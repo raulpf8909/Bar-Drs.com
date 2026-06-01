@@ -120,10 +120,25 @@
         }
 
         /* Kitchen Menu Styles */
-        .hairline-border { border: 0.5px solid #00272d; }
-        .double-border { border: 1px solid #00272d; outline: 2px solid #00272d; outline-offset: 4px; }
-        .engraving-line { height: 1px; background: linear-gradient(to right, transparent, #00272d, transparent); }
-        .vignette-card { position: relative; overflow: hidden; }
+        .hairline-border {
+            border: 0.5px solid #00272d;
+        }
+
+        .double-border {
+            border: 1px solid #00272d;
+            outline: 2px solid #00272d;
+            outline-offset: 4px;
+        }
+
+        .engraving-line {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #00272d, transparent);
+        }
+
+        .vignette-card {
+            position: relative;
+            overflow: hidden;
+        }
 
         /* Deco Border (Cocina Page) */
         .deco-border {
@@ -247,9 +262,11 @@
 <body class="bg-background text-primary font-body-md art-deco-pattern min-h-screen flex flex-col">
 
     <!-- TopAppBar -->
-    <header class="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b-[0.5px] border-outline-variant w-full pt-6">
+    <header
+        class="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b-[0.5px] border-outline-variant w-full pt-6">
         <div class="flex flex-col items-center w-full px-margin-md max-w-7xl mx-auto">
-            <a href="index.html" class="logo-link flex items-center gap-4 mb-4 hover:opacity-90 transition-opacity cursor-pointer">
+            <a href="index.html"
+                class="logo-link flex items-center gap-4 mb-4 hover:opacity-90 transition-opacity cursor-pointer">
                 <div class="w-16 h-16 rounded-full border-2 border-primary flex items-center justify-center p-1">
                     <img alt="Drs.Com Cafetería Logo" class="rounded-full w-full h-full object-cover"
                         src="logo-brown.png">
@@ -277,137 +294,138 @@
 
     <!-- Main Content Canvas -->
     <main class="flex-grow w-full max-w-7xl mx-auto px-margin-md pt-section-gap pb-32">
-            <!-- Category Header -->
-            <div class="vintage-divider mb-12">
-                <span class="font-headline-md text-headline-md italic">Coctelería de Autor</span>
+        <!-- Category Header -->
+        <div class="vintage-divider mb-12">
+            <span class="font-headline-md text-headline-md italic">Coctelería</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <!-- Classic Item 1 -->
+            <div class="group">
+                <div class="aspect-square mb-6 border-[0.5px] border-outline overflow-hidden relative">
+                    <img class="w-full h-full object-cover filter sepia-[0.2] transition-transform duration-500 group-hover:scale-110"
+                        alt="Negroni"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfrSoI6JgO8w1tAEsPs196hBQO0ThA4pSKpjeOAuIXoGUCJ_KHWdWUtdZgdyziVQmhQi-B-8J1NoR72k2-buhCoWI1wncMPx5N6SB1-hsHdYWjjWcyEl5FCs3MeoBhF9DjcS8leKYwJoWAyT0nDgXxJz_GhxT25hbdoZ87Kmd3C08Ct7rNnHb-u7fY-hHBrnybJs-QjmdUWjOzWAh2EIvUbedQkGHpw5wl4PWuidyi3HWo1NZiVSYSRSl2_CIv-7xqjAweH9tVdIc">
+                    <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                    </div>
+                </div>
+                <div class="flex justify-between items-baseline mb-1">
+                    <h4 class="font-headline-sm text-headline-sm text-primary">Old Fashioned</h4>
+                    <span class="font-label-md text-label-md text-primary">$3,500</span>
+                </div>
+                <p class="font-body-md text-body-md text-on-surface-variant italic">Bourbon, azúcar de caña,
+                    angostura y piel de naranja.</p>
             </div>
 
-            <!-- Bento Grid for Signature Drinks -->
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 mb-section-gap">
-                <!-- Featured Cocktail -->
-                <div
-                    class="md:col-span-7 flex flex-col md:flex-row gap-6 border-[0.5px] border-primary p-6 relative group overflow-hidden">
-                    <div
-                        class="w-full md:w-1/2 aspect-[4/5] bg-surface-container overflow-hidden art-deco-border">
-                        <img class="w-full h-full object-cover grayscale-[0.2] transition-transform duration-700 group-hover:scale-105"
-                            alt="Cóctel El Bohemio"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOT_cCB6KLpOX5Har1XaDfh_SxRiqm3OtSduvnit7spHyvtqyQ3GjZZgvvyjZlqbCOYOF5XZ14TKMmpRjJmfbahMiHO_D0RxRm2YjI40lDxnIeqwqOxKm6fiMM8dlMZD1sL_QovnbK57_8VYEkIbmd6pujAFCn8N9Pk7WgOlTofsQ8vbvIza9ID1rJ7RowtO1Mh7zlLwl6M-uDe1pBjggbYmZMxyj4h_2m4DCjZqcazPzvQeNq3LBI5-c6rZJluUcgu8_hn99fQsg">
-                    </div>
-                    <div class="w-full md:w-1/2 flex flex-col justify-center">
-                        <div class="flex justify-between items-baseline mb-2">
-                            <h3 class="font-headline-sm text-headline-sm text-primary">El Bohemio</h3>
-                            <span class="font-label-md text-label-md text-primary">$4,200</span>
-                        </div>
-                        <p class="font-body-md text-body-md text-on-surface-variant mb-6">Vermouth rosso artesanal, gin
-                            infusionado con botánicos locales y un toque de bitter de chocolate amargo.</p>
-                        <div class="mt-auto">
-                            <span
-                                class="inline-block px-3 py-1 rounded-full border border-primary text-[10px] font-label-md uppercase tracking-tighter">Sugerencia
-                                del Chef</span>
-                        </div>
+            <!-- Classic Item 2 -->
+            <div class="group">
+                <div class="aspect-square mb-6 border-[0.5px] border-outline overflow-hidden relative">
+                    <img class="w-full h-full object-cover filter sepia-[0.2] transition-transform duration-500 group-hover:scale-110"
+                        alt="Martini"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXEj-Kvi6V4HWSPwpmMC2AItQvK4LrzyAms-qbF7UYOUaSDYNv3qM0TAgwEW2a2j8bP4yE4BU_heDagh_7X02R1wze_w4wbEMBhikcGJJHwROyz3fSmv-bYk9YuGRgoO8I63l8NFlTT7Xq5MSXA-9x-pRB9BpFEQSVQRcT8jhxuiM63AEw2HmKDJOxb8HrzhERPoEh0FaNRBY6RBGeuU7YIZ6OxwSnyrUHa6XKyQy7fvd8F4twY7HhetYSjY7SxJw9ATn5fwQzug0">
+                    <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity">
                     </div>
                 </div>
-
-                <!-- Smaller Cocktail Card -->
-                <div class="md:col-span-5 border-[0.5px] border-primary p-6 flex flex-col justify-between">
-                    <div>
-                        <div class="aspect-video bg-surface-container mb-6 art-deco-border overflow-hidden">
-                            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                alt="Cóctel Clarificado Nº2"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4xEfcy1tet_CUdwIxPdE45WAYJloSPzxKN6bYdPDgOFhn-_2naeWLRhLFhg-x0yshaQqM3Y10oGel19uspWDfwTlRJasl06lGbpdLuW7FO2ZT_Bsy2tunCZLCvyqMpbqcC0mOZqpoY2bTityBhmPFftoacrCc9fDnbGfKn9ICAEkRUtMohtp12czPHowDTWOZcgD9anRBhMJrAevt92YktY8JVulWY5Fa8sAT5VDvBClmfFNJS7pirc_MtLdE3TR1oiiVlsx3RuY">
-                        </div>
-                        <div class="flex justify-between items-baseline mb-2">
-                            <h3 class="font-headline-sm text-headline-sm text-primary">Clarificado Nº2</h3>
-                            <span class="font-label-md text-label-md text-primary">$3,800</span>
-                        </div>
-                        <p class="font-body-md text-body-md text-on-surface-variant">Mezcla cítrica clarificada con
-                            leche de coco, tequila reposado y esencia de jazmín.</p>
-                    </div>
-                    <button
-                        class="mt-6 w-full py-3 bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container transition-colors relative active:scale-95 duration-150">
-                        DETALLES
-                        <div class="absolute -inset-1 border border-primary opacity-30 pointer-events-none"></div>
-                    </button>
+                <div class="flex justify-between items-baseline mb-1">
+                    <h4 class="font-headline-sm text-headline-sm text-primary">Dry Martini</h4>
+                    <span class="font-label-md text-label-md text-primary">$3,500</span>
                 </div>
+                <p class="font-body-md text-body-md text-on-surface-variant italic">Gin premium, Vermouth dry,
+                    aceitunas sevillanas.</p>
             </div>
 
-            <!-- Classics Section -->
-            <div class="vintage-divider mb-12">
-                <span class="font-headline-md text-headline-md italic">Los Clásicos de la Casa</span>
+            <!-- Classic Item 3 -->
+            <div class="group">
+                <div class="aspect-square mb-6 border-[0.5px] border-outline overflow-hidden relative">
+                    <img class="w-full h-full object-cover filter sepia-[0.2] transition-transform duration-500 group-hover:scale-110"
+                        alt="Whiskey Sour"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDg1G6lgt18j0AmhjBShgRvywMAAUfKRJOXaHpgk3jFVSImHwfg-bdoRkt8k6MsP0WmWJi-Hy9CtbyoqoOm8oiDRbf4COa0eTiw-W5yRPh_q3WiYIbguyFLjJWDKwSI8AmpaMdNZE34Ubg72r9x_k2rvlcOpREhtONJu1WXb3Y_nxVlJeesiY6chx9WKIuqUv6cpmU7_3qFdxXZrLQGxDqrZ3TXvpSzTWt6hg1RdFudV8Nmm_Oe2RmeyH53GWxc4MwmEJyD0HWwE44">
+                    <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                    </div>
+                </div>
+                <div class="flex justify-between items-baseline mb-1">
+                    <h4 class="font-headline-sm text-headline-sm text-primary">Sour de la Casa</h4>
+                    <span class="font-label-md text-label-md text-primary">$3,200</span>
+                </div>
+                <p class="font-body-md text-body-md text-on-surface-variant italic">Pisco, jarabe de goma artesanal,
+                    limón sutil y clara de huevo.</p>
+            </div>
+        </div>
+
+
+        <!-- Classics Section -->
+        <div class="vintage-divider mb-12">
+            <span class="font-headline-md text-headline-md italic">Tragos</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <!-- Classic Item 1 -->
+            <div class="group">
+                <div class="aspect-square mb-6 border-[0.5px] border-outline overflow-hidden relative">
+                    <img class="w-full h-full object-cover filter sepia-[0.2] transition-transform duration-500 group-hover:scale-110"
+                        alt="Negroni"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfrSoI6JgO8w1tAEsPs196hBQO0ThA4pSKpjeOAuIXoGUCJ_KHWdWUtdZgdyziVQmhQi-B-8J1NoR72k2-buhCoWI1wncMPx5N6SB1-hsHdYWjjWcyEl5FCs3MeoBhF9DjcS8leKYwJoWAyT0nDgXxJz_GhxT25hbdoZ87Kmd3C08Ct7rNnHb-u7fY-hHBrnybJs-QjmdUWjOzWAh2EIvUbedQkGHpw5wl4PWuidyi3HWo1NZiVSYSRSl2_CIv-7xqjAweH9tVdIc">
+                    <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                    </div>
+                </div>
+                <div class="flex justify-between items-baseline mb-1">
+                    <h4 class="font-headline-sm text-headline-sm text-primary">Old Fashioned</h4>
+                    <span class="font-label-md text-label-md text-primary">$3,500</span>
+                </div>
+                <p class="font-body-md text-body-md text-on-surface-variant italic">Bourbon, azúcar de caña,
+                    angostura y piel de naranja.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                <!-- Classic Item 1 -->
-                <div class="group">
-                    <div
-                        class="aspect-square mb-6 border-[0.5px] border-outline overflow-hidden relative">
-                        <img class="w-full h-full object-cover filter sepia-[0.2] transition-transform duration-500 group-hover:scale-110"
-                            alt="Negroni"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfrSoI6JgO8w1tAEsPs196hBQO0ThA4pSKpjeOAuIXoGUCJ_KHWdWUtdZgdyziVQmhQi-B-8J1NoR72k2-buhCoWI1wncMPx5N6SB1-hsHdYWjjWcyEl5FCs3MeoBhF9DjcS8leKYwJoWAyT0nDgXxJz_GhxT25hbdoZ87Kmd3C08Ct7rNnHb-u7fY-hHBrnybJs-QjmdUWjOzWAh2EIvUbedQkGHpw5wl4PWuidyi3HWo1NZiVSYSRSl2_CIv-7xqjAweH9tVdIc">
-                        <div
-                            class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
+            <!-- Classic Item 2 -->
+            <div class="group">
+                <div class="aspect-square mb-6 border-[0.5px] border-outline overflow-hidden relative">
+                    <img class="w-full h-full object-cover filter sepia-[0.2] transition-transform duration-500 group-hover:scale-110"
+                        alt="Martini"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXEj-Kvi6V4HWSPwpmMC2AItQvK4LrzyAms-qbF7UYOUaSDYNv3qM0TAgwEW2a2j8bP4yE4BU_heDagh_7X02R1wze_w4wbEMBhikcGJJHwROyz3fSmv-bYk9YuGRgoO8I63l8NFlTT7Xq5MSXA-9x-pRB9BpFEQSVQRcT8jhxuiM63AEw2HmKDJOxb8HrzhERPoEh0FaNRBY6RBGeuU7YIZ6OxwSnyrUHa6XKyQy7fvd8F4twY7HhetYSjY7SxJw9ATn5fwQzug0">
+                    <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity">
                     </div>
-                    <div class="flex justify-between items-baseline mb-1">
-                        <h4 class="font-headline-sm text-headline-sm text-primary">Old Fashioned</h4>
-                        <span class="font-label-md text-label-md text-primary">$3,500</span>
-                    </div>
-                    <p class="font-body-md text-body-md text-on-surface-variant italic">Bourbon, azúcar de caña,
-                        angostura y piel de naranja.</p>
                 </div>
-
-                <!-- Classic Item 2 -->
-                <div class="group">
-                    <div
-                        class="aspect-square mb-6 border-[0.5px] border-outline overflow-hidden relative">
-                        <img class="w-full h-full object-cover filter sepia-[0.2] transition-transform duration-500 group-hover:scale-110"
-                            alt="Martini"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXEj-Kvi6V4HWSPwpmMC2AItQvK4LrzyAms-qbF7UYOUaSDYNv3qM0TAgwEW2a2j8bP4yE4BU_heDagh_7X02R1wze_w4wbEMBhikcGJJHwROyz3fSmv-bYk9YuGRgoO8I63l8NFlTT7Xq5MSXA-9x-pRB9BpFEQSVQRcT8jhxuiM63AEw2HmKDJOxb8HrzhERPoEh0FaNRBY6RBGeuU7YIZ6OxwSnyrUHa6XKyQy7fvd8F4twY7HhetYSjY7SxJw9ATn5fwQzug0">
-                        <div
-                            class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-baseline mb-1">
-                        <h4 class="font-headline-sm text-headline-sm text-primary">Dry Martini</h4>
-                        <span class="font-label-md text-label-md text-primary">$3,500</span>
-                    </div>
-                    <p class="font-body-md text-body-md text-on-surface-variant italic">Gin premium, Vermouth dry,
-                        aceitunas sevillanas.</p>
+                <div class="flex justify-between items-baseline mb-1">
+                    <h4 class="font-headline-sm text-headline-sm text-primary">Dry Martini</h4>
+                    <span class="font-label-md text-label-md text-primary">$3,500</span>
                 </div>
-
-                <!-- Classic Item 3 -->
-                <div class="group">
-                    <div
-                        class="aspect-square mb-6 border-[0.5px] border-outline overflow-hidden relative">
-                        <img class="w-full h-full object-cover filter sepia-[0.2] transition-transform duration-500 group-hover:scale-110"
-                            alt="Whiskey Sour"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDg1G6lgt18j0AmhjBShgRvywMAAUfKRJOXaHpgk3jFVSImHwfg-bdoRkt8k6MsP0WmWJi-Hy9CtbyoqoOm8oiDRbf4COa0eTiw-W5yRPh_q3WiYIbguyFLjJWDKwSI8AmpaMdNZE34Ubg72r9x_k2rvlcOpREhtONJu1WXb3Y_nxVlJeesiY6chx9WKIuqUv6cpmU7_3qFdxXZrLQGxDqrZ3TXvpSzTWt6hg1RdFudV8Nmm_Oe2RmeyH53GWxc4MwmEJyD0HWwE44">
-                        <div
-                            class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-baseline mb-1">
-                        <h4 class="font-headline-sm text-headline-sm text-primary">Sour de la Casa</h4>
-                        <span class="font-label-md text-label-md text-primary">$3,200</span>
-                    </div>
-                    <p class="font-body-md text-body-md text-on-surface-variant italic">Pisco, jarabe de goma artesanal,
-                        limón sutil y clara de huevo.</p>
-                </div>
+                <p class="font-body-md text-body-md text-on-surface-variant italic">Gin premium, Vermouth dry,
+                    aceitunas sevillanas.</p>
             </div>
 
-            <!-- CTA Section -->
-            <section class="mt-section-gap border-y-[0.5px] border-primary py-12 text-center bg-surface-container-low">
-                <h2 class="font-headline-md text-headline-md text-primary mb-4 italic">¿Algo para acompañar?</h2>
-                <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-8 px-4">Explora nuestra selección de bocados diseñados específicamente para maridar con nuestra coctelería.</p>
-                <a href="cocina.html"
-                    class="inline-block px-10 py-3 bg-primary text-on-primary font-label-md text-label-md tracking-widest hover:bg-primary-container transition-all active:scale-95">
-                    VER COCINA
-                </a>
-            </section>
+            <!-- Classic Item 3 -->
+            <div class="group">
+                <div class="aspect-square mb-6 border-[0.5px] border-outline overflow-hidden relative">
+                    <img class="w-full h-full object-cover filter sepia-[0.2] transition-transform duration-500 group-hover:scale-110"
+                        alt="Whiskey Sour"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDg1G6lgt18j0AmhjBShgRvywMAAUfKRJOXaHpgk3jFVSImHwfg-bdoRkt8k6MsP0WmWJi-Hy9CtbyoqoOm8oiDRbf4COa0eTiw-W5yRPh_q3WiYIbguyFLjJWDKwSI8AmpaMdNZE34Ubg72r9x_k2rvlcOpREhtONJu1WXb3Y_nxVlJeesiY6chx9WKIuqUv6cpmU7_3qFdxXZrLQGxDqrZ3TXvpSzTWt6hg1RdFudV8Nmm_Oe2RmeyH53GWxc4MwmEJyD0HWwE44">
+                    <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                    </div>
+                </div>
+                <div class="flex justify-between items-baseline mb-1">
+                    <h4 class="font-headline-sm text-headline-sm text-primary">Sour de la Casa</h4>
+                    <span class="font-label-md text-label-md text-primary">$3,200</span>
+                </div>
+                <p class="font-body-md text-body-md text-on-surface-variant italic">Pisco, jarabe de goma artesanal,
+                    limón sutil y clara de huevo.</p>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <section class="mt-section-gap border-y-[0.5px] border-primary py-12 text-center bg-surface-container-low">
+            <h2 class="font-headline-md text-headline-md text-primary mb-4 italic">¿Algo para acompañar?</h2>
+            <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-8 px-4">Explora nuestra
+                selección de bocados diseñados específicamente para maridar con nuestra coctelería.</p>
+            <a href="cocina.html"
+                class="inline-block px-10 py-3 bg-primary text-on-primary font-label-md text-label-md tracking-widest hover:bg-primary-container transition-all active:scale-95">
+                VER COCINA
+            </a>
+        </section>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-background dark:bg-background full-width py-section-gap border-t-[0.5px] border-outline-variant mt-section-gap pb-28 md:pb-12">
+    <footer
+        class="bg-background dark:bg-background full-width py-section-gap border-t-[0.5px] border-outline-variant mt-section-gap pb-28 md:pb-12">
         <div class="flex flex-col items-center gap-4 w-full px-margin-md text-center max-w-7xl mx-auto">
             <div class="flex space-x-8 mb-4">
                 <a class="text-primary hover:opacity-70 transition-opacity" href="#">
@@ -421,15 +439,16 @@
                 </a>
             </div>
 
-            <p class="font-label-md text-label-md uppercase tracking-widest text-primary mb-2"> Calle Ignacio Agramonte #57, Puerto Padre</p>
+            <p class="font-label-md text-label-md uppercase tracking-widest text-primary mb-2"> Calle Ignacio Agramonte
+                #57, Puerto Padre</p>
 
             <div class="flex gap-6 mb-4 justify-center">
                 <a class="font-body-md text-body-md text-secondary hover:text-primary transition-colors"
-                    href="#">Location</a>
+                    href="https://www.google.com.mx/maps/place/Dr.com/@21.1958888,-76.5993123,450m/data=!3m1!1e3!4m9!1m2!2m1!1sCalle+Ignacio+Agramonte+%2357,+Puerto+Padre!3m5!1s0x8ed27b1426a4269d:0xdcbfe25ffc0f8c4!8m2!3d21.1952353!4d-76.59919!16s%2Fg%2F11k41wd_dc!5m1!1e1?entry=ttu&g_ep=EgoyMDI2MDUzMS4wIKXMDSoASAFQAw%3D%3D">Location</a>
                 <a class="font-body-md text-body-md text-secondary hover:text-primary transition-colors"
-                    href="#">Instagram</a>
+                    href="https://www.instagram.com/_drs.com_?igsh=anpibm11b2JlMTQy">Instagram</a>
                 <a class="font-body-md text-body-md text-secondary hover:text-primary transition-colors"
-                    href="#">Facebook</a>
+                    href="https://www.facebook.com/profile.php?id=100088449266135">Facebook</a>
             </div>
 
             <div class="font-brand-logo text-primary opacity-50 mb-4 flex items-center gap-2">
@@ -437,7 +456,8 @@
                 <span class="font-label-md text-label-md uppercase tracking-widest">Est. 2022</span>
                 <span class="h-px w-12 bg-primary"></span>
             </div>
-            <p class="font-body-md text-body-md text-outline opacity-60 italic">© 2026 Drs.Com Bar &amp; Cafetería - Desde 2022</p>
+            <p class="font-body-md text-body-md text-outline opacity-60 italic">© 2026 Drs.Com Bar &amp; Cafetería -
+                Desde 2022</p>
         </div>
     </footer>
 
@@ -503,7 +523,7 @@
             <p id="modal-description" class="font-body-md mt-2"></p>
         </div>
     </div>
-    
+
     <script>
         // Modal handling
         const modal = document.getElementById('product-modal');
@@ -514,14 +534,17 @@
         const modalDesc = document.getElementById('modal-description');
 
         closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+        // Close on backdrop click
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.add('hidden'); });
 
         // Attach click listeners to product cards (including classic items)
         document.querySelectorAll('.group').forEach(card => {
+            card.style.cursor = 'pointer';
             card.addEventListener('click', () => {
                 const img = card.querySelector('img');
-                const title = card.querySelector('h3, h4')?.textContent || '';
-                const price = card.querySelector('span:last-child')?.textContent || '';
-                const description = card.querySelector('p')?.textContent || '';
+                const title = card.querySelector('h3, h4')?.textContent?.trim() || '';
+                const price = card.querySelector('span.font-label-md')?.textContent?.trim() || '';
+                const description = card.querySelector('p')?.textContent?.trim() || '';
                 modalImg.src = img?.src || '';
                 modalImg.alt = title;
                 modalTitle.textContent = title;

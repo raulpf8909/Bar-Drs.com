@@ -1,22 +1,63 @@
+<!-- logo-brown.png -->
 <!DOCTYPE html>
 <html class="light" lang="es">
 
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Drs.Com Cafetería & Bar</title>
-
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com" rel="preconnect" />
-    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
-        rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-        rel="stylesheet">
-
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&amp;family=Merriweather:wght@300;400;700&amp;family=DM+Sans:wght@400;500;700&amp;display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .deco-border {
+            border: 0.5px solid #70787a;
+            position: relative;
+        }
+
+        .deco-border::before,
+        .deco-border::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border: 1px solid #00272d;
+            transform: rotate(45deg);
+        }
+
+        .deco-border::before {
+            top: -4px;
+            left: -4px;
+        }
+
+        .deco-border::after {
+            bottom: -4px;
+            right: -4px;
+        }
+
+        .vintage-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00272d, transparent);
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        .art-deco-pattern {
+            background-color: #fbf9f3;
+            background-image: radial-gradient(#c0c8ca 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+        }
+    </style>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -105,763 +146,140 @@
             },
         }
     </script>
-
-    <!-- Custom CSS Styles -->
-    <style>
-        body {
-            background-color: #fbf9f3;
-            color: #00272d;
-            font-family: 'Merriweather', serif;
-            min-height: max(884px, 100dvh);
-        }
-
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-        }
-
-        /* Kitchen Menu Styles */
-        .hairline-border { border: 0.5px solid #00272d; }
-        .double-border { border: 1px solid #00272d; outline: 2px solid #00272d; outline-offset: 4px; }
-        .engraving-line { height: 1px; background: linear-gradient(to right, transparent, #00272d, transparent); }
-        .vignette-card { position: relative; overflow: hidden; }
-
-        /* Deco Border (Cocina Page) */
-        .deco-border {
-            border: 0.5px solid #70787a;
-            position: relative;
-        }
-
-        .deco-border::before,
-        .deco-border::after {
-            content: '';
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            border: 1px solid #00272d;
-            transform: rotate(45deg);
-        }
-
-        .deco-border::before {
-            top: -4px;
-            left: -4px;
-        }
-
-        .deco-border::after {
-            bottom: -4px;
-            right: -4px;
-        }
-
-        .vintage-line {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #00272d, transparent);
-            width: 100%;
-            margin: 1rem 0;
-        }
-
-        .art-deco-pattern {
-            background-color: #fbf9f3;
-            background-image: radial-gradient(#c0c8ca 0.5px, transparent 0.5px);
-            background-size: 24px 24px;
-        }
-
-        /* Vintage Border (Bebidas Page) */
-        .vintage-border {
-            border: 0.5px solid #00272d;
-            position: relative;
-            transition: border-color 0.3s ease;
-        }
-
-        .vintage-border::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            right: 2px;
-            bottom: 2px;
-            border: 0.5px solid #00272d;
-            pointer-events: none;
-        }
-
-        .etched-line {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #00272d 20%, #00272d 80%, transparent);
-            width: 100%;
-            margin: 1.5rem 0;
-        }
-
-        .scalloped-badge {
-            clip-path: polygon(100% 50%, 98% 57%, 93% 63%, 86% 67%, 80% 70%, 73% 73%, 67% 76%, 60% 78%, 53% 79%, 47% 79%, 40% 78%, 33% 76%, 27% 73%, 20% 70%, 14% 67%, 7% 63%, 2% 57%, 0% 50%, 2% 43%, 7% 37%, 14% 33%, 20% 30%, 27% 27%, 33% 24%, 40% 22%, 47% 21%, 53% 21%, 60% 22%, 67% 24%, 73% 27%, 80% 30%, 86% 33%, 93% 37%, 98% 43%);
-        }
-
-        /* Art Deco Border (Cocteles Page) */
-        .art-deco-border {
-            border: 0.5px solid #00272d;
-            padding: 2px;
-            position: relative;
-        }
-
-        .art-deco-border::after {
-            content: '';
-            position: absolute;
-            top: -4px;
-            left: -4px;
-            right: -4px;
-            bottom: -4px;
-            border: 0.5px solid #00272d;
-            pointer-events: none;
-        }
-
-        .vintage-divider {
-            display: flex;
-            align-items: center;
-            text-align: center;
-        }
-
-        .vintage-divider::before,
-        .vintage-divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 0.5px solid #00272d;
-        }
-
-        .vintage-divider:not(:empty)::before {
-            margin-right: 1rem;
-        }
-
-        .vintage-divider:not(:empty)::after {
-            margin-left: 1rem;
-        }
-
-        /* Hide scrollbars but keep scrolling functionality */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        /* SPA Transitions */
-        .menu-section {
-            opacity: 0;
-            transform: translateY(12px);
-            transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        .menu-section.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
 </head>
 
 <body class="bg-background text-primary font-body-md art-deco-pattern min-h-screen flex flex-col">
-
     <!-- TopAppBar -->
-    <header class="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b-[0.5px] border-outline-variant w-full pt-6">
-        <div class="flex flex-col items-center w-full px-margin-md max-w-7xl mx-auto">
-            <a href="index.html" class="logo-link flex items-center gap-4 mb-4 hover:opacity-90 transition-opacity cursor-pointer">
-                <div class="w-16 h-16 rounded-full border-2 border-primary flex items-center justify-center p-1">
-                    <img alt="Drs.Com Cafetería Logo" class="rounded-full w-full h-full object-cover"
-                        src="logo-brown.png">
-                </div>
-                <h1
-                    class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary uppercase tracking-tighter">
-                    Drs.Com Cafetería
-                </h1>
-            </a>
-
-            <!-- Desktop Navigation Tabs -->
-            <nav class="flex space-x-8 mb-4 overflow-x-auto no-scrollbar w-full justify-center">
-                <a id="tab-desktop-cocina"
-                    class="font-label-md text-label-md text-primary font-bold hover:text-primary transition-colors whitespace-nowrap pb-2 border-b-2 border-primary"
-                    href="cocina.html">Cocina</a>
-                <a id="tab-desktop-cocteles"
-                    class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap pb-2"
-                    href="cocteles.html">Cocteles</a>
-                <a id="tab-desktop-bebidas"
-                    class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap pb-2"
-                    href="bebidas.html">Bebidas</a>
-            </nav>
+    <header
+        class="flex flex-col items-center w-full px-margin-md max-w-7xl mx-auto full-width top-0 pt-section-gap border-b-[0.5px] border-outline-variant bg-background dark:bg-background">
+        <div class="mb-6">
+            <img alt="Drs.Com Cafetería" class="w-32 h-32 object-contain rounded-full border-2 border-primary p-1"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcWrWpCBR5gim58v6MWEK5ucN43xju9bb0EH02ECI1S_k-awgtva7QH4J-oTz_0mbUL0eV8jwXjdqVvZ6xaMlNevgQGs3GbJ83iSeWWMwWtmfkUnJzOH09jUNfOsfXjd6k3IDTV0WOSxh2L7eYcWNExqZQlDS0BVtLNN9Sugr-x_U2pXxcyBoAN2nrDFe50spq_48N3G65aZtNXxx22C44X4UrvQxpdaEihk5eZT5DtZE97esDeYYhmi4b80WDVU_cWfxpV9S1Bdo">
         </div>
+        <h1
+            class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary text-center mb-8 tracking-tighter">
+            Drs.Com Cafetería
+        </h1>
+        <!-- Navigation Tabs (Shared Component Logic) -->
+        <nav class="flex space-x-8 mb-6 overflow-x-auto no-scrollbar w-full justify-center">
+            <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap"
+                href="cocina.html">Cocina</a>
+            <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap"
+                href="cocteles.html">Cocteles</a>
+            <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap"
+                href="bebidas.html">Bebidas</a>
+        </nav>
     </header>
-
     <!-- Main Content Canvas -->
-    <main class="flex-grow w-full max-w-7xl mx-auto px-margin-md py-section-gap">
-
-        <!-- SECTION 1: Cocina (Home) -->
-        <section id="section-cocina" class="menu-section active max-w-4xl mx-auto w-full">
-            <!-- Category Header: Appetizers -->
-            <div class="flex items-center gap-4 mb-10">
-                <div class="flex-1 engraving-line"></div>
-                <h2 class="font-headline-md text-headline-md text-primary italic px-4 text-center">Entradas</h2>
-                <div class="flex-1 engraving-line"></div>
+    <main class="flex-grow max-w-4xl mx-auto px-margin-md py-section-gap w-full">
+        <!-- Domicilios Section: Vintage Banner -->
+        <section
+            class="relative bg-surface-container border-[0.5px] border-primary p-8 md:p-12 text-center flex flex-col items-center justify-center overflow-hidden">
+            <!-- Decorative Corners -->
+            <div class="absolute top-2 left-2 w-12 h-12 border-t border-l border-primary"></div>
+            <div class="absolute top-2 right-2 w-12 h-12 border-t border-r border-primary"></div>
+            <div class="absolute bottom-2 left-2 w-12 h-12 border-b border-l border-primary"></div>
+            <div class="absolute bottom-2 right-2 w-12 h-12 border-b border-r border-primary"></div>
+            <div class="mb-6">
+                <span class="material-symbols-outlined text-6xl text-primary" data-icon="pedal_bike">pedal_bike</span>
             </div>
-            <!-- Vertical List of Items -->
-            <section class="space-y-12">
-                <!-- Item 1 -->
-                <div class="group flex flex-col md:flex-row gap-8 items-start">
-                    <div class="w-full md:w-48 h-48 flex-shrink-0 hairline-border p-1 bg-white">
-                        <img alt="Croquetas" class="w-full h-full object-cover" data-alt="Close-up macro photography of golden, crispy artisanal croquettes served on a pristine white ceramic plate. The lighting is dramatic and moody, casting soft shadows that highlight the crunchy texture. The overall aesthetic is clean and sophisticated, matching a vintage European bistro menu style with a warm cream color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUVLQ-AR5rvhwnCgiluhD9vTGUFsaX8IywIm3ZVf_uRSWk4jSxYIXUUazD-xVFTqzb1EUC5_-EIIqEXYqaUn51Y1pvYO7GdbUa5dWryQZOM5rODP205lg5Fri3sj-pyVa38iGS273A74lunUh3J3WW3MwAaZlB98Ad08N0zB_YhqXfiCUZNP2lTaP2oqCeoL6pxnNdmmfxDibHS-O6347Z0pI_2WCg-jeAUfVZnL4jvzY0fhlccgNrdCJSiwu6-kJC_K56CHdv6e4"/>
-                    </div>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-baseline mb-2">
-                            <h3 class="font-headline-sm text-headline-sm text-primary">Croquetas de Jamón Ibérico</h3>
-                            <span class="font-label-md text-label-md text-secondary">$12.00</span>
-                        </div>
-                        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed italic mb-4">
-                            Bechamel cremosa infusionada con el mejor jamón de bellota, fritura ligera y un toque de nuez moscada.
-                        </p>
-                        <div class="flex gap-2">
-                            <span class="px-3 py-1 rounded-full hairline-border text-[10px] uppercase tracking-widest text-secondary font-bold">Favorito</span>
-                        </div>
-                    </div>
+            <div class="vintage-line mb-4"></div>
+            <h2 class="font-headline-md text-headline-md text-primary mb-2 italic">Servicio a Domicilio</h2>
+            <p class="font-headline-sm text-headline-sm text-secondary uppercase tracking-[0.2em] mb-6">Elegancia a tu
+                puerta</p>
+            <div class="vintage-line mb-8"></div>
+            <button class="bg-primary-container text-on-primary px-8 py-3 font-label-md text-label-md relative group">
+                <span class="relative z-10"><a href="https://wa.me/+5355770922">ORDENAR AHORA</span>
+                <div class="absolute inset-0 border border-primary-container -m-[4px] group-active:m-0 transition-all">
                 </div>
-                <!-- Item 2 -->
-                <div class="group flex flex-col md:flex-row gap-8 items-start">
-                    <div class="w-full md:w-48 h-48 flex-shrink-0 hairline-border p-1 bg-white">
-                        <img alt="Salad" class="w-full h-full object-cover" data-alt="A beautifully plated seasonal salad with roasted heirloom beets, creamy goat cheese, and toasted walnuts. The image is captured in high-key natural lighting, creating a bright and fresh atmosphere. The composition is artistic and minimalist, evoking the feel of a curated physical menu card from a high-end vintage restaurant." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDROd9GGQ-wpZReBSf8uwlKkiTPl9zxr7d47hkKO6M54Aa0Qs43WkYO7ezz6IKz5wxgjHsLaVIsQKgyQcYTFW6Cm0ESW4GpMWIqWvOehayy2B6AX4WHk7y9nnMv-gQmMC52B5bLe_aBiyvmJ-4a3d7SxCr467I87obTaNBrDoERFsuhrl5zcKeEibhB9Lrlqa-K_8I7gLEb-gmlq48MDy36-omkCOOqGdyLwToLuYPQJ2JApjLAYQ7W_Bij8LzCfRswCGMJ_7w51Ew"/>
-                    </div>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-baseline mb-2">
-                            <h3 class="font-headline-sm text-headline-sm text-primary">Ensalada Bohemia</h3>
-                            <span class="font-label-md text-label-md text-secondary">$14.50</span>
-                        </div>
-                        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed italic mb-4">
-                            Brotes tiernos, remolacha asada, queso de cabra artesanal y vinagreta de miel y mostaza antigua.
-                        </p>
-                    </div>
+            </button>
+            <p class="mt-8 font-body-md text-body-md text-outline">
+                Llevamos la experiencia bohemia directamente a su residencia. <br>
+                Consulte nuestra carta seleccionada para envíos.
+            </p>
+        </section>
+        <!-- Asymmetric Featured Grid (High-end UI Pattern) -->
+        <section class="mt-section-gap grid grid-cols-1 md:grid-cols-12 gap-gutter">
+            <div
+                class="md:col-span-7 bg-surface-container-low border border-outline-variant p-6 flex flex-col justify-between aspect-video md:aspect-auto">
+                <div>
+                    <h3 class="font-headline-sm text-headline-sm text-primary mb-2">Especial de la Casa</h3>
+                    <p class="font-body-md text-body-md text-on-surface-variant">Un recorrido por los sabores
+                        artesanales de nuestra cocina vintage.</p>
                 </div>
-            </section>
-            <!-- Category Header: Main Dishes -->
-            <div class="flex items-center gap-4 mt-section-gap mb-10">
-                <div class="flex-1 engraving-line"></div>
-                <h2 class="font-headline-md text-headline-md text-primary italic px-4 text-center">Platos Fuertes</h2>
-                <div class="flex-1 engraving-line"></div>
+                <div class="flex justify-end">
+                    <span class="material-symbols-outlined text-4xl text-secondary opacity-50"
+                        data-icon="restaurant">restaurant</span>
+                </div>
             </div>
-            <section class="space-y-12">
-                <!-- Item 3 -->
-                <div class="group flex flex-col md:flex-row gap-8 items-start">
-                    <div class="w-full md:w-48 h-48 flex-shrink-0 hairline-border p-1 bg-white">
-                        <img alt="Meat" class="w-full h-full object-cover" data-alt="A perfectly seared steak served with a side of micro-greens and a rich red wine reduction. The scene is illuminated by warm, dim light typical of an early 20th-century European bistro. The focus is sharp on the texture of the meat and the glossy sauce, creating an appetizing and luxurious visual for a premium menu." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvUQNqSYJrRRzcI-DPv8CKChE0WO3UDsdZH6907FcRzGWs7iN5Ch208RySNpAAV4bBlbUWJ4onKzK20MWA2L54tn1aZjpGBrMDW-4bZWFNYr9hsF-bKxO3u_6varWx5xvSPxod3oHQmSnSiljUxj3ivSdNtg59-gwP16r-wP77hFXfunpwlZapErrjrI67y-K4LZt8Fp6nvpp8NSWTxr_7tiRV-jOl6M5AVAIRnMFT2b3mt8Hz2NJQkP7cpiUPuAzsy3qlDg1WJRY"/>
-                    </div>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-baseline mb-2">
-                            <h3 class="font-headline-sm text-headline-sm text-primary">Solomillo al Café de París</h3>
-                            <span class="font-label-md text-label-md text-secondary">$28.00</span>
-                        </div>
-                        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed italic mb-4">
-                            Corte premium madurado 30 días, bañado en nuestra salsa secreta de hierbas y mantequilla artesanal.
-                        </p>
-                    </div>
-                </div>
-                <!-- Item 4 -->
-                <div class="group flex flex-col md:flex-row gap-8 items-start">
-                    <div class="w-full md:w-48 h-48 flex-shrink-0 hairline-border p-1 bg-white">
-                        <img alt="Pasta" class="w-full h-full object-cover" data-alt="Handmade tagliatelle pasta tossed in a rich truffle cream sauce, served in a vintage-style shallow bowl. The lighting is soft and golden, highlighting the steam rising from the dish. The overall style is reminiscent of fine-line engravings and classic culinary photography found in heirloom cookbooks." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAe9XXj551qeLh1tXmJgtVOJV7qBLq8BhSNDR5OHC1pEiwg6ms3BeF9GdrKGstLRULSVYLno0k3Nl1LWbkIwq_pNq6-3IjEXPvuJpo-PTHbw2phi9oDtVG4ZfmQ-RWNF4BIkgrjWeclkya9p7qV5H53-DT5232kOTMPjpc2z0HY9P3MFpidUpuwivwnObJqRVBK-h4DOeKxSqeyk6jCZM-FldGXL6KM8fe7EREaD-eVxaNbwq0j6MSYkRL99jZfgwnrXKCs_OnhBEs"/>
-                    </div>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-baseline mb-2">
-                            <h3 class="font-headline-sm text-headline-sm text-primary">Pasta de la Casa</h3>
-                            <span class="font-label-md text-label-md text-secondary">$22.00</span>
-                        </div>
-                        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed italic mb-4">
-                            Tagliatelle fresco elaborado diariamente con sémola italiana, trufa negra y parmesano reggiano.
-                        </p>
-                        <div class="flex gap-2">
-                            <span class="px-3 py-1 rounded-full hairline-border text-[10px] uppercase tracking-widest text-secondary font-bold">Vegetariano</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <!-- Decorative Ornament -->
-            <div class="mt-section-gap flex justify-center py-8">
-                <span class="material-symbols-outlined text-primary text-4xl" data-icon="restaurant">restaurant</span>
+            <div
+                class="md:col-span-5 bg-primary p-6 text-on-primary flex flex-col items-center justify-center text-center">
+                <span class="material-symbols-outlined text-5xl mb-4" data-icon="local_bar">local_bar</span>
+                <h3 class="font-label-md text-label-md uppercase tracking-widest">Coctelería de Época</h3>
+                <div class="w-12 h-[1px] bg-on-primary my-4"></div>
+                <p class="font-body-md text-body-md opacity-80">Recetas clásicas</p>
             </div>
         </section>
-
-        <!-- SECTION 2: Cocteles -->
-        <section id="section-cocteles" class="menu-section hidden w-full">
-            <!-- Category Header -->
-            <div class="vintage-divider mb-12">
-                <span class="font-headline-md text-headline-md italic">Coctelería de Autor</span>
-            </div>
-
-            <!-- Bento Grid for Signature Drinks -->
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 mb-section-gap">
-                <!-- Featured Cocktail -->
-                <div
-                    class="md:col-span-7 flex flex-col md:flex-row gap-6 border-[0.5px] border-primary p-6 relative group overflow-hidden">
-                    <div
-                        class="w-full md:w-1/2 aspect-[4/5] bg-surface-container overflow-hidden art-deco-border shrink-0">
-                        <img class="w-full h-full object-cover grayscale-[0.2] transition-transform duration-700 group-hover:scale-105"
-                            alt="Cóctel El Bohemio"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOT_cCB6KLpOX5Har1XaDfh_SxRiqm3OtSduvnit7spHyvtqyQ3GjZZgvvyjZlqbCOYOF5XZ14TKMmpRjJmfbahMiHO_D0RxRm2YjI40lDxnIeqwqOxKm6fiMM8dlMZD1sL_QovnbK57_8VYEkIbmd6pujAFCn8N9Pk7WgOlTofsQ8vbvIza9ID1rJ7RowtO1Mh7zlLwl6M-uDe1pBjggbYmZMxyj4h_2m4DCjZqcazPzvQeNq3LBI5-c6rZJluUcgu8_hn99fQsg">
-                    </div>
-                    <div class="w-full md:w-1/2 flex flex-col justify-center">
-                        <div class="flex justify-between items-baseline mb-2">
-                            <h3 class="font-headline-sm text-headline-sm text-primary font-bold">El Bohemio</h3>
-                            <span class="font-label-md text-label-md text-primary">$4.200</span>
-                        </div>
-                        <p class="font-body-md text-body-md text-on-surface-variant mb-6">Vermouth rosso artesanal, gin
-                            infusionado con botánicos locales y un toque de bitter de chocolate amargo.</p>
-                        <div class="mt-auto">
-                            <span
-                                class="inline-block px-3 py-1 rounded-full border border-primary text-[10px] font-label-md uppercase tracking-tighter">Sugerencia
-                                del Chef</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Smaller Cocktail Card -->
-                <div class="md:col-span-5 border-[0.5px] border-primary p-6 flex flex-col justify-between group">
-                    <div>
-                        <div class="aspect-video bg-surface-container mb-6 art-deco-border overflow-hidden">
-                            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                alt="Cóctel Clarificado Nº2"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4xEfcy1tet_CUdwIxPdE45WAYJloSPzxKN6bYdPDgOFhn-_2naeWLRhLFhg-x0yshaQqM3Y10oGel19uspWDfwTlRJasl06lGbpdLuW7FO2ZT_Bsy2tunCZLCvyqMpbqcC0mOZqpoY2bTityBhmPFftoacrCc9fDnbGfKn9ICAEkRUtMohtp12czPHowDTWOZcgD9anRBhMJrAevt92YktY8JVulWY5Fa8sAT5VDvBClmfFNJS7pirc_MtLdE3TR1oiiVlsx3RuY">
-                        </div>
-                        <div class="flex justify-between items-baseline mb-2">
-                            <h3 class="font-headline-sm text-headline-sm text-primary font-bold">Clarificado Nº2</h3>
-                            <span class="font-label-md text-label-md text-primary">$3.800</span>
-                        </div>
-                        <p class="font-body-md text-body-md text-on-surface-variant">Mezcla cítrica clarificada con
-                            leche de coco, tequila reposado y esencia de jazmín.</p>
-                    </div>
-                    <button
-                        class="mt-6 w-full py-3 bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container transition-colors relative active:scale-95 duration-150">
-                        DETALLES
-                        <div class="absolute -inset-1 border border-primary opacity-30 pointer-events-none"></div>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Classics Section -->
-            <div class="vintage-divider mb-12">
-                <span class="font-headline-md text-headline-md italic">Los Clásicos de la Casa</span>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                <!-- Classic Item 1 -->
-                <div class="group flex flex-col">
-                    <div
-                        class="aspect-square mb-6 border-[0.5px] border-primary overflow-hidden relative vintage-border">
-                        <img class="w-full h-full object-cover filter sepia-[0.2] transition-transform duration-500 group-hover:scale-110"
-                            alt="Negroni"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfrSoI6JgO8w1tAEsPs196hBQO0ThA4pSKpjeOAuIXoGUCJ_KHWdWUtdZgdyziVQmhQi-B-8J1NoR72k2-buhCoWI1wncMPx5N6SB1-hsHdYWjjWcyEl5FCs3MeoBhF9DjcS8leKYwJoWAyT0nDgXxJz_GhxT25hbdoZ87Kmd3C08Ct7rNnHb-u7fY-hHBrnybJs-QjmdUWjOzWAh2EIvUbedQkGHpw5wl4PWuidyi3HWo1NZiVSYSRSl2_CIv-7xqjAweH9tVdIc">
-                        <div
-                            class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-baseline mb-1">
-                        <h4 class="font-headline-sm text-headline-sm text-primary font-bold">Old Fashioned</h4>
-                        <span class="font-label-md text-label-md text-primary">$3.500</span>
-                    </div>
-                    <p class="font-body-md text-body-md text-on-surface-variant italic">Bourbon, azúcar de caña,
-                        angostura y piel de naranja.</p>
-                </div>
-
-                <!-- Classic Item 2 -->
-                <div class="group flex flex-col">
-                    <div
-                        class="aspect-square mb-6 border-[0.5px] border-primary overflow-hidden relative vintage-border">
-                        <img class="w-full h-full object-cover filter sepia-[0.2] transition-transform duration-500 group-hover:scale-110"
-                            alt="Martini"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXEj-Kvi6V4HWSPwpmMC2AItQvK4LrzyAms-qbF7UYOUaSDYNv3qM0TAgwEW2a2j8bP4yE4BU_heDagh_7X02R1wze_w4wbEMBhikcGJJHwROyz3fSmv-bYk9YuGRgoO8I63l8NFlTT7Xq5MSXA-9x-pRB9BpFEQSVQRcT8jhxuiM63AEw2HmKDJOxb8HrzhERPoEh0FaNRBY6RBGeuU7YIZ6OxwSnyrUHa6XKyQy7fvd8F4twY7HhetYSjY7SxJw9ATn5fwQzug0">
-                        <div
-                            class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-baseline mb-1">
-                        <h4 class="font-headline-sm text-headline-sm text-primary font-bold">Dry Martini</h4>
-                        <span class="font-label-md text-label-md text-primary">$3.500</span>
-                    </div>
-                    <p class="font-body-md text-body-md text-on-surface-variant italic">Gin premium, Vermouth dry,
-                        aceitunas sevillanas.</p>
-                </div>
-
-                <!-- Classic Item 3 -->
-                <div class="group flex flex-col">
-                    <div
-                        class="aspect-square mb-6 border-[0.5px] border-primary overflow-hidden relative vintage-border">
-                        <img class="w-full h-full object-cover filter sepia-[0.2] transition-transform duration-500 group-hover:scale-110"
-                            alt="Whiskey Sour"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDg1G6lgt18j0AmhjBShgRvywMAAUfKRJOXaHpgk3jFVSImHwfg-bdoRkt8k6MsP0WmWJi-Hy9CtbyoqoOm8oiDRbf4COa0eTiw-W5yRPh_q3WiYIbguyFLjJWDKwSI8AmpaMdNZE34Ubg72r9x_k2rvlcOpREhtONJu1WXb3Y_nxVlJeesiY6chx9WKIuqUv6cpmU7_3qFdxXZrLQGxDqrZ3TXvpSzTWt6hg1RdFudV8Nmm_Oe2RmeyH53GWxc4MwmEJyD0HWwE44">
-                        <div
-                            class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-baseline mb-1">
-                        <h4 class="font-headline-sm text-headline-sm text-primary font-bold">Sour de la Casa</h4>
-                        <span class="font-label-md text-label-md text-primary">$3.200</span>
-                    </div>
-                    <p class="font-body-md text-body-md text-on-surface-variant italic">Pisco, jarabe de goma artesanal,
-                        limón sutil y clara de huevo.</p>
-                </div>
-            </div>
-
-            <!-- CTA Section (Reconstructed) -->
-            <div class="mt-section-gap border-y-[0.5px] border-primary py-12 text-center bg-surface-container-low">
-                <h2 class="font-headline-md text-headline-md text-primary mb-4 italic">¿Algo para acompañar?</h2>
-                <p class="font-body-lg text-body-lg text-on-surface-variant mb-8 italic">Disfruta de nuestros exquisitos
-                    platillos y especialidades artesanales.</p>
-                <a href="#cocina" onclick="navigateToSection('cocina'); return false;"
-                    class="inline-block bg-primary text-on-primary px-8 py-3 font-label-md text-label-md uppercase tracking-widest relative hover:opacity-90 active:scale-95 transition-all outline outline-1 outline-offset-[4px] outline-primary">
-                    Ver Menú de Cocina
-                </a>
-            </div>
-        </section>
-
-        <!-- SECTION 3: Bebidas -->
-        <section id="section-bebidas" class="menu-section hidden w-full">
-            <!-- Category: Café de Especialidad -->
-            <div class="mb-section-gap">
-                <div class="flex items-center justify-center gap-4 mb-8">
-                    <span class="material-symbols-outlined text-primary text-3xl">local_cafe</span>
-                    <h2 class="font-headline-md text-headline-md text-primary text-center">Café de Especialidad</h2>
-                    <span class="material-symbols-outlined text-primary text-3xl">local_cafe</span>
-                </div>
-                <div class="etched-line"></div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Coffee Item 1 -->
-                    <div class="flex flex-col group">
-                        <div class="aspect-square w-full vintage-border overflow-hidden mb-4">
-                            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                alt="Capuchino Clásico"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZz0tQtwh0hZc2wwku3gOahARJGkQAOCw45-24EdGNWo1JEfK19zX-RDo-EJCPMLN_0a1eiimntMScO6_ttn-OHJwBAL8W3kROA3sf3MkUKYYcwXll1kCendsWh3QoyqoKA-aG741nSfscY3fS6PqBmxbJ2QUGV1-IsIxouj-jDRPALS7dkc6tckuEAoeNSsN1RVRz4ByNIYaZ-CJIQzrz7lSl2CqqwzPHnxplqDFT0e-fEjhj_F_5Xwz5rTwbw1Uj4uyWZjM9rso">
-                        </div>
-                        <div class="flex justify-between items-baseline mb-1">
-                            <h3 class="font-headline-sm text-headline-sm text-primary font-bold">Capuchino Clásico</h3>
-                            <span class="font-label-md text-label-md text-secondary">$3.500</span>
-                        </div>
-                        <p class="font-body-md text-body-md text-on-surface-variant italic">Espresso doble con leche
-                            emulsionada y un toque de canela fresca.</p>
-                    </div>
-
-                    <!-- Coffee Item 2 -->
-                    <div class="flex flex-col group">
-                        <div class="aspect-square w-full vintage-border overflow-hidden mb-4">
-                            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                alt="Cold Brew Nitro"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-W77IwJtFmAQN82N7fpJu9Yk49QBJNnlu4__VoGlPkBVtvSwZJqDVKvW5KH1AMOY5y96qM0-V4iTHbGFaEK9iGwGAqZ2wuO7yfTQdu-2xSs0E9ftz1RaXylNiSgY5FusFbK4Hvyufau_tb7dKcBjugL3otkV1utz37KOLiYi_TzR2c4S6JhzmJ2bdxHp4v1_YHCnNHd7LRXV-5_FAA4MqahwxA3kfB-yOBsPg4C20DbmWaVIdBmDJoBsBnvZudawnF7yegdMh8Bg">
-                        </div>
-                        <div class="flex justify-between items-baseline mb-1">
-                            <h3 class="font-headline-sm text-headline-sm text-primary font-bold">Cold Brew Nitro</h3>
-                            <span class="font-label-md text-label-md text-secondary">$4.200</span>
-                        </div>
-                        <p class="font-body-md text-body-md text-on-surface-variant italic">Extracción en frío por 18
-                            horas, servido con nitrógeno para una textura cremosa.</p>
-                    </div>
-
-                    <!-- Coffee Item 3 -->
-                    <div class="flex flex-col group">
-                        <div class="aspect-square w-full vintage-border overflow-hidden mb-4">
-                            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                alt="Café Vienés"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnrmTVEzvSQzGM1kcCGsgLDzv2CG6Z0eeYolkk7l1PoxL2WMXgW8xZ4QtvTpn83uZTlxAnFd90h5__iTUsZMP6aJHNm9sLw5FdVJhS-3R36SSWs9ojVGoKnGf5vMPTPkMzRQWXMDfU9FwwsfGE6MbIxCSDf2q1Qv51H350EMlZSJF6iTG2A8956EPkxtn_7Kd1BQZuc4IIway6gBPmbwVFuXMRGbhhfCEb7opsXHpwlIf1Hc-Dzc2MuTGuL8zLsqwGYvcOH4zgx1I">
-                        </div>
-                        <div class="flex justify-between items-baseline mb-1">
-                            <h3 class="font-headline-sm text-headline-sm text-primary font-bold">Café Vienés</h3>
-                            <span class="font-label-md text-label-md text-secondary">$3.800</span>
-                        </div>
-                        <p class="font-body-md text-body-md text-on-surface-variant italic">Café largo coronado con nata
-                            montada artesanal y virutas de cacao amargo.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Category: Bebidas Frías & Refrescos -->
-            <div class="mb-section-gap">
-                <div class="flex items-center justify-center gap-4 mb-8">
-                    <span class="material-symbols-outlined text-primary text-3xl">eco</span>
-                    <h2 class="font-headline-md text-headline-md text-primary text-center">Refrescos Naturales</h2>
-                    <span class="material-symbols-outlined text-primary text-3xl">eco</span>
-                </div>
-                <div class="etched-line"></div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12">
-                    <!-- Drink 4 -->
-                    <div class="flex gap-6 items-start border-l-2 border-primary pl-6">
-                        <div
-                            class="w-24 h-24 shrink-0 rounded-full bg-secondary-container flex items-center justify-center scalloped-badge overflow-hidden border border-secondary">
-                            <img class="w-full h-full object-cover" alt="Limonada de Menta"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrYHGFuFLx8IpCSEQmwWM8sffWXkMsLyBx_6qIdD3Ygd1oFS8HZIDOkCgIRjsDRIS6KRXMwtNNB4AmJI97JPpuc5HWXqje7Oay6qinmyqkRHI9DKe1qlq1Rn4coKowlXWvOJhC9A6U-CO-MqIkCc49U26Jt5S0aV5JaX_GnA0sI6kGSsEWdGLp377USefOqq79UpzZrBjVLEDFa3UUcOG0eLJhFLB1zwfIJjbZxNnhVU6rQX0FiP6YWH6u2SZsX1MXNQ7_yQAxyFU">
-                        </div>
-                        <div class="flex-grow">
-                            <div class="flex justify-between items-baseline">
-                                <h3 class="font-headline-sm text-headline-sm text-primary font-bold">Limonada de Menta
-                                </h3>
-                                <span class="font-label-md text-label-md text-secondary">$3.200</span>
-                            </div>
-                            <p class="font-body-md text-body-md text-on-surface-variant mt-2">Limones seleccionados,
-                                menta fresca del huerto y miel de abeja orgánica.</p>
-                            <div class="mt-2 flex gap-2">
-                                <span
-                                    class="text-[10px] font-bold px-2 py-1 bg-surface-container-highest text-primary border border-primary uppercase tracking-widest">Sin
-                                    Azúcar</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Drink 5 -->
-                    <div class="flex gap-6 items-start border-l-2 border-primary pl-6">
-                        <div
-                            class="w-24 h-24 shrink-0 rounded-full bg-secondary-container flex items-center justify-center scalloped-badge overflow-hidden border border-secondary">
-                            <img class="w-full h-full object-cover" alt="Té Rojo Hibiscus"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTs-TJIJDJNc-B_yG4HIMGu427ktW3s5oo5bK9Ea8xOVcljzeH1VrcgkQET55sO96J-1L1RKU3aO8RNAQLEGklxgeCydXcg_cT427cFoD6rVPTIY2C3uY2P1EyBvIBtbnLBK6LEpH_VS-yxZ_J2dR3vpNIbEEH-1aJJzwZCTV0iwp6OVXyUEMNuwIHNCt5bhkeBVkyKKeIxt7sgPhae-cnhu5zDp47SH0oV5-vQ0XC37dLEoQbI7jEDLyXz6sKxXf8_7gF3egRXWM">
-                        </div>
-                        <div class="flex-grow">
-                            <div class="flex justify-between items-baseline">
-                                <h3 class="font-headline-sm text-headline-sm text-primary font-bold">Té Rojo Hibiscus
-                                </h3>
-                                <span class="font-label-md text-label-md text-secondary">$3.500</span>
-                            </div>
-                            <p class="font-body-md text-body-md text-on-surface-variant mt-2">Infusión fría de flores de
-                                Jamaica con un toque de jengibre y frutos rojos.</p>
-                            <div class="mt-2 flex gap-2">
-                                <span
-                                    class="text-[10px] font-bold px-2 py-1 bg-surface-container-highest text-primary border border-primary uppercase tracking-widest">Antioxidante</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- CTA Section -->
-            <div class="my-section-gap vintage-border p-12 bg-surface-container-low text-center max-w-3xl mx-auto">
-                <h2 class="font-headline-md text-headline-md text-primary mb-4">¿Buscas algo más fuerte?</h2>
-                <p class="font-body-lg text-body-lg text-on-surface-variant mb-8 italic">Explora nuestra selección de
-                    coctelería clásica inspirada en la era de la prohibición.</p>
-                <a href="#cocteles" onclick="navigateToSection('cocteles'); return false;"
-                    class="inline-block bg-primary text-on-primary px-8 py-3 font-label-md text-label-md uppercase tracking-widest relative hover:opacity-90 active:scale-95 transition-all outline outline-1 outline-offset-[4px] outline-primary">
-                    Ver Menú de Cocteles
-                </a>
-            </div>
-        </section>
-
     </main>
-
     <!-- Footer -->
     <footer
-        class="bg-background dark:bg-background full-width py-section-gap border-t-[0.5px] border-outline-variant mt-section-gap pb-28 md:pb-12">
-        <div class="flex flex-col items-center gap-4 w-full px-margin-md text-center max-w-7xl mx-auto">
-            <div class="flex space-x-8 mb-4">
-                <a class="text-primary hover:opacity-70 transition-opacity" href="#">
-                    <span class="material-symbols-outlined text-2xl">location_on</span>
-                </a>
-                <a class="text-primary hover:opacity-70 transition-opacity" href="#">
-                    <span class="material-symbols-outlined text-2xl">photo_camera</span>
-                </a>
-                <a class="text-primary hover:opacity-70 transition-opacity" href="#">
-                    <span class="material-symbols-outlined text-2xl">social_leaderboard</span>
-                </a>
-            </div>
-
-            <p class="font-label-md text-label-md uppercase tracking-widest text-primary mb-2"> Calle Ignacio Agramonte
-                #57,
-                Puerto Padre</p>
-
-            <div class="flex gap-6 mb-4 justify-center">
-                <a class="font-body-md text-body-md text-secondary hover:text-primary transition-colors"
-                    href="#">Location</a>
-                <a class="font-body-md text-body-md text-secondary hover:text-primary transition-colors"
-                    href="#">Instagram</a>
-                <a class="font-body-md text-body-md text-secondary hover:text-primary transition-colors"
-                    href="#">Facebook</a>
-            </div>
-
-            <div class="font-brand-logo text-primary opacity-50 mb-4 flex items-center gap-2">
-                <span class="h-px w-12 bg-primary"></span>
-                <span class="font-label-md text-label-md uppercase tracking-widest">Est. 2022</span>
-                <span class="h-px w-12 bg-primary"></span>
-            </div>
-            <p class="font-body-md text-body-md text-outline opacity-60 italic">© 2026 Drs.Com Bar &amp; Cafetería -
-                Desde 2022</p>
+        class="flex flex-col items-center gap-4 w-full px-margin-md text-center bg-background dark:bg-background py-section-gap border-t-[0.5px] border-outline-variant mt-section-gap">
+        <div class="flex space-x-8 mb-4">
+            <a class="text-primary hover:opacity-70 transition-opacity" href="#">
+                <span class="material-symbols-outlined text-2xl" data-icon="location_on">location_on</span>
+            </a>
+            <a class="text-primary hover:opacity-70 transition-opacity" href="#">
+                <span class="material-symbols-outlined text-2xl" data-icon="photo_camera">photo_camera</span>
+            </a>
+            <a class="text-primary hover:opacity-70 transition-opacity" href="#">
+                <span class="material-symbols-outlined text-2xl" data-icon="facebook">social_leaderboard</span>
+            </a>
         </div>
+        <p class="font-label-md text-label-md uppercase tracking-widest text-primary mb-2">Calle Ignacio Agramonte #57,
+            Puerto Padre</p>
+        <div class="flex gap-6 mb-4">
+            <a class="font-body-md text-body-md text-secondary hover:text-primary transition-colors"
+                href="https://www.google.com.mx/maps/place/Dr.com/@21.1958888,-76.5993123,450m/data=!3m1!1e3!4m9!1m2!2m1!1sCalle+Ignacio+Agramonte+%2357,+Puerto+Padre!3m5!1s0x8ed27b1426a4269d:0xdcbfe25ffc0f8c4!8m2!3d21.1952353!4d-76.59919!16s%2Fg%2F11k41wd_dc!5m1!1e1?entry=ttu&g_ep=EgoyMDI2MDUzMS4wIKXMDSoASAFQAw%3D%3D">Location</a>
+            <a class="font-body-md text-body-md text-secondary hover:text-primary transition-colors"
+                href="https://www.instagram.com/_drs.com_?igsh=anpibm11b2JlMTQy">Instagram</a>
+            <a class="font-body-md text-body-md text-secondary hover:text-primary transition-colors"
+                href="https://www.facebook.com/profile.php?id=100088449266135">Facebook</a>
+        </div>
+        <p class="font-body-md text-body-md text-outline opacity-60 italic">© 2026 Drs.Com Bar &amp; Cafetería - Desde
+            2022</p>
     </footer>
-
-    <!-- BottomNavBar (Mobile Only) -->
+    <!-- BottomNavBar (Shared Component Logic - Active: None for Home Splash) -->
     <nav
-        class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter py-4 bg-surface-container-low dark:bg-surface-container-low shadow-lg border-t-[1px] border-primary rounded-t-full">
-        <a id="tab-mobile-cocina"
-            class="flex flex-col items-center justify-center p-2 hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-95 bg-primary-container text-on-primary rounded-full"
-            href="#cocina" onclick="navigateToSection('cocina'); return false;">
-            <span class="material-symbols-outlined">restaurant</span>
-            <span class="font-label-md text-label-md">Cocina</span>
-        </a>
-        <a id="tab-mobile-cocteles"
-            class="flex flex-col items-center justify-center p-2 hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-95 text-primary rounded-full"
-            href="#cocteles" onclick="navigateToSection('cocteles'); return false;">
-            <span class="material-symbols-outlined">local_bar</span>
-            <span class="font-label-md text-label-md">Cocteles</span>
-        </a>
-        <a id="tab-mobile-bebidas"
-            class="flex flex-col items-center justify-center p-2 hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-95 text-primary rounded-full"
-            href="#bebidas" onclick="navigateToSection('bebidas'); return false;">
-            <span class="material-symbols-outlined">local_cafe</span>
-            <span class="font-label-md text-label-md">Bebidas</span>
-        </a>
+        class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter py-4 bg-surface-container-low dark:bg-surface-container-low border-t-[1px] border-primary shadow-lg rounded-t-full md:hidden">
+        <button
+            class="flex flex-col items-center justify-center p-2 hover:bg-primary-container hover:text-on-primary-container transition-colors rounded-full active:scale-95 duration-150 bg-primary-container text-on-primary">
+            <span class="material-symbols-outlined" data-icon="restaurant">restaurant</span>
+            <span class="font-label-md text-label-md"><a href="cocina.html"></a>Cocina</span>
+        </button>
+        <button
+            class="flex flex-col items-center justify-center p-2 hover:bg-primary-container hover:text-on-primary-container transition-colors rounded-full active:scale-95 duration-150 bg-primary-container text-on-primary">
+            <span class="material-symbols-outlined" data-icon="local_bar">local_bar</span>
+            <span class="font-label-md text-label-md"><a href="cocteles.html"></a>Cocteles</span>
+        </button>
+        <button
+            class="flex flex-col items-center justify-center p-2 hover:bg-primary-container hover:text-on-primary-container transition-colors rounded-full active:scale-95 duration-150 bg-primary-container text-on-primary">
+            <span class="material-symbols-outlined" data-icon="local_cafe">local_cafe</span>
+            <span class="font-label-md text-label-md"><a href="bebidas.html">Bebidas</a></span>
+        </button>
     </nav>
-
-    <!-- SPA Logic & Animations -->
     <script>
-        // Set the active section
-        let activeSectionId = 'cocina';
-
-        // Navigation Function
-        function navigateToSection(sectionId) {
-            if (sectionId === activeSectionId) {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                return;
-            }
-
-            const prevSection = document.getElementById(`section-${activeSectionId}`);
-            const nextSection = document.getElementById(`section-${sectionId}`);
-
-            if (!nextSection) return;
-
-            // 1. Deselect old tab styles
-            updateTabStyles(activeSectionId, false);
-
-            // 2. Animate out the previous section
-            if (prevSection) {
-                prevSection.classList.remove('active');
-                prevSection.classList.add('opacity-0', 'translate-y-4');
-
-                // Hide from viewport after fade transition completes (300ms)
-                setTimeout(() => {
-                    prevSection.classList.add('hidden');
-
-                    // 3. Prepare and animate in the new section
-                    nextSection.classList.remove('hidden');
-                    // Trigger a reflow to start transition
-                    nextSection.offsetHeight;
-
-                    nextSection.classList.add('active');
-                    nextSection.classList.remove('opacity-0', 'translate-y-4');
-                }, 300);
-            } else {
-                // If there's no previous section (initial load)
-                nextSection.classList.remove('hidden');
-                nextSection.offsetHeight;
-                nextSection.classList.add('active');
-                nextSection.classList.remove('opacity-0', 'translate-y-4');
-            }
-
-            // 4. Select new tab styles
-            updateTabStyles(sectionId, true);
-
-            // 5. Update state
-            activeSectionId = sectionId;
-
-            // Scroll back to top smoothly when changing tabs
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Update styling of navigation tabs dynamically
-        function updateTabStyles(sectionId, isActive) {
-            const desktopTab = document.getElementById(`tab-desktop-${sectionId}`);
-            const mobileTab = document.getElementById(`tab-mobile-${sectionId}`);
-
-            if (isActive) {
-                // Desktop active
-                if (desktopTab) {
-                    desktopTab.classList.add('text-primary', 'font-bold', 'border-b-2', 'border-primary');
-                    desktopTab.classList.remove('text-on-surface-variant');
-                }
-                // Mobile active
-                if (mobileTab) {
-                    mobileTab.classList.add('bg-primary-container', 'text-on-primary');
-                    mobileTab.classList.remove('text-primary');
-                }
-            } else {
-                // Desktop inactive
-                if (desktopTab) {
-                    desktopTab.classList.remove('text-primary', 'font-bold', 'border-b-2', 'border-primary');
-                    desktopTab.classList.add('text-on-surface-variant');
-                }
-                // Mobile inactive
-                if (mobileTab) {
-                    mobileTab.classList.remove('bg-primary-container', 'text-on-primary');
-                    mobileTab.classList.add('text-primary');
-                }
-            }
-        }
-
-        // Listen to hash changes in URL (e.g. refresh, history nav)
-        window.addEventListener('hashchange', () => {
-            const hash = window.location.hash.substring(1);
-            if (['cocina', 'bebidas', 'cocteles'].includes(hash)) {
-                navigateToSection(hash);
-            }
-        });
-
-        // Initial load check
-        window.addEventListener('load', () => {
-            const hash = window.location.hash.substring(1);
-            if (['cocina', 'bebidas', 'cocteles'].includes(hash)) {
-                // Instantly show the hash section without animations
-                const defaultSec = document.getElementById('section-cocina');
-                const targetSec = document.getElementById(`section-${hash}`);
-
-                if (defaultSec && targetSec && hash !== 'cocina') {
-                    defaultSec.classList.add('hidden');
-                    defaultSec.classList.remove('active');
-                    updateTabStyles('cocina', false);
-
-                    targetSec.classList.remove('hidden');
-                    targetSec.classList.add('active');
-                    targetSec.classList.remove('opacity-0', 'translate-y-4');
-                    updateTabStyles(hash, true);
-
-                    activeSectionId = hash;
-                }
-            } else {
-                // Default is cocina, make sure active class is set
-                const defaultSec = document.getElementById('section-cocina');
-                if (defaultSec) {
-                    defaultSec.classList.add('active');
-                    defaultSec.classList.remove('opacity-0', 'translate-y-4');
-                }
-            }
-        });
-
-        // Vintage border micro-interaction hover effect
-        document.querySelectorAll('.vintage-border').forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.style.borderColor = '#023e47'; // primary-container
+        // Micro-interaction for hover effects on buttons and interactive elements
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.style.transform = 'scale(0.98)';
             });
-            card.addEventListener('mouseleave', () => {
-                card.style.borderColor = '#00272d'; // primary
-            });
-        });
-
-        // Global button scale-down micro-interaction on press
-        document.querySelectorAll('button, a:not(.logo-link)').forEach(el => {
-            el.addEventListener('mousedown', () => {
-                el.style.transform = 'scale(0.97)';
-                el.style.transition = 'transform 0.1s ease';
-            });
-            el.addEventListener('mouseup', () => {
-                el.style.transform = '';
-            });
-            el.addEventListener('mouseleave', () => {
-                el.style.transform = '';
-            });
-        });
-
-        // Kitchen menu item hover highlighting micro-interaction
-        document.querySelectorAll('#section-cocina section > div').forEach(item => {
-            item.addEventListener('mouseenter', () => {
-                item.style.transform = 'translateY(-2px)';
-                item.style.transition = 'transform 0.3s ease';
-            });
-            item.addEventListener('mouseleave', () => {
-                item.style.transform = 'translateY(0)';
+            button.addEventListener('mouseup', () => {
+                button.style.transform = 'scale(1)';
             });
         });
     </script>
+
+
 </body>
 
 </html>
