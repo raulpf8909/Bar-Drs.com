@@ -251,21 +251,21 @@
     <!-- BottomNavBar (Shared Component Logic - Active: None for Home Splash) -->
     <nav
         class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter py-4 bg-surface-container-low dark:bg-surface-container-low border-t-[1px] border-primary shadow-lg rounded-t-full md:hidden">
-        <button
-            class="flex flex-col items-center justify-center p-2 hover:bg-primary-container hover:text-on-primary-container transition-colors rounded-full active:scale-95 duration-150 bg-primary-container text-on-primary">
-            <span class="material-symbols-outlined" data-icon="restaurant">restaurant</span>
-            <span class="font-label-md text-label-md"><a href="cocina.html"></a>Cocina</span>
-        </button>
-        <button
-            class="flex flex-col items-center justify-center p-2 hover:bg-primary-container hover:text-on-primary-container transition-colors rounded-full active:scale-95 duration-150 bg-primary-container text-on-primary">
-            <span class="material-symbols-outlined" data-icon="local_bar">local_bar</span>
-            <span class="font-label-md text-label-md"><a href="cocteles.html"></a>Cocteles</span>
-        </button>
-        <button
-            class="flex flex-col items-center justify-center p-2 hover:bg-primary-container hover:text-on-primary-container transition-colors rounded-full active:scale-95 duration-150 bg-primary-container text-on-primary">
-            <span class="material-symbols-outlined" data-icon="local_cafe">local_cafe</span>
-            <span class="font-label-md text-label-md"><a href="bebidas.html">Bebidas</a></span>
-        </button>
+        <a href="cocina.html"> <button
+                class="flex flex-col items-center justify-center p-2 hover:bg-primary-container hover:text-on-primary-container transition-colors rounded-full active:scale-95 duration-150 bg-primary-container text-on-primary">
+                <span class="material-symbols-outlined" data-icon="restaurant">restaurant</span>
+                <span class="font-label-md text-label-md">Cocina</span>
+            </button></a>
+        <a href="cocteles.html"><button
+                class="flex flex-col items-center justify-center p-2 hover:bg-primary-container hover:text-on-primary-container transition-colors rounded-full active:scale-95 duration-150 bg-primary-container text-on-primary">
+                <span class="material-symbols-outlined" data-icon="local_bar">local_bar</span>
+                <span class="font-label-md text-label-md">Cocteles</span>
+            </button></a>
+        <a href="bebidas.html"><button
+                class="flex flex-col items-center justify-center p-2 hover:bg-primary-container hover:text-on-primary-container transition-colors rounded-full active:scale-95 duration-150 bg-primary-container text-on-primary">
+                <span class="material-symbols-outlined" data-icon="local_cafe">local_cafe</span>
+                <span class="font-label-md text-label-md">Bebidas</span>
+            </button></a>
     </nav>
     <script>
         // Micro-interaction for hover effects on buttons and interactive elements
