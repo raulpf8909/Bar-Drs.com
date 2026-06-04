@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Administración - Drs.Com Cafetería & Bar</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#9ecfd9",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#40484a",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#eae8e2",
+                        "outline-variant": "#c0c8ca",
+                        "on-primary-container": "#79a9b3",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e4e2dc",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#9ecfd9",
+                        "secondary-fixed-dim": "#e3c19f",
+                        "outline": "#70787a",
+                        "on-primary-fixed-variant": "#1a4d56",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#b9ebf6",
+                        "tertiary-container": "#363838",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#212323",
+                        "inverse-surface": "#30312d",
+                        "secondary-fixed": "#ffddbb",
+                        "on-tertiary-container": "#a0a1a1",
+                        "tertiary-fixed": "#e2e2e2",
+                        "primary-container": "#023e47",
+                        "surface": "#fbf9f3",
+                        "on-secondary-fixed": "#291803",
+                        "surface-tint": "#35656f",
+                        "primary": "#00272d",
+                        "on-primary-fixed": "#001f25",
+                        "surface-dim": "#dcdad4",
+                        "background": "#fbf9f3",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "on-background": "#1b1c18",
+                        "surface-container": "#f0eee8",
+                        "surface-bright": "#fbf9f3",
+                        "inverse-on-surface": "#f3f1eb",
+                        "secondary-container": "#fdd9b7",
+                        "surface-container-low": "#f5f3ed",
+                        "secondary": "#735a3e",
+                        "on-secondary-fixed-variant": "#5a4229",
+                        "on-secondary-container": "#785e42",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#1b1c18",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "surface-variant": "#e4e2dc"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "section-gap": "2.5rem",
+                        "margin-sm": "1rem",
+                        "margin-md": "1.5rem",
+                        "gutter": "1rem"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Merriweather"],
+                        "label-md": ["DM Sans"],
+                        "headline-lg": ["Playfair Display"],
+                        "headline-sm": ["Playfair Display"],
+                        "body-lg": ["Merriweather"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "500" }],
+                        "headline-lg": ["40px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "headline-md": ["28px", { "lineHeight": "1.3", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+
+    <!-- Custom CSS Styles -->
+    <style>
+        body {
+            background-color: #fbf9f3;
+            color: #00272d;
+            font-family: 'Merriweather', serif;
+            min-height: max(884px, 100dvh);
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .double-border {
+            border: 1px solid #00272d;
+            outline: 2px solid #00272d;
+            outline-offset: 4px;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body class="bg-background text-primary font-body-md min-h-screen flex flex-col relative pb-20">
+
+    <!-- Auth Overlay (Shown when user is not logged in) -->
+    <div id="auth-overlay" class="fixed inset-0 bg-background z-[100] flex flex-col items-center justify-center hidden">
+        <div class="text-center p-8 max-w-md w-full">
+            <h1 class="font-headline-lg text-primary mb-8">Administración</h1>
+            <p class="font-body-md text-on-surface-variant mb-8">Por favor, inicia sesión para acceder al panel de control.</p>
+            <button id="btn-login" class="bg-primary text-on-primary px-8 py-3 rounded-full font-label-md flex items-center justify-center w-full gap-2 hover:bg-primary-container transition-colors">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="w-6 h-6 bg-white rounded-full p-1" />
+                Iniciar sesión con Google
+            </button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b-[0.5px] border-outline-variant w-full pt-4 pb-2">
+        <div class="flex flex-col w-full max-w-7xl mx-auto">
+            <div class="flex justify-between items-center px-margin-md mb-4">
+                <button class="text-primary hover:bg-surface-variant p-2 rounded-full transition-colors">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <h1 class="font-headline-md text-primary font-bold">Administración</h1>
+                <button id="btn-logout" class="text-primary text-xs flex flex-col items-center hover:bg-surface-variant p-2 rounded-lg transition-colors">
+                    <span class="font-label-md">Cerrar</span>
+                    <span class="font-label-md">Sesión</span>
+                </button>
+            </div>
+
+            <!-- Scrollable Tabs -->
+            <nav class="flex space-x-6 overflow-x-auto no-scrollbar w-full px-margin-md">
+                <button class="category-tab active-tab font-label-md text-primary font-bold border-b-2 border-primary pb-2 whitespace-nowrap" data-category="cocina">Cocina</button>
+                <button class="category-tab font-label-md text-on-surface-variant hover:text-primary pb-2 whitespace-nowrap transition-colors" data-category="cocteles">Cocteles</button>
+                <button class="category-tab font-label-md text-on-surface-variant hover:text-primary pb-2 whitespace-nowrap transition-colors" data-category="bebidas">Bebidas</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow w-full max-w-7xl mx-auto px-margin-md py-6">
+        
+        <div class="flex items-center justify-center gap-4 mb-8">
+            <span class="material-symbols-outlined text-primary">restaurant</span>
+            <h2 class="font-headline-lg text-primary italic text-center">Carta de<br>Productos</h2>
+            <span class="material-symbols-outlined text-primary">local_bar</span>
+        </div>
+
+        <div id="products-container" class="space-y-4">
+            <!-- Product Cards will be injected here dynamically -->
+            <div class="text-center py-10">
+                <span class="material-symbols-outlined animate-spin text-primary text-4xl">autorenew</span>
+                <p class="mt-4 text-on-surface-variant">Cargando productos...</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Floating Action Button -->
+    <button id="btn-add-product" class="fixed bottom-24 right-6 w-16 h-16 bg-primary text-on-primary rounded-xl flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors z-40">
+        <span class="material-symbols-outlined text-3xl">add</span>
+    </button>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 left-0 w-full z-40 bg-surface flex justify-around items-center px-4 py-3 border-t-[0.5px] border-outline-variant pb-safe">
+        <a href="#" class="flex flex-col items-center text-on-primary bg-primary-container rounded-xl px-4 py-1">
+            <span class="material-symbols-outlined text-xl">restaurant_menu</span>
+            <span class="text-[10px] mt-1 font-bold">Productos</span>
+        </a>
+        <a href="#" class="flex flex-col items-center text-on-surface-variant hover:text-primary transition-colors px-4 py-1">
+            <span class="material-symbols-outlined text-xl">category</span>
+            <span class="text-[10px] mt-1">Categorías</span>
+        </a>
+        <a href="#" class="flex flex-col items-center text-on-surface-variant hover:text-primary transition-colors px-4 py-1">
+            <span class="material-symbols-outlined text-xl">receipt_long</span>
+            <span class="text-[10px] mt-1">Pedidos</span>
+        </a>
+        <a href="#" class="flex flex-col items-center text-on-surface-variant hover:text-primary transition-colors px-4 py-1">
+            <span class="material-symbols-outlined text-xl">settings</span>
+            <span class="text-[10px] mt-1">Ajustes</span>
+        </a>
+    </nav>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex-col justify-end md:justify-center items-center">
+        <div class="bg-surface w-full md:max-w-lg rounded-t-2xl md:rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+            <div class="p-4 border-b border-outline-variant flex justify-between items-center bg-surface-container">
+                <h3 id="modal-title" class="font-headline-sm text-primary">Agregar Producto</h3>
+                <button id="btn-close-modal" class="text-on-surface-variant hover:text-primary">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto">
+                <form id="product-form" class="space-y-4">
+                    <input type="hidden" id="product-id">
+                    
+                    <div>
+                        <label class="block font-label-md text-primary mb-1">Nombre</label>
+                        <input type="text" id="product-name" required class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block font-label-md text-primary mb-1">Precio ($)</label>
+                            <input type="number" step="0.01" id="product-price" required class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary">
+                        </div>
+                        <div>
+                            <label class="block font-label-md text-primary mb-1">Categoría</label>
+                            <select id="product-category" required class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary">
+                                <option value="cocina">Cocina</option>
+                                <option value="cocteles">Cocteles</option>
+                                <option value="bebidas">Bebidas</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-label-md text-primary mb-1">Subcategoría</label>
+                        <select id="product-subcategory" required class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary">
+                            <!-- Populated dynamically based on category -->
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-label-md text-primary mb-1">Descripción</label>
+                        <textarea id="product-description" rows="3" required class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block font-label-md text-primary mb-1">Imagen</label>
+                        <input type="file" id="product-image" accept="image/*" class="w-full text-sm text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-container file:text-on-primary hover:file:bg-primary">
+                        <img id="image-preview" class="mt-2 h-32 w-32 object-cover rounded hidden">
+                        <input type="hidden" id="existing-image-url">
+                    </div>
+
+                    <div class="pt-4 flex gap-4">
+                        <button type="submit" id="btn-save" class="flex-1 bg-primary text-on-primary py-3 rounded font-label-md hover:bg-primary-container transition-colors flex justify-center items-center gap-2">
+                            Guardar Producto
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Logic -->
+    <script type="module">
+        import { auth, provider, db, storage } from './firebase-config.js';
+        import { signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
+
+        // DOM Elements
+        const authOverlay = document.getElementById('auth-overlay');
+        const btnLogin = document.getElementById('btn-login');
+        const btnLogout = document.getElementById('btn-logout');
+        const productsContainer = document.getElementById('products-container');
+        const categoryTabs = document.querySelectorAll('.category-tab');
+        
+        // Modal Elements
+        const modal = document.getElementById('product-modal');
+        const btnAddProduct = document.getElementById('btn-add-product');
+        const btnCloseModal = document.getElementById('btn-close-modal');
+        const productForm = document.getElementById('product-form');
+        const modalTitle = document.getElementById('modal-title');
+        
+        const inputId = document.getElementById('product-id');
+        const inputName = document.getElementById('product-name');
+        const inputPrice = document.getElementById('product-price');
+        const inputCategory = document.getElementById('product-category');
+        const inputSubcategory = document.getElementById('product-subcategory');
+        const inputDesc = document.getElementById('product-description');
+        const inputImage = document.getElementById('product-image');
+        const imagePreview = document.getElementById('image-preview');
+        const existingImageUrl = document.getElementById('existing-image-url');
+        const btnSave = document.getElementById('btn-save');
+
+        let currentCategory = 'cocina';
+        let allProducts = [];
+
+        // Subcategory definitions
+        const subcategories = {
+            'cocina': ['Plato Principal', 'Postres', 'Entradas'],
+            'cocteles': ['Clásicos', 'Tragos', 'De Autor'],
+            'bebidas': ['Café', 'Jugos', 'Refrescos']
+        };
+
+        // --- AUTHENTICATION ---
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                authOverlay.classList.add('hidden');
+                loadProducts(currentCategory);
+            } else {
+                authOverlay.classList.remove('hidden');
+                authOverlay.classList.add('flex');
+            }
+        });
+
+        btnLogin.addEventListener('click', async () => {
+            try {
+                await signInWithPopup(auth, provider);
+            } catch (error) {
+                console.error("Error signing in:", error);
+                alert("Error al iniciar sesión.");
+            }
+        });
+
+        btnLogout.addEventListener('click', () => {
+            signOut(auth);
+        });
+
+        // --- UI LOGIC ---
+        categoryTabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                // Update active tab styling
+                categoryTabs.forEach(t => {
+                    t.classList.remove('active-tab', 'font-bold', 'border-b-2', 'border-primary', 'text-primary');
+                    t.classList.add('text-on-surface-variant');
+                });
+                
+                const clickedTab = e.target;
+                clickedTab.classList.remove('text-on-surface-variant');
+                clickedTab.classList.add('active-tab', 'font-bold', 'border-b-2', 'border-primary', 'text-primary');
+                
+                currentCategory = clickedTab.dataset.category;
+                renderProducts(); // Re-render from cache or reload
+            });
+        });
+
+        inputCategory.addEventListener('change', () => {
+            populateSubcategories(inputCategory.value);
+        });
+
+        function populateSubcategories(category, selectedSub = null) {
+            inputSubcategory.innerHTML = '';
+            const subs = subcategories[category] || [];
+            subs.forEach(sub => {
+                const option = document.createElement('option');
+                option.value = sub.toLowerCase();
+                option.textContent = sub;
+                inputSubcategory.appendChild(option);
+            });
+            if (selectedSub) {
+                inputSubcategory.value = selectedSub;
+            }
+        }
+
+        // --- DATABASE LOGIC ---
+        async function loadProducts() {
+            try {
+                productsContainer.innerHTML = '<div class="text-center py-10"><span class="material-symbols-outlined animate-spin text-primary text-4xl">autorenew</span><p class="mt-4">Cargando...</p></div>';
+                
+                const q = query(collection(db, "products"));
+                const querySnapshot = await getDocs(q);
+                
+                allProducts = [];
+                querySnapshot.forEach((doc) => {
+                    allProducts.push({ id: doc.id, ...doc.data() });
+                });
+                
+                renderProducts();
+            } catch (error) {
+                console.error("Error loading products:", error);
+                productsContainer.innerHTML = '<p class="text-error text-center py-10">Error al cargar los productos. Asegúrate de configurar Firebase.</p>';
+            }
+        }
+
+        function renderProducts() {
+            productsContainer.innerHTML = '';
+            const filteredProducts = allProducts.filter(p => p.category === currentCategory);
+
+            if (filteredProducts.length === 0) {
+                productsContainer.innerHTML = '<p class="text-center py-10 text-on-surface-variant">No hay productos en esta categoría.</p>';
+                return;
+            }
+
+            filteredProducts.forEach(product => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-3 border border-primary flex gap-4 relative shadow-sm";
+                
+                // Double border effect
+                const innerBorder = document.createElement('div');
+                innerBorder.className = "absolute inset-1 border-[0.5px] border-primary pointer-events-none";
+                card.appendChild(innerBorder);
+
+                card.innerHTML += `
+                    <div class="w-24 h-24 flex-shrink-0 relative z-10">
+                        <img src="${product.imageUrl || 'https://via.placeholder.com/150'}" alt="${product.name}" class="w-full h-full object-cover border-[0.5px] border-primary">
+                    </div>
+                    <div class="flex-grow z-10 py-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start">
+                                <h3 class="font-headline-sm text-primary text-lg leading-tight w-3/4">${product.name}</h3>
+                                <span class="font-label-md font-bold text-secondary text-sm">$${parseFloat(product.price).toFixed(2)}</span>
+                            </div>
+                            <p class="text-xs text-on-surface-variant italic mt-1 line-clamp-2">${product.description}</p>
+                        </div>
+                        <div class="flex gap-4 mt-2">
+                            <button class="btn-edit flex items-center text-xs text-primary hover:text-secondary font-bold" data-id="${product.id}">
+                                <span class="material-symbols-outlined text-[16px] mr-1">edit</span> Editar
+                            </button>
+                            <button class="btn-delete flex items-center text-xs text-error hover:opacity-80 font-bold" data-id="${product.id}">
+                                <span class="material-symbols-outlined text-[16px] mr-1">delete</span> Eliminar
+                            </button>
+                        </div>
+                    </div>
+                `;
+                productsContainer.appendChild(card);
+            });
+
+            // Attach listeners to new buttons
+            document.querySelectorAll('.btn-edit').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.dataset.id;
+                    const product = allProducts.find(p => p.id === id);
+                    openModal(product);
+                });
+            });
+
+            document.querySelectorAll('.btn-delete').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    if(confirm('¿Estás seguro de eliminar este producto?')) {
+                        const id = e.currentTarget.dataset.id;
+                        try {
+                            await deleteDoc(doc(db, "products", id));
+                            await loadProducts(); // Reload
+                        } catch (error) {
+                            console.error("Error deleting:", error);
+                            alert("Error al eliminar");
+                        }
+                    }
+                });
+            });
+        }
+
+        // --- MODAL LOGIC ---
+        function openModal(product = null) {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            if (product) {
+                modalTitle.textContent = "Editar Producto";
+                inputId.value = product.id;
+                inputName.value = product.name;
+                inputPrice.value = product.price;
+                inputCategory.value = product.category;
+                populateSubcategories(product.category, product.subcategory);
+                inputDesc.value = product.description;
+                
+                existingImageUrl.value = product.imageUrl || '';
+                if(product.imageUrl) {
+                    imagePreview.src = product.imageUrl;
+                    imagePreview.classList.remove('hidden');
+                } else {
+                    imagePreview.classList.add('hidden');
+                }
+            } else {
+                modalTitle.textContent = "Agregar Producto";
+                productForm.reset();
+                inputId.value = '';
+                inputCategory.value = currentCategory;
+                populateSubcategories(currentCategory);
+                existingImageUrl.value = '';
+                imagePreview.classList.add('hidden');
+            }
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        btnAddProduct.addEventListener('click', () => openModal());
+        btnCloseModal.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // Image preview before upload
+        inputImage.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imagePreview.src = e.target.result;
+                    imagePreview.classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Save Product
+        productForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            btnSave.disabled = true;
+            btnSave.innerHTML = '<span class="material-symbols-outlined animate-spin">autorenew</span> Guardando...';
+
+            try {
+                let imageUrl = existingImageUrl.value;
+                const file = inputImage.files[0];
+
+                if (file) {
+                    const storageRef = ref(storage, 'products/' + Date.now() + '_' + file.name);
+                    const snapshot = await uploadBytes(storageRef, file);
+                    imageUrl = await getDownloadURL(snapshot.ref);
+                }
+
+                const productData = {
+                    name: inputName.value,
+                    price: parseFloat(inputPrice.value),
+                    category: inputCategory.value,
+                    subcategory: inputSubcategory.value,
+                    description: inputDesc.value,
+                    imageUrl: imageUrl,
+                    updatedAt: new Date()
+                };
+
+                if (inputId.value) {
+                    // Update
+                    await updateDoc(doc(db, "products", inputId.value), productData);
+                } else {
+                    // Create
+                    productData.createdAt = new Date();
+                    await addDoc(collection(db, "products"), productData);
+                }
+
+                closeModal();
+                await loadProducts(); // Reload list
+
+            } catch (error) {
+                console.error("Error saving product:", error);
+                alert("Hubo un error al guardar. Revisa la consola.");
+            } finally {
+                btnSave.disabled = false;
+                btnSave.innerHTML = 'Guardar Producto';
+            }
+        });
+
+    </script>
+</body>
+</html>

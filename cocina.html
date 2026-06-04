@@ -294,104 +294,15 @@
 
     <!-- Main Content Canvas -->
     <main class="flex-grow w-full max-w-7xl mx-auto px-margin-md py-section-gap">
+        <div class="max-w-4xl mx-auto w-full" id="dynamic-content-container">
+            <!-- Dynamic Content Injected Here -->
+            <div class="text-center py-10">
+                <span class="material-symbols-outlined animate-spin text-primary text-4xl">autorenew</span>
+                <p class="mt-4 text-on-surface-variant">Cargando menú...</p>
+            </div>
+        </div>
+        
         <div class="max-w-4xl mx-auto w-full">
-            <!-- Category Header: Appetizers -->
-            <div class="flex items-center gap-4 mb-10">
-                <div class="flex-1 engraving-line"></div>
-                <h2 class="font-headline-md text-headline-md text-primary italic px-4 text-center">Cocina</h2>
-                <div class="flex-1 engraving-line"></div>
-            </div>
-            <!-- Vertical List of Items -->
-            <section class="space-y-12">
-                <!-- Item 1 -->
-                <div class="group flex flex-col md:flex-row gap-8 items-start">
-                    <div class="w-full md:w-48 h-48 flex-shrink-0 hairline-border p-1 bg-white">
-                        <img alt="Croquetas" class="w-full h-full object-cover"
-                            data-alt="Close-up macro photography of golden, crispy artisanal croquettes served on a pristine white ceramic plate. The lighting is dramatic and moody, casting soft shadows that highlight the crunchy texture. The overall aesthetic is clean and sophisticated, matching a vintage European bistro menu style with a warm cream color palette."
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUVLQ-AR5rvhwnCgiluhD9vTGUFsaX8IywIm3ZVf_uRSWk4jSxYIXUUazD-xVFTqzb1EUC5_-EIIqEXYqaUn51Y1pvYO7GdbUa5dWryQZOM5rODP205lg5Fri3sj-pyVa38iGS273A74lunUh3J3WW3MwAaZlB98Ad08N0zB_YhqXfiCUZNP2lTaP2oqCeoL6pxnNdmmfxDibHS-O6347Z0pI_2WCg-jeAUfVZnL4jvzY0fhlccgNrdCJSiwu6-kJC_K56CHdv6e4" />
-                    </div>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-baseline mb-2">
-                            <h3 class="font-headline-sm text-headline-sm text-primary">Croquetas de Jamón Ibérico</h3>
-                            <span class="font-label-md text-label-md text-secondary">$12.00</span>
-                        </div>
-                        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed italic mb-4">
-                            Bechamel cremosa infusionada con el mejor jamón de bellota, fritura ligera y un toque de
-                            nuez moscada.
-                        </p>
-                        <div class="flex gap-2">
-                            <span
-                                class="px-3 py-1 rounded-full hairline-border text-[10px] uppercase tracking-widest text-secondary font-bold">Favorito</span>
-                        </div>
-                    </div>
-                </div>
-                <!-- Item 2 -->
-                <div class="group flex flex-col md:flex-row gap-8 items-start">
-                    <div class="w-full md:w-48 h-48 flex-shrink-0 hairline-border p-1 bg-white">
-                        <img alt="Salad" class="w-full h-full object-cover"
-                            data-alt="A beautifully plated seasonal salad with roasted heirloom beets, creamy goat cheese, and toasted walnuts. The image is captured in high-key natural lighting, creating a bright and fresh atmosphere. The composition is artistic and minimalist, evoking the feel of a curated physical menu card from a high-end vintage restaurant."
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDROd9GGQ-wpZReBSf8uwlKkiTPl9zxr7d47hkKO6M54Aa0Qs43WkYO7ezz6IKz5wxgjHsLaVIsQKgyQcYTFW6Cm0ESW4GpMWIqWvOehayy2B6AX4WHk7y9nnMv-gQmMC52B5bLe_aBiyvmJ-4a3d7SxCr467I87obTaNBrDoERFsuhrl5zcKeEibhB9Lrlqa-K_8I7gLEb-gmlq48MDy36-omkCOOqGdyLwToLuYPQJ2JApjLAYQ7W_Bij8LzCfRswCGMJ_7w51Ew" />
-                    </div>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-baseline mb-2">
-                            <h3 class="font-headline-sm text-headline-sm text-primary">Ensalada Bohemia</h3>
-                            <span class="font-label-md text-label-md text-secondary">$14.50</span>
-                        </div>
-                        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed italic mb-4">
-                            Brotes tiernos, remolacha asada, queso de cabra artesanal y vinagreta de miel y mostaza
-                            antigua.
-                        </p>
-                    </div>
-                </div>
-            </section>
-            <!-- Category Header: Main Dishes -->
-            <div class="flex items-center gap-4 mt-section-gap mb-10">
-                <div class="flex-1 engraving-line"></div>
-                <h2 class="font-headline-md text-headline-md text-primary italic px-4 text-center">Postres</h2>
-                <div class="flex-1 engraving-line"></div>
-            </div>
-            <section class="space-y-12">
-                <!-- Item 3 -->
-                <div class="group flex flex-col md:flex-row gap-8 items-start">
-                    <div class="w-full md:w-48 h-48 flex-shrink-0 hairline-border p-1 bg-white">
-                        <img alt="Meat" class="w-full h-full object-cover"
-                            data-alt="A perfectly seared steak served with a side of micro-greens and a rich red wine reduction. The scene is illuminated by warm, dim light typical of an early 20th-century European bistro. The focus is sharp on the texture of the meat and the glossy sauce, creating an appetizing and luxurious visual for a premium menu."
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvUQNqSYJrRRzcI-DPv8CKChE0WO3UDsdZH6907FcRzGWs7iN5Ch208RySNpAAV4bBlbUWJ4onKzK20MWA2L54tn1aZjpGBrMDW-4bZWFNYr9hsF-bKxO3u_6varWx5xvSPxod3oHQmSnSiljUxj3ivSdNtg59-gwP16r-wP77hFXfunpwlZapErrjrI67y-K4LZt8Fp6nvpp8NSWTxr_7tiRV-jOl6M5AVAIRnMFT2b3mt8Hz2NJQkP7cpiUPuAzsy3qlDg1WJRY" />
-                    </div>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-baseline mb-2">
-                            <h3 class="font-headline-sm text-headline-sm text-primary">Solomillo al Café de París</h3>
-                            <span class="font-label-md text-label-md text-secondary">$28.00</span>
-                        </div>
-                        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed italic mb-4">
-                            Corte premium madurado 30 días, bañado en nuestra salsa secreta de hierbas y mantequilla
-                            artesanal.
-                        </p>
-                    </div>
-                </div>
-                <!-- Item 4 -->
-                <div class="group flex flex-col md:flex-row gap-8 items-start">
-                    <div class="w-full md:w-48 h-48 flex-shrink-0 hairline-border p-1 bg-white">
-                        <img alt="Pasta" class="w-full h-full object-cover"
-                            data-alt="Handmade tagliatelle pasta tossed in a rich truffle cream sauce, served in a vintage-style shallow bowl. The lighting is soft and golden, highlighting the steam rising from the dish. The overall style is reminiscent of fine-line engravings and classic culinary photography found in heirloom cookbooks."
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAe9XXj551qeLh1tXmJgtVOJV7qBLq8BhSNDR5OHC1pEiwg6ms3BeF9GdrKGstLRULSVYLno0k3Nl1LWbkIwq_pNq6-3IjEXPvuJpo-PTHbw2phi9oDtVG4ZfmQ-RWNF4BIkgrjWeclkya9p7qV5H53-DT5232kOTMPjpc2z0HY9P3MFpidUpuwivwnObJqRVBK-h4DOeKxSqeyk6jCZM-FldGXL6KM8fe7EREaD-eVxaNbwq0j6MSYkRL99jZfgwnrXKCs_OnhBEs" />
-                    </div>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-baseline mb-2">
-                            <h3 class="font-headline-sm text-headline-sm text-primary">Pasta de la Casa</h3>
-                            <span class="font-label-md text-label-md text-secondary">$22.00</span>
-                        </div>
-                        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed italic mb-4">
-                            Tagliatelle fresco elaborado diariamente con sémola italiana, trufa negra y parmesano
-                            reggiano.
-                        </p>
-                        <div class="flex gap-2">
-                            <span
-                                class="px-3 py-1 rounded-full hairline-border text-[10px] uppercase tracking-widest text-secondary font-bold">Vegetariano</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
             <!-- Decorative Ornament -->
             <div class="mt-section-gap flex justify-center py-8">
                 <span class="material-symbols-outlined text-primary text-4xl" data-icon="restaurant">restaurant</span>
@@ -509,7 +420,10 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        import { db } from './firebase-config.js';
+        import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
         // Modal handling
         const modal = document.getElementById('product-modal');
         const closeBtn = document.getElementById('modal-close');
@@ -517,26 +431,103 @@
         const modalTitle = document.getElementById('modal-title');
         const modalPrice = document.getElementById('modal-price');
         const modalDesc = document.getElementById('modal-description');
-        closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
-        // Close on backdrop click
-        modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.add('hidden'); });
+        
+        if (closeBtn) closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+        if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.add('hidden'); });
 
-        // Attach click listeners to product cards
-        document.querySelectorAll('.group').forEach(card => {
-            card.style.cursor = 'pointer';
-            card.addEventListener('click', () => {
-                const img = card.querySelector('img');
-                const title = card.querySelector('h3')?.textContent?.trim() || '';
-                const price = card.querySelector('span.font-label-md')?.textContent?.trim() || '';
-                const description = card.querySelector('p')?.textContent?.trim() || '';
-                modalImg.src = img?.src || '';
-                modalImg.alt = title;
-                modalTitle.textContent = title;
-                modalPrice.textContent = price;
-                modalDesc.textContent = description;
-                modal.classList.remove('hidden');
-            });
-        });
+        const container = document.getElementById('dynamic-content-container');
+
+        async function loadCocinaProducts() {
+            try {
+                const q = query(collection(db, "products"), where("category", "==", "cocina"));
+                const querySnapshot = await getDocs(q);
+                
+                const productsBySubcategory = {};
+                querySnapshot.forEach((doc) => {
+                    const product = doc.data();
+                    const sub = product.subcategory || 'Otros';
+                    if (!productsBySubcategory[sub]) productsBySubcategory[sub] = [];
+                    productsBySubcategory[sub].push(product);
+                });
+
+                if (Object.keys(productsBySubcategory).length === 0) {
+                    container.innerHTML = '<p class="text-center py-10 text-on-surface-variant">El menú de cocina se está preparando...</p>';
+                    return;
+                }
+
+                container.innerHTML = ''; // Clear loading
+
+                for (const [subcategory, products] of Object.entries(productsBySubcategory)) {
+                    // Capitalize subcategory
+                    const subTitle = subcategory.charAt(0).toUpperCase() + subcategory.slice(1);
+                    
+                    // Header
+                    const headerHtml = `
+                        <div class="flex items-center gap-4 mt-10 mb-10">
+                            <div class="flex-1 engraving-line"></div>
+                            <h2 class="font-headline-md text-headline-md text-primary italic px-4 text-center">${subTitle}</h2>
+                            <div class="flex-1 engraving-line"></div>
+                        </div>
+                    `;
+                    
+                    // Products Section
+                    let productsHtml = '<section class="space-y-12">';
+                    products.forEach(product => {
+                        productsHtml += `
+                            <div class="group flex flex-col md:flex-row gap-8 items-start cursor-pointer product-card" 
+                                data-title="${product.name}" 
+                                data-price="$${parseFloat(product.price).toFixed(2)}" 
+                                data-desc="${product.description}" 
+                                data-img="${product.imageUrl || 'https://via.placeholder.com/300'}">
+                                
+                                <div class="w-full md:w-48 h-48 flex-shrink-0 hairline-border p-1 bg-white">
+                                    <img alt="${product.name}" class="w-full h-full object-cover" src="${product.imageUrl || 'https://via.placeholder.com/300'}" />
+                                </div>
+                                <div class="flex-grow">
+                                    <div class="flex justify-between items-baseline mb-2">
+                                        <h3 class="font-headline-sm text-headline-sm text-primary">${product.name}</h3>
+                                        <span class="font-label-md text-label-md text-secondary">$${parseFloat(product.price).toFixed(2)}</span>
+                                    </div>
+                                    <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed italic mb-4">
+                                        ${product.description}
+                                    </p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    productsHtml += '</section>';
+
+                    container.innerHTML += headerHtml + productsHtml;
+                }
+
+                // Re-attach modal listeners
+                document.querySelectorAll('.product-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        modalImg.src = card.dataset.img;
+                        modalImg.alt = card.dataset.title;
+                        modalTitle.textContent = card.dataset.title;
+                        modalPrice.textContent = card.dataset.price;
+                        modalDesc.textContent = card.dataset.desc;
+                        modal.classList.remove('hidden');
+                    });
+
+                    // Micro-interactions
+                    card.addEventListener('mouseenter', () => {
+                        card.style.transform = 'translateY(-2px)';
+                        card.style.transition = 'transform 0.3s ease';
+                    });
+                    card.addEventListener('mouseleave', () => {
+                        card.style.transform = 'translateY(0)';
+                    });
+                });
+
+            } catch (error) {
+                console.error("Error loading products:", error);
+                container.innerHTML = '<p class="text-error text-center py-10">Error al cargar el menú. Revisa tu conexión o configuración de Firebase.</p>';
+            }
+        }
+
+        loadCocinaProducts();
     </script>
 
 </body>
