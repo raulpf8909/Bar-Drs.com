@@ -138,27 +138,63 @@
 
 <body class="bg-background text-primary font-body-md min-h-screen flex flex-col relative pb-20">
 
-    <!-- Auth Overlay (Shown when user is not logged in) -->
+    <!-- Auth Overlay -->
     <div id="auth-overlay" class="fixed inset-0 bg-background z-[100] flex flex-col items-center justify-center hidden">
-        <div class="text-center p-8 max-w-md w-full">
-            <h1 class="font-headline-lg text-primary mb-8">Administración</h1>
-            <p class="font-body-md text-on-surface-variant mb-8">Por favor, inicia sesión para acceder al panel de control.</p>
-            <button id="btn-login" class="bg-primary text-on-primary px-8 py-3 rounded-full font-label-md flex items-center justify-center w-full gap-2 hover:bg-primary-container transition-colors">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="w-6 h-6 bg-white rounded-full p-1" />
-                Iniciar sesión con Google
+        <div class="text-center p-8 max-w-sm w-full">
+            <h1 class="font-headline-lg text-primary mb-2">Administración</h1>
+            <p class="font-body-md text-on-surface-variant mb-6 text-sm">Por favor, inicia sesión para acceder al panel
+                de control.</p>
+
+            <!-- Email and Password Form Section -->
+            <form id="email-login-form" class="space-y-4 text-left mb-6">
+                <div>
+                    <label for="login-email" class="block font-label-md text-primary text-xs uppercase mb-1">Correo
+                        Electrónico</label>
+                    <input type="email" id="login-email" required
+                        class="w-full border-outline-variant bg-surface p-2.5 text-sm focus:ring-primary focus:border-primary placeholder:text-outline-variant"
+                        placeholder="nombre@correo.com">
+                </div>
+                <div>
+                    <label for="login-password"
+                        class="block font-label-md text-primary text-xs uppercase mb-1">Contraseña</label>
+                    <input type="password" id="login-password" required
+                        class="w-full border-outline-variant bg-surface p-2.5 text-sm focus:ring-primary focus:border-primary placeholder:text-outline-variant"
+                        placeholder="••••••••">
+                </div>
+                <button type="submit" id="btn-email-submit"
+                    class="bg-primary text-on-primary py-3 rounded font-label-md text-xs uppercase w-full hover:bg-primary-container transition-colors flex justify-center items-center gap-2">
+                    Ingresar con Usuario
+                </button>
+            </form>
+
+            <!-- Custom Elegant Divider -->
+            <div class="relative flex items-center mb-6">
+                <div class="flex-grow border-t border-outline-variant"></div>
+                <span class="flex-shrink mx-4 font-headline-sm text-sm italic text-outline">o</span>
+                <div class="flex-grow border-t border-outline-variant"></div>
+            </div>
+
+            <!-- Google Authentication Section -->
+            <button id="btn-login"
+                class="border border-primary text-primary px-8 py-3 rounded font-label-md text-xs uppercase flex items-center justify-center w-full gap-3 hover:bg-surface-container transition-colors">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"
+                    class="w-5 h-5 bg-white rounded-full p-0.5" />
+                Continuar con Google
             </button>
         </div>
     </div>
 
     <!-- Header -->
-    <header class="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b-[0.5px] border-outline-variant w-full pt-4 pb-2">
+    <header
+        class="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b-[0.5px] border-outline-variant w-full pt-4 pb-2">
         <div class="flex flex-col w-full max-w-7xl mx-auto">
             <div class="flex justify-between items-center px-margin-md mb-4">
                 <button class="text-primary hover:bg-surface-variant p-2 rounded-full transition-colors">
                     <span class="material-symbols-outlined">menu</span>
                 </button>
                 <h1 class="font-headline-md text-primary font-bold">Administración</h1>
-                <button id="btn-logout" class="text-primary text-xs flex flex-col items-center hover:bg-surface-variant p-2 rounded-lg transition-colors">
+                <button id="btn-logout"
+                    class="text-primary text-xs flex flex-col items-center hover:bg-surface-variant p-2 rounded-lg transition-colors">
                     <span class="font-label-md">Cerrar</span>
                     <span class="font-label-md">Sesión</span>
                 </button>
@@ -166,16 +202,22 @@
 
             <!-- Scrollable Tabs -->
             <nav class="flex space-x-6 overflow-x-auto no-scrollbar w-full px-margin-md">
-                <button class="category-tab active-tab font-label-md text-primary font-bold border-b-2 border-primary pb-2 whitespace-nowrap" data-category="cocina">Cocina</button>
-                <button class="category-tab font-label-md text-on-surface-variant hover:text-primary pb-2 whitespace-nowrap transition-colors" data-category="cocteles">Cocteles</button>
-                <button class="category-tab font-label-md text-on-surface-variant hover:text-primary pb-2 whitespace-nowrap transition-colors" data-category="bebidas">Bebidas</button>
+                <button
+                    class="category-tab active-tab font-label-md text-primary font-bold border-b-2 border-primary pb-2 whitespace-nowrap"
+                    data-category="cocina">Cocina</button>
+                <button
+                    class="category-tab font-label-md text-on-surface-variant hover:text-primary pb-2 whitespace-nowrap transition-colors"
+                    data-category="cocteles">Cocteles</button>
+                <button
+                    class="category-tab font-label-md text-on-surface-variant hover:text-primary pb-2 whitespace-nowrap transition-colors"
+                    data-category="bebidas">Bebidas</button>
             </nav>
         </div>
     </header>
 
     <!-- Main Content -->
     <main class="flex-grow w-full max-w-7xl mx-auto px-margin-md py-6">
-        
+
         <div class="flex items-center justify-center gap-4 mb-8">
             <span class="material-symbols-outlined text-primary">restaurant</span>
             <h2 class="font-headline-lg text-primary italic text-center">Carta de<br>Productos</h2>
@@ -193,33 +235,40 @@
     </main>
 
     <!-- Floating Action Button -->
-    <button id="btn-add-product" class="fixed bottom-24 right-6 w-16 h-16 bg-primary text-on-primary rounded-xl flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors z-40">
+    <button id="btn-add-product"
+        class="fixed bottom-24 right-6 w-16 h-16 bg-primary text-on-primary rounded-xl flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors z-40">
         <span class="material-symbols-outlined text-3xl">add</span>
     </button>
 
     <!-- Bottom Navigation Bar -->
-    <nav class="fixed bottom-0 left-0 w-full z-40 bg-surface flex justify-around items-center px-4 py-3 border-t-[0.5px] border-outline-variant pb-safe">
+    <nav
+        class="fixed bottom-0 left-0 w-full z-40 bg-surface flex justify-around items-center px-4 py-3 border-t-[0.5px] border-outline-variant pb-safe">
         <a href="#" class="flex flex-col items-center text-on-primary bg-primary-container rounded-xl px-4 py-1">
             <span class="material-symbols-outlined text-xl">restaurant_menu</span>
             <span class="text-[10px] mt-1 font-bold">Productos</span>
         </a>
-        <a href="#" class="flex flex-col items-center text-on-surface-variant hover:text-primary transition-colors px-4 py-1">
+        <a href="#"
+            class="flex flex-col items-center text-on-surface-variant hover:text-primary transition-colors px-4 py-1">
             <span class="material-symbols-outlined text-xl">category</span>
             <span class="text-[10px] mt-1">Categorías</span>
         </a>
-        <a href="#" class="flex flex-col items-center text-on-surface-variant hover:text-primary transition-colors px-4 py-1">
+        <a href="#"
+            class="flex flex-col items-center text-on-surface-variant hover:text-primary transition-colors px-4 py-1">
             <span class="material-symbols-outlined text-xl">receipt_long</span>
             <span class="text-[10px] mt-1">Pedidos</span>
         </a>
-        <a href="#" class="flex flex-col items-center text-on-surface-variant hover:text-primary transition-colors px-4 py-1">
+        <a href="#"
+            class="flex flex-col items-center text-on-surface-variant hover:text-primary transition-colors px-4 py-1">
             <span class="material-symbols-outlined text-xl">settings</span>
             <span class="text-[10px] mt-1">Ajustes</span>
         </a>
     </nav>
 
     <!-- Product Modal -->
-    <div id="product-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex-col justify-end md:justify-center items-center">
-        <div class="bg-surface w-full md:max-w-lg rounded-t-2xl md:rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+    <div id="product-modal"
+        class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex-col justify-end md:justify-center items-center">
+        <div
+            class="bg-surface w-full md:max-w-lg rounded-t-2xl md:rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-4 border-b border-outline-variant flex justify-between items-center bg-surface-container">
                 <h3 id="modal-title" class="font-headline-sm text-primary">Agregar Producto</h3>
                 <button id="btn-close-modal" class="text-on-surface-variant hover:text-primary">
@@ -229,20 +278,23 @@
             <div class="p-6 overflow-y-auto">
                 <form id="product-form" class="space-y-4">
                     <input type="hidden" id="product-id">
-                    
+
                     <div>
                         <label class="block font-label-md text-primary mb-1">Nombre</label>
-                        <input type="text" id="product-name" required class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary">
+                        <input type="text" id="product-name" required
+                            class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary">
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block font-label-md text-primary mb-1">Precio ($)</label>
-                            <input type="number" step="0.01" id="product-price" required class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary">
+                            <input type="number" step="0.01" id="product-price" required
+                                class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary">
                         </div>
                         <div>
                             <label class="block font-label-md text-primary mb-1">Categoría</label>
-                            <select id="product-category" required class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary">
+                            <select id="product-category" required
+                                class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary">
                                 <option value="cocina">Cocina</option>
                                 <option value="cocteles">Cocteles</option>
                                 <option value="bebidas">Bebidas</option>
@@ -252,25 +304,29 @@
 
                     <div>
                         <label class="block font-label-md text-primary mb-1">Subcategoría</label>
-                        <select id="product-subcategory" required class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary">
+                        <select id="product-subcategory" required
+                            class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary">
                             <!-- Populated dynamically based on category -->
                         </select>
                     </div>
 
                     <div>
                         <label class="block font-label-md text-primary mb-1">Descripción</label>
-                        <textarea id="product-description" rows="3" required class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary"></textarea>
+                        <textarea id="product-description" rows="3" required
+                            class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary"></textarea>
                     </div>
 
                     <div>
                         <label class="block font-label-md text-primary mb-1">Imagen</label>
-                        <input type="file" id="product-image" accept="image/*" class="w-full text-sm text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-container file:text-on-primary hover:file:bg-primary">
+                        <input type="file" id="product-image" accept="image/*"
+                            class="w-full text-sm text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-container file:text-on-primary hover:file:bg-primary">
                         <img id="image-preview" class="mt-2 h-32 w-32 object-cover rounded hidden">
                         <input type="hidden" id="existing-image-url">
                     </div>
 
                     <div class="pt-4 flex gap-4">
-                        <button type="submit" id="btn-save" class="flex-1 bg-primary text-on-primary py-3 rounded font-label-md hover:bg-primary-container transition-colors flex justify-center items-center gap-2">
+                        <button type="submit" id="btn-save"
+                            class="flex-1 bg-primary text-on-primary py-3 rounded font-label-md hover:bg-primary-container transition-colors flex justify-center items-center gap-2">
                             Guardar Producto
                         </button>
                     </div>
@@ -282,7 +338,7 @@
     <!-- Application Logic -->
     <script type="module">
         import { auth, provider, db, storage } from './firebase-config.js';
-        import { signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
@@ -292,14 +348,20 @@
         const btnLogout = document.getElementById('btn-logout');
         const productsContainer = document.getElementById('products-container');
         const categoryTabs = document.querySelectorAll('.category-tab');
-        
+
+        // Email Auth Elements
+        const emailLoginForm = document.getElementById('email-login-form');
+        const loginEmail = document.getElementById('login-email');
+        const loginPassword = document.getElementById('login-password');
+        const btnEmailSubmit = document.getElementById('btn-email-submit');
+
         // Modal Elements
         const modal = document.getElementById('product-modal');
         const btnAddProduct = document.getElementById('btn-add-product');
         const btnCloseModal = document.getElementById('btn-close-modal');
         const productForm = document.getElementById('product-form');
         const modalTitle = document.getElementById('modal-title');
-        
+
         const inputId = document.getElementById('product-id');
         const inputName = document.getElementById('product-name');
         const inputPrice = document.getElementById('product-price');
@@ -316,9 +378,9 @@
 
         // Subcategory definitions
         const subcategories = {
-            'cocina': ['Plato Principal', 'Postres', 'Entradas'],
-            'cocteles': ['Clásicos', 'Tragos', 'De Autor'],
-            'bebidas': ['Café', 'Jugos', 'Refrescos']
+            'cocina': ['Comida', 'Postres'],
+            'cocteles': ['Coctelería', 'Tragos'],
+            'bebidas': ['Café', 'Bebidas',]
         };
 
         // --- AUTHENTICATION ---
@@ -332,12 +394,31 @@
             }
         });
 
+        // Email & Password Auth Logic
+        emailLoginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            btnEmailSubmit.disabled = true;
+            btnEmailSubmit.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">autorenew</span> Verificando...';
+
+            try {
+                await signInWithEmailAndPassword(auth, loginEmail.value, loginPassword.value);
+                emailLoginForm.reset();
+            } catch (error) {
+                console.error("Error with email sign in:", error);
+                alert("Credenciales incorrectas o usuario no registrado.");
+            } finally {
+                btnEmailSubmit.disabled = false;
+                btnEmailSubmit.innerHTML = 'Ingresar con Usuario';
+            }
+        });
+
+        // Google Auth Logic
         btnLogin.addEventListener('click', async () => {
             try {
                 await signInWithPopup(auth, provider);
             } catch (error) {
                 console.error("Error signing in:", error);
-                alert("Error al iniciar sesión.");
+                alert("Error al iniciar sesión con Google.");
             }
         });
 
@@ -353,11 +434,11 @@
                     t.classList.remove('active-tab', 'font-bold', 'border-b-2', 'border-primary', 'text-primary');
                     t.classList.add('text-on-surface-variant');
                 });
-                
+
                 const clickedTab = e.target;
                 clickedTab.classList.remove('text-on-surface-variant');
                 clickedTab.classList.add('active-tab', 'font-bold', 'border-b-2', 'border-primary', 'text-primary');
-                
+
                 currentCategory = clickedTab.dataset.category;
                 renderProducts(); // Re-render from cache or reload
             });
@@ -385,15 +466,15 @@
         async function loadProducts() {
             try {
                 productsContainer.innerHTML = '<div class="text-center py-10"><span class="material-symbols-outlined animate-spin text-primary text-4xl">autorenew</span><p class="mt-4">Cargando...</p></div>';
-                
+
                 const q = query(collection(db, "products"));
                 const querySnapshot = await getDocs(q);
-                
+
                 allProducts = [];
                 querySnapshot.forEach((doc) => {
                     allProducts.push({ id: doc.id, ...doc.data() });
                 });
-                
+
                 renderProducts();
             } catch (error) {
                 console.error("Error loading products:", error);
@@ -413,33 +494,35 @@
             filteredProducts.forEach(product => {
                 const card = document.createElement('div');
                 card.className = "bg-white p-3 border border-primary flex gap-4 relative shadow-sm";
-                
+
                 // Double border effect
                 const innerBorder = document.createElement('div');
                 innerBorder.className = "absolute inset-1 border-[0.5px] border-primary pointer-events-none";
                 card.appendChild(innerBorder);
 
                 card.innerHTML += `
-                    <div class="w-24 h-24 flex-shrink-0 relative z-10">
-                        <img src="${product.imageUrl || 'https://via.placeholder.com/150'}" alt="${product.name}" class="w-full h-full object-cover border-[0.5px] border-primary">
-                    </div>
-                    <div class="flex-grow z-10 py-1 flex flex-col justify-between">
-                        <div>
-                            <div class="flex justify-between items-start">
-                                <h3 class="font-headline-sm text-primary text-lg leading-tight w-3/4">${product.name}</h3>
-                                <span class="font-label-md font-bold text-secondary text-sm">$${parseFloat(product.price).toFixed(2)}</span>
-                            </div>
-                            <p class="text-xs text-on-surface-variant italic mt-1 line-clamp-2">${product.description}</p>
-                        </div>
-                        <div class="flex gap-4 mt-2">
-                            <button class="btn-edit flex items-center text-xs text-primary hover:text-secondary font-bold" data-id="${product.id}">
-                                <span class="material-symbols-outlined text-[16px] mr-1">edit</span> Editar
-                            </button>
-                            <button class="btn-delete flex items-center text-xs text-error hover:opacity-80 font-bold" data-id="${product.id}">
-                                <span class="material-symbols-outlined text-[16px] mr-1">delete</span> Eliminar
-                            </button>
-                        </div>
-                    </div>
+                   <div class="w-24 h-24 flex-shrink-0 relative z-10">
+    <img src="${product.imageUrl || 'https://via.placeholder.com/150'}" alt="${product.name}" class="w-full h-full object-cover border-[0.5px] border-primary">
+</div>
+<div class="flex-grow z-10 py-1 flex flex-col justify-between">
+    <div>
+        <div class="flex justify-between items-start">
+            <h3 class="font-headline-sm text-primary text-lg leading-tight w-3/4">${product.name}</h3>
+            <span class="font-label-md font-bold text-secondary text-sm">$${parseFloat(product.price).toFixed(2)}</span>
+        </div>
+        <!-- Cambiado line-clamp-2 por whitespace-pre-line -->
+        <p class="text-xs text-on-surface-variant italic mt-1 whitespace-pre-line">${product.description}</p>
+    </div>
+    <div class="flex gap-4 mt-2">
+        <button class="btn-edit flex items-center text-xs text-primary hover:text-secondary font-bold" data-id="${product.id}">
+            <span class="material-symbols-outlined text-[16px] mr-1">edit</span> Editar
+        </button>
+        <button class="btn-delete flex items-center text-xs text-error hover:opacity-80 font-bold" data-id="${product.id}">
+            <span class="material-symbols-outlined text-[16px] mr-1">delete</span> Eliminar
+        </button>
+    </div>
+</div>
+
                 `;
                 productsContainer.appendChild(card);
             });
@@ -455,7 +538,7 @@
 
             document.querySelectorAll('.btn-delete').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
-                    if(confirm('¿Estás seguro de eliminar este producto?')) {
+                    if (confirm('¿Estás seguro de eliminar este producto?')) {
                         const id = e.currentTarget.dataset.id;
                         try {
                             await deleteDoc(doc(db, "products", id));
@@ -473,7 +556,7 @@
         function openModal(product = null) {
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            
+
             if (product) {
                 modalTitle.textContent = "Editar Producto";
                 inputId.value = product.id;
@@ -482,9 +565,9 @@
                 inputCategory.value = product.category;
                 populateSubcategories(product.category, product.subcategory);
                 inputDesc.value = product.description;
-                
+
                 existingImageUrl.value = product.imageUrl || '';
-                if(product.imageUrl) {
+                if (product.imageUrl) {
                     imagePreview.src = product.imageUrl;
                     imagePreview.classList.remove('hidden');
                 } else {
@@ -515,7 +598,7 @@
         // Image preview before upload
         inputImage.addEventListener('change', (e) => {
             const file = e.target.files[0];
-            if(file) {
+            if (file) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     imagePreview.src = e.target.result;
@@ -536,9 +619,36 @@
                 const file = inputImage.files[0];
 
                 if (file) {
-                    const storageRef = ref(storage, 'products/' + Date.now() + '_' + file.name);
-                    const snapshot = await uploadBytes(storageRef, file);
-                    imageUrl = await getDownloadURL(snapshot.ref);
+                    // Convert and compress image to Base64 to store directly in Firestore (bypassing Storage)
+                    imageUrl = await new Promise((resolve) => {
+                        const img = new Image();
+                        img.onload = () => {
+                            const canvas = document.createElement('canvas');
+                            const MAX_WIDTH = 800;
+                            const MAX_HEIGHT = 800;
+                            let width = img.width;
+                            let height = img.height;
+
+                            if (width > height) {
+                                if (width > MAX_WIDTH) {
+                                    height *= MAX_WIDTH / width;
+                                    width = MAX_WIDTH;
+                                }
+                            } else {
+                                if (height > MAX_HEIGHT) {
+                                    width *= MAX_HEIGHT / height;
+                                    height = MAX_HEIGHT;
+                                }
+                            }
+                            canvas.width = width;
+                            canvas.height = height;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, width, height);
+                            // Convert to JPEG with 60% quality to keep it under 1MB limit for Firestore
+                            resolve(canvas.toDataURL('image/jpeg', 0.6));
+                        };
+                        img.src = imagePreview.src;
+                    });
                 }
 
                 const productData = {
@@ -574,4 +684,5 @@
 
     </script>
 </body>
+
 </html>

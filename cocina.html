@@ -301,7 +301,7 @@
                 <p class="mt-4 text-on-surface-variant">Cargando menú...</p>
             </div>
         </div>
-        
+
         <div class="max-w-4xl mx-auto w-full">
             <!-- Decorative Ornament -->
             <div class="mt-section-gap flex justify-center py-8">
@@ -431,7 +431,7 @@
         const modalTitle = document.getElementById('modal-title');
         const modalPrice = document.getElementById('modal-price');
         const modalDesc = document.getElementById('modal-description');
-        
+
         if (closeBtn) closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
         if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.add('hidden'); });
 
@@ -441,7 +441,7 @@
             try {
                 const q = query(collection(db, "products"), where("category", "==", "cocina"));
                 const querySnapshot = await getDocs(q);
-                
+
                 const productsBySubcategory = {};
                 querySnapshot.forEach((doc) => {
                     const product = doc.data();
@@ -460,7 +460,7 @@
                 for (const [subcategory, products] of Object.entries(productsBySubcategory)) {
                     // Capitalize subcategory
                     const subTitle = subcategory.charAt(0).toUpperCase() + subcategory.slice(1);
-                    
+
                     // Header
                     const headerHtml = `
                         <div class="flex items-center gap-4 mt-10 mb-10">
@@ -469,7 +469,7 @@
                             <div class="flex-1 engraving-line"></div>
                         </div>
                     `;
-                    
+
                     // Products Section
                     let productsHtml = '<section class="space-y-12">';
                     products.forEach(product => {
@@ -488,9 +488,10 @@
                                         <h3 class="font-headline-sm text-headline-sm text-primary">${product.name}</h3>
                                         <span class="font-label-md text-label-md text-secondary">$${parseFloat(product.price).toFixed(2)}</span>
                                     </div>
-                                    <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed italic mb-4">
-                                        ${product.description}
+                                    <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed italic mb-4 whitespace-pre-line">
+                                    ${product.description}
                                     </p>
+
                                 </div>
                             </div>
                         `;

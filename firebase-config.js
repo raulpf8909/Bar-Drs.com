@@ -2,9 +2,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebas
 import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Reemplaza esto con la configuración de tu proyecto Firebase
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
+
+// Configuración de tu proyecto Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCPkfsrWoSkF7oYE_QAKkjJ5oYLzsXynao",
   authDomain: "bardrs-64b37.firebaseapp.com",

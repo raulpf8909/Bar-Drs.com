@@ -424,7 +424,7 @@
         const modalTitle = document.getElementById('modal-title');
         const modalPrice = document.getElementById('modal-price');
         const modalDesc = document.getElementById('modal-description');
-        
+
         if (closeBtn) closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
         if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.add('hidden'); });
 
@@ -434,7 +434,7 @@
             try {
                 const q = query(collection(db, "products"), where("category", "==", "bebidas"));
                 const querySnapshot = await getDocs(q);
-                
+
                 const productsBySubcategory = {};
                 querySnapshot.forEach((doc) => {
                     const product = doc.data();
@@ -452,7 +452,7 @@
 
                 for (const [subcategory, products] of Object.entries(productsBySubcategory)) {
                     const subTitle = subcategory.charAt(0).toUpperCase() + subcategory.slice(1);
-                    
+
                     const headerHtml = `
                         <div class="mb-section-gap">
                             <div class="flex items-center justify-center gap-4 mb-8">
@@ -463,7 +463,7 @@
                             <div class="etched-line"></div>
                         </div>
                     `;
-                    
+
                     let productsHtml = '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">';
                     products.forEach(product => {
                         productsHtml += `
@@ -480,7 +480,7 @@
                                     <h3 class="font-headline-sm text-headline-sm text-primary font-bold">${product.name}</h3>
                                     <span class="font-label-md text-label-md text-secondary">$${parseFloat(product.price).toFixed(2)}</span>
                                 </div>
-                                <p class="font-body-md text-body-md text-on-surface-variant italic line-clamp-2">${product.description}</p>
+                                <p class="font-body-md text-body-md text-on-surface-variant italic whitespace-pre-line">${product.description}</p>
                             </div>
                         `;
                     });
