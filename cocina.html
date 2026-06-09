@@ -459,7 +459,12 @@
 
                 container.innerHTML = ''; // Clear loading
 
-                for (const [subcategory, products] of Object.entries(productsBySubcategory)) {
+                const subcategoryOrder = { 'comida': 0, 'postres': 1 };
+                const sortedEntries = Object.entries(productsBySubcategory).sort((a, b) => {
+                    return (subcategoryOrder[a[0].toLowerCase()] ?? 99) - (subcategoryOrder[b[0].toLowerCase()] ?? 99);
+                });
+
+                for (const [subcategory, products] of sortedEntries) {
                     // Capitalize subcategory
                     const subTitle = subcategory.charAt(0).toUpperCase() + subcategory.slice(1);
 
@@ -478,7 +483,7 @@
                         productsHtml += `
                             <div class="group flex flex-col md:flex-row gap-8 items-start cursor-pointer product-card" 
                                 data-title="${product.name}" 
-                                data-price="$${parseFloat(product.price).toFixed(2)}" 
+                                data-price="${product.price != null && !isNaN(product.price) ? '$' + parseFloat(product.price).toFixed(2) : ''}" 
                                 data-desc="${product.description}" 
                                 data-img="${product.imageUrl || 'https://via.placeholder.com/300'}">
                                 
@@ -488,7 +493,7 @@
                                 <div class="flex-grow">
                                     <div class="flex justify-between items-baseline mb-2">
                                         <h3 class="font-headline-sm text-headline-sm text-primary">${product.name}</h3>
-                                        <span class="font-label-md text-label-md text-secondary">$${parseFloat(product.price).toFixed(2)}</span>
+                                        ${product.price != null && !isNaN(product.price) ? '<span class="font-label-md text-label-md text-secondary">$' + parseFloat(product.price).toFixed(2) + '</span>' : ''}
                                     </div>
                                     <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed italic mb-4 whitespace-pre-line">
                                     ${product.description}
