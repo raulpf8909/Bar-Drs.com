@@ -435,10 +435,15 @@
                 const productsBySubcategory = {};
                 querySnapshot.forEach((doc) => {
                     const product = doc.data();
+                    if (product.order === undefined) product.order = 0;
                     const sub = product.subcategory || 'Café';
                     if (!productsBySubcategory[sub]) productsBySubcategory[sub] = [];
                     productsBySubcategory[sub].push(product);
                 });
+
+                for (const key of Object.keys(productsBySubcategory)) {
+                    productsBySubcategory[key].sort((a, b) => (a.order || 0) - (b.order || 0));
+                }
 
                 if (Object.keys(productsBySubcategory).length === 0) {
                     container.innerHTML = '<p class="text-center py-10 text-on-surface-variant">Las bebidas se están preparando...</p>';
