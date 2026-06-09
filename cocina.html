@@ -539,6 +539,23 @@
         loadCocinaProducts();
     </script>
 
+    <button id="back-to-top"
+        class="fixed bottom-[100px] right-6 w-14 h-14 bg-primary text-on-primary rounded-xl flex items-center justify-center shadow-lg hover:bg-primary-container transition-all duration-300 z-50 opacity-0 invisible"
+        onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <span class="material-symbols-outlined text-3xl">arrow_upward</span>
+    </button>
+    <script>
+        window.addEventListener('scroll', () => {
+            const btn = document.getElementById('back-to-top');
+            if (window.scrollY > 400) {
+                btn.classList.remove('opacity-0', 'invisible');
+                btn.classList.add('opacity-100', 'visible');
+            } else {
+                btn.classList.remove('opacity-100', 'visible');
+                btn.classList.add('opacity-0', 'invisible');
+            }
+        });
+    </script>
 </body>
 
 </html>
