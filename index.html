@@ -12,9 +12,6 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-        rel="stylesheet">
     <style>
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
@@ -188,11 +185,12 @@
             <p class="font-headline-sm text-headline-sm text-secondary uppercase tracking-[0.2em] mb-6">Elegancia a tu
                 puerta</p>
             <div class="vintage-line mb-8"></div>
-            <button class="bg-primary-container text-on-primary px-8 py-3 font-label-md text-label-md relative group">
-                <span class="relative z-10"><a href="https://wa.me/+5355770922">ORDENAR AHORA</span>
+            <a href="https://wa.me/+5355770922"
+                class="inline-block bg-primary-container text-on-primary px-8 py-3 font-label-md text-label-md relative group">
+                <span class="relative z-10">ORDENAR AHORA</span>
                 <div class="absolute inset-0 border border-primary-container -m-[4px] group-active:m-0 transition-all">
                 </div>
-            </button>
+            </a>
             <p class="mt-8 font-body-md text-body-md text-outline">
                 Llevamos la experiencia bohemia directamente a su residencia. <br>
                 Consulte nuestra carta seleccionada para envíos.
@@ -251,21 +249,21 @@
     <!-- BottomNavBar (Shared Component Logic - Active: None for Home Splash) -->
     <nav
         class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter py-4 bg-surface-container-low dark:bg-surface-container-low border-t-[1px] border-primary shadow-lg rounded-t-full md:hidden">
-        <a href="cocina.html"> <button
-                class="flex flex-col items-center justify-center p-2 hover:bg-primary-container hover:text-on-primary-container transition-colors rounded-full active:scale-95 duration-150 bg-primary-container text-on-primary">
-                <span class="material-symbols-outlined" data-icon="restaurant">restaurant</span>
-                <span class="font-label-md text-label-md">Cocina</span>
-            </button></a>
-        <a href="cocteles.html"><button
-                class="flex flex-col items-center justify-center p-2 hover:bg-primary-container hover:text-on-primary-container transition-colors rounded-full active:scale-95 duration-150 bg-primary-container text-on-primary">
-                <span class="material-symbols-outlined" data-icon="local_bar">local_bar</span>
-                <span class="font-label-md text-label-md">Cocteles</span>
-            </button></a>
-        <a href="bebidas.html"><button
-                class="flex flex-col items-center justify-center p-2 hover:bg-primary-container hover:text-on-primary-container transition-colors rounded-full active:scale-95 duration-150 bg-primary-container text-on-primary">
-                <span class="material-symbols-outlined" data-icon="local_cafe">local_cafe</span>
-                <span class="font-label-md text-label-md">Bebidas</span>
-            </button></a>
+        <a href="cocina.html"
+            class="flex flex-col items-center justify-center p-2 hover:bg-primary-container hover:text-on-primary-container transition-colors rounded-full active:scale-95 duration-150 bg-primary-container text-on-primary">
+            <span class="material-symbols-outlined" data-icon="restaurant">restaurant</span>
+            <span class="font-label-md text-label-md">Cocina</span>
+        </a>
+        <a href="cocteles.html"
+            class="flex flex-col items-center justify-center p-2 hover:bg-primary-container hover:text-on-primary-container transition-colors rounded-full active:scale-95 duration-150 bg-primary-container text-on-primary">
+            <span class="material-symbols-outlined" data-icon="local_bar">local_bar</span>
+            <span class="font-label-md text-label-md">Cocteles</span>
+        </a>
+        <a href="bebidas.html"
+            class="flex flex-col items-center justify-center p-2 hover:bg-primary-container hover:text-on-primary-container transition-colors rounded-full active:scale-95 duration-150 bg-primary-container text-on-primary">
+            <span class="material-symbols-outlined" data-icon="local_cafe">local_cafe</span>
+            <span class="font-label-md text-label-md">Bebidas</span>
+        </a>
     </nav>
     <script>
         // Micro-interaction for hover effects on buttons and interactive elements
