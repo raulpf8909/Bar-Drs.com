@@ -373,6 +373,13 @@
                     </div>
 
                     <div>
+                        <label class="block font-label-md text-primary mb-1">Orden</label>
+                        <input type="number" id="product-order" min="0" step="1" value="0"
+                            class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary">
+                        <p class="text-xs text-on-surface-variant mt-1">Número de posición (menor = primero)</p>
+                    </div>
+
+                    <div>
                         <label class="block font-label-md text-primary mb-1">Descripción</label>
                         <textarea id="product-description" rows="3" required
                             class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary"></textarea>
@@ -538,6 +545,7 @@
         const inputCategory = document.getElementById('product-category');
         const inputSubcategory = document.getElementById('product-subcategory');
         const inputDesc = document.getElementById('product-description');
+        const inputOrder = document.getElementById('product-order');
         const inputImage = document.getElementById('product-image');
         const imagePreview = document.getElementById('image-preview');
         const existingImageUrl = document.getElementById('existing-image-url');
@@ -723,6 +731,7 @@
         card.innerHTML += `
             <div class="w-48 h-48 flex-shrink-0 relative z-10">
                 <img src="${product.imageUrl || 'https://via.placeholder.com/150'}" alt="${product.name}" class="w-full h-full object-cover border-[0.5px] border-primary">
+                <span class="absolute top-1 left-1 bg-primary text-on-primary text-xs font-bold px-2 py-0.5 rounded">#${product.order ?? 0}</span>
             </div>
             <div class="flex-grow z-10 py-1 flex flex-col justify-between">
                 <div>
@@ -817,6 +826,7 @@
                 inputPrice.value = product.price ?? '';
                 inputCategory.value = product.category;
                 populateSubcategories(product.category, product.subcategory);
+                inputOrder.value = product.order ?? 0;
                 inputDesc.value = product.description;
 
                 existingImageUrl.value = product.imageUrl || '';
@@ -832,6 +842,10 @@
                 inputId.value = '';
                 inputCategory.value = currentCategory;
                 populateSubcategories(currentCategory);
+                const maxOrder = allProducts
+                    .filter(p => p.category === currentCategory)
+                    .reduce((max, p) => Math.max(max, p.order || 0), -1);
+                inputOrder.value = maxOrder + 1;
                 existingImageUrl.value = '';
                 imagePreview.classList.add('hidden');
             }
@@ -915,7 +929,7 @@
                          description: inputDesc.value,
                          imageUrl: imageUrl,
                          updatedAt: new Date(),
-                         order: Date.now()
+                         order: parseInt(inputOrder.value) || 0
                      };
 
                 if (inputId.value) {
