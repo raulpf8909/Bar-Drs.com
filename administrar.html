@@ -25,10 +25,10 @@
                     "colors": {
                         "inverse-primary": "#9ecfd9",
                         "error": "#ba1a1a",
-                        "on-surface-variant": "#40484a",
+                        "on-surface-variant": "var(--on-surface-variant)",
                         "on-tertiary": "#ffffff",
-                        "surface-container-high": "#eae8e2",
-                        "outline-variant": "#c0c8ca",
+                        "surface-container-high": "var(--surface-high)",
+                        "outline-variant": "var(--border)",
                         "on-primary-container": "#79a9b3",
                         "on-primary": "#ffffff",
                         "surface-container-highest": "#e4e2dc",
@@ -48,16 +48,16 @@
                         "on-tertiary-container": "#a0a1a1",
                         "tertiary-fixed": "#e2e2e2",
                         "primary-container": "#023e47",
-                        "surface": "#fbf9f3",
+                        "surface": "var(--surface)",
                         "on-secondary-fixed": "#291803",
                         "surface-tint": "#35656f",
-                        "primary": "#00272d",
+                        "primary": "var(--primary)",
                         "on-primary-fixed": "#001f25",
                         "surface-dim": "#dcdad4",
-                        "background": "#fbf9f3",
+                        "background": "var(--bg)",
                         "tertiary-fixed-dim": "#c6c6c7",
-                        "on-background": "#1b1c18",
-                        "surface-container": "#f0eee8",
+                        "on-background": "var(--text)",
+                        "surface-container": "var(--surface-container)",
                         "surface-bright": "#fbf9f3",
                         "inverse-on-surface": "#f3f1eb",
                         "secondary-container": "#fdd9b7",
@@ -67,9 +67,9 @@
                         "on-secondary-container": "#785e42",
                         "on-tertiary-fixed-variant": "#454747",
                         "on-secondary": "#ffffff",
-                        "on-surface": "#1b1c18",
+                        "on-surface": "var(--text)",
                         "on-tertiary-fixed": "#1a1c1c",
-                        "surface-variant": "#e4e2dc"
+                        "surface-variant": "var(--surface-variant, #e4e2dc)"
                     },
                     "borderRadius": {
                         "DEFAULT": "0.125rem",
@@ -108,9 +108,34 @@
 
     <!-- Custom CSS Styles -->
     <style>
+        :root {
+            --bg: #fbf9f3;
+            --text: #00272d;
+            --surface: #fbf9f3;
+            --surface-container: #f0eee8;
+            --surface-high: #eae8e2;
+            --surface-variant: #e4e2dc;
+            --border: #c0c8ca;
+            --primary: #00272d;
+            --on-surface-variant: #40484a;
+            --card-bg: #ffffff;
+        }
+        html.dark {
+            --bg: #1a1c1c;
+            --text: #e2e2e2;
+            --surface: #212323;
+            --surface-container: #2a2c2c;
+            --surface-high: #303232;
+            --surface-variant: #363838;
+            --border: #40484a;
+            --primary: #9ecfd9;
+            --on-surface-variant: #c0c8ca;
+            --card-bg: #2a2c2c;
+        }
+
         body {
-            background-color: #fbf9f3;
-            color: #00272d;
+            background-color: var(--bg);
+            color: var(--text);
             font-family: 'Merriweather', serif;
             min-height: max(884px, 100dvh);
         }
@@ -120,8 +145,8 @@
         }
 
         .double-border {
-            border: 1px solid #00272d;
-            outline: 2px solid #00272d;
+            border: 1px solid var(--primary);
+            outline: 2px solid var(--primary);
             outline-offset: 4px;
         }
 
@@ -132,6 +157,54 @@
         .no-scrollbar {
             -ms-overflow-style: none;
             scrollbar-width: none;
+        }
+
+        .theme-toggle {
+            width: 48px;
+            height: 26px;
+            background: var(--border);
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+            flex-shrink: 0;
+        }
+        .theme-toggle.dark {
+            background: var(--primary);
+        }
+        .theme-toggle::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            transition: transform 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .theme-toggle.dark::after {
+            transform: translateX(22px);
+        }
+
+        .category-item {
+            transition: background 0.2s;
+        }
+        .category-item:hover {
+            background: var(--surface-container);
+        }
+
+        .subcategory-tag {
+            display: inline-block;
+            padding: 2px 10px;
+            background: var(--surface-variant, #e4e2dc);
+            border-radius: 12px;
+            font-size: 12px;
+            margin: 2px 4px 2px 0;
+        }
+        html.dark .subcategory-tag {
+            background: #40484a;
         }
     </style>
 </head>
@@ -189,9 +262,7 @@
         class="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b-[0.5px] border-outline-variant w-full pt-4 pb-2">
         <div class="flex flex-col w-full max-w-7xl mx-auto">
             <div class="flex justify-between items-center px-margin-md mb-4">
-                <button class="text-primary hover:bg-surface-variant p-2 rounded-full transition-colors">
-                    <span class="material-symbols-outlined">menu</span>
-                </button>
+                <img src="logo-brown.png" alt="Drs.Com" class="h-10 w-auto">
                 <h1 class="font-headline-md text-primary font-bold">Administración</h1>
                 <button id="btn-logout"
                     class="text-primary text-xs flex flex-col items-center hover:bg-surface-variant p-2 rounded-lg transition-colors">
@@ -201,16 +272,8 @@
             </div>
 
             <!-- Scrollable Tabs -->
-            <nav class="flex space-x-6 overflow-x-auto no-scrollbar w-full px-margin-md">
-                <button
-                    class="category-tab active-tab font-label-md text-primary font-bold border-b-2 border-primary pb-2 whitespace-nowrap"
-                    data-category="cocina">Cocina</button>
-                <button
-                    class="category-tab font-label-md text-on-surface-variant hover:text-primary pb-2 whitespace-nowrap transition-colors"
-                    data-category="cocteles">Cocteles</button>
-                <button
-                    class="category-tab font-label-md text-on-surface-variant hover:text-primary pb-2 whitespace-nowrap transition-colors"
-                    data-category="bebidas">Bebidas</button>
+            <nav id="category-tabs-container" class="flex space-x-6 overflow-x-auto no-scrollbar w-full px-margin-md">
+                <!-- Populated dynamically from Firestore categories -->
             </nav>
         </div>
     </header>
@@ -241,27 +304,28 @@
     </button>
 
     <!-- Bottom Navigation Bar -->
-    <nav
+    <nav id="bottom-nav"
         class="fixed bottom-0 left-0 w-full z-40 bg-surface flex justify-around items-center px-4 py-3 border-t-[0.5px] border-outline-variant pb-safe">
-        <a href="#" class="flex flex-col items-center text-on-primary bg-primary-container rounded-xl px-4 py-1">
+        <button id="btn-nav-products"
+            class="nav-btn flex flex-col items-center text-on-primary bg-primary-container rounded-xl px-4 py-1 transition-colors" data-view="products">
             <span class="material-symbols-outlined text-xl">restaurant_menu</span>
             <span class="text-[10px] mt-1 font-bold">Productos</span>
-        </a>
-        <a href="#"
-            class="flex flex-col items-center text-on-surface-variant hover:text-primary transition-colors px-4 py-1">
+        </button>
+        <button id="btn-nav-categories"
+            class="nav-btn flex flex-col items-center text-on-surface-variant hover:text-primary transition-colors px-4 py-1" data-view="categories">
             <span class="material-symbols-outlined text-xl">category</span>
             <span class="text-[10px] mt-1">Categorías</span>
-        </a>
-        <a href="#"
-            class="flex flex-col items-center text-on-surface-variant hover:text-primary transition-colors px-4 py-1">
+        </button>
+        <button id="btn-nav-orders"
+            class="nav-btn flex flex-col items-center text-on-surface-variant hover:text-primary transition-colors px-4 py-1" data-view="orders">
             <span class="material-symbols-outlined text-xl">receipt_long</span>
             <span class="text-[10px] mt-1">Pedidos</span>
-        </a>
-        <a href="#"
-            class="flex flex-col items-center text-on-surface-variant hover:text-primary transition-colors px-4 py-1">
+        </button>
+        <button id="btn-nav-settings"
+            class="nav-btn flex flex-col items-center text-on-surface-variant hover:text-primary transition-colors px-4 py-1" data-view="settings">
             <span class="material-symbols-outlined text-xl">settings</span>
             <span class="text-[10px] mt-1">Ajustes</span>
-        </a>
+        </button>
     </nav>
 
     <!-- Product Modal -->
@@ -289,15 +353,13 @@
                         <div>
                             <label class="block font-label-md text-primary mb-1">Precio ($)</label>
                              <input type="number" step="0.01" id="product-price"
-                                 class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary">>
+                                 class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary">
                         </div>
                         <div>
                             <label class="block font-label-md text-primary mb-1">Categoría</label>
                             <select id="product-category" required
                                 class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary">
-                                <option value="cocina">Cocina</option>
-                                <option value="cocteles">Cocteles</option>
-                                <option value="bebidas">Bebidas</option>
+                                <!-- Populated dynamically from Firestore categories -->
                             </select>
                         </div>
                     </div>
@@ -335,11 +397,120 @@
         </div>
     </div>
 
+    <!-- Categories Modal -->
+    <div id="categories-modal"
+        class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex-col justify-end md:justify-center items-center">
+        <div
+            class="bg-surface w-full md:max-w-lg rounded-t-2xl md:rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+            <div class="p-4 border-b border-outline-variant flex justify-between items-center bg-surface-container">
+                <h3 class="font-headline-sm text-primary">Gestionar Categorías</h3>
+                <button id="btn-close-categories" class="text-on-surface-variant hover:text-primary">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div id="categories-list" class="p-4 overflow-y-auto flex-grow space-y-2">
+                <!-- Categories injected here -->
+            </div>
+            <div class="p-4 border-t border-outline-variant">
+                <button id="btn-add-category"
+                    class="w-full bg-primary text-on-primary py-3 rounded font-label-md hover:bg-primary-container transition-colors flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-lg">add</span> Agregar Categoría
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Form Modal (Add/Edit) -->
+    <div id="category-form-modal"
+        class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm hidden flex-col justify-end md:justify-center items-center">
+        <div
+            class="bg-surface w-full md:max-w-lg rounded-t-2xl md:rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+            <div class="p-4 border-b border-outline-variant flex justify-between items-center bg-surface-container">
+                <h3 id="category-form-title" class="font-headline-sm text-primary">Agregar Categoría</h3>
+                <button id="btn-close-category-form" class="text-on-surface-variant hover:text-primary">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto">
+                <form id="category-form" class="space-y-4">
+                    <input type="hidden" id="category-id">
+                    <div>
+                        <label class="block font-label-md text-primary mb-1">Nombre</label>
+                        <input type="text" id="category-name" required placeholder="ej. Cocina"
+                            class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary">
+                    </div>
+                    <div>
+                        <label class="block font-label-md text-primary mb-1">Subcategorías</label>
+                        <p class="text-xs text-on-surface-variant mb-1">Separadas por coma (ej. Comida, Postres)</p>
+                        <input type="text" id="category-subcategories" placeholder="Comida, Postres"
+                            class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary">
+                    </div>
+                    <button type="submit" id="btn-save-category"
+                        class="w-full bg-primary text-on-primary py-3 rounded font-label-md hover:bg-primary-container transition-colors">
+                        Guardar Categoría
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal"
+        class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex-col justify-end md:justify-center items-center">
+        <div
+            class="bg-surface w-full md:max-w-lg rounded-t-2xl md:rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+            <div class="p-4 border-b border-outline-variant flex justify-between items-center bg-surface-container">
+                <h3 class="font-headline-sm text-primary">Ajustes</h3>
+                <button id="btn-close-settings" class="text-on-surface-variant hover:text-primary">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-6">
+                <!-- Theme Toggle -->
+                <div>
+                    <h4 class="font-label-md text-primary mb-3 uppercase tracking-wider">Tema</h4>
+                    <div class="flex items-center gap-4 p-4 bg-surface-container-high rounded-xl">
+                        <span class="material-symbols-outlined text-on-surface-variant">light_mode</span>
+                        <div id="theme-toggle" class="theme-toggle"></div>
+                        <span class="material-symbols-outlined text-on-surface-variant">dark_mode</span>
+                        <span id="theme-label" class="font-label-md text-sm text-on-surface-variant ml-2">Claro</span>
+                    </div>
+                </div>
+
+                <!-- Business Info -->
+                <div>
+                    <h4 class="font-label-md text-primary mb-3 uppercase tracking-wider">Información del Negocio</h4>
+                    <form id="business-form" class="space-y-3 p-4 bg-surface-container-high rounded-xl">
+                        <div>
+                            <label class="block font-label-md text-xs text-primary mb-1">Nombre del negocio</label>
+                            <input type="text" id="biz-name"
+                                class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary">
+                        </div>
+                        <div>
+                            <label class="block font-label-md text-xs text-primary mb-1">Teléfono</label>
+                            <input type="text" id="biz-phone"
+                                class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary">
+                        </div>
+                        <div>
+                            <label class="block font-label-md text-xs text-primary mb-1">Dirección</label>
+                            <input type="text" id="biz-address"
+                                class="w-full border-outline-variant rounded bg-surface p-2 focus:ring-primary focus:border-primary">
+                        </div>
+                        <button type="submit"
+                            class="w-full bg-primary text-on-primary py-2 rounded font-label-md text-sm hover:bg-primary-container transition-colors">
+                            Guardar Información
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Application Logic -->
     <script type="module">
         import { auth, provider, db, storage } from './firebase-config.js';
         import { signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-                 import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+                  import { collection, addDoc, getDocs, getDocsFromServer, doc, updateDoc, deleteDoc, setDoc, query } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
         // DOM Elements
@@ -347,7 +518,6 @@
         const btnLogin = document.getElementById('btn-login');
         const btnLogout = document.getElementById('btn-logout');
         const productsContainer = document.getElementById('products-container');
-        const categoryTabs = document.querySelectorAll('.category-tab');
 
         // Email Auth Elements
         const emailLoginForm = document.getElementById('email-login-form');
@@ -373,28 +543,54 @@
         const existingImageUrl = document.getElementById('existing-image-url');
         const btnSave = document.getElementById('btn-save');
 
+        // Bottom nav buttons
+        const navBtns = document.querySelectorAll('.nav-btn');
+        const btnNavCategories = document.getElementById('btn-nav-categories');
+        const btnNavSettings = document.getElementById('btn-nav-settings');
+        const btnNavOrders = document.getElementById('btn-nav-orders');
+
+        // Categories modal
+        const categoriesModal = document.getElementById('categories-modal');
+        const btnCloseCategories = document.getElementById('btn-close-categories');
+        const categoriesList = document.getElementById('categories-list');
+        const btnAddCategory = document.getElementById('btn-add-category');
+
+        // Category form modal
+        const categoryFormModal = document.getElementById('category-form-modal');
+        const categoryForm = document.getElementById('category-form');
+        const categoryFormTitle = document.getElementById('category-form-title');
+        const btnCloseCategoryForm = document.getElementById('btn-close-category-form');
+        const inputCategoryId = document.getElementById('category-id');
+        const inputCategoryName = document.getElementById('category-name');
+        const inputCategorySubs = document.getElementById('category-subcategories');
+        const btnSaveCategory = document.getElementById('btn-save-category');
+
+        // Settings modal
+        const settingsModal = document.getElementById('settings-modal');
+        const btnCloseSettings = document.getElementById('btn-close-settings');
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeLabel = document.getElementById('theme-label');
+        const businessForm = document.getElementById('business-form');
+        const inputBizName = document.getElementById('biz-name');
+        const inputBizPhone = document.getElementById('biz-phone');
+        const inputBizAddress = document.getElementById('biz-address');
+
         let currentCategory = 'cocina';
         let allProducts = [];
-
-        // Subcategory definitions
-         const subcategories = {
-             'cocina': ['Comida', 'Postres'],
-             'cocteles': ['Coctelería', 'Tragos'],
-             'bebidas': ['Café', 'Bebidas']
-         };
+        let allCategories = [];
+        let editingCategoryId = null;
 
 
         // --- AUTHENTICATION ---
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 authOverlay.classList.add('hidden');
-                loadProducts();
+                loadCategories().then(() => loadProducts());
             } else {
                 authOverlay.classList.remove('hidden');
                 authOverlay.classList.add('flex');
             }
         });
-
         // Email & Password Auth Logic
         emailLoginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -429,22 +625,21 @@
         });
 
         // --- UI LOGIC ---
-        categoryTabs.forEach(tab => {
-            tab.addEventListener('click', (e) => {
-                // Update active tab styling
-                categoryTabs.forEach(t => {
+        function setupCategoryTabs() {
+            const container = document.getElementById('category-tabs-container');
+            container.addEventListener('click', (e) => {
+                const tab = e.target.closest('.category-tab');
+                if (!tab) return;
+                document.querySelectorAll('.category-tab').forEach(t => {
                     t.classList.remove('active-tab', 'font-bold', 'border-b-2', 'border-primary', 'text-primary');
                     t.classList.add('text-on-surface-variant');
                 });
-
-                const clickedTab = e.target;
-                clickedTab.classList.remove('text-on-surface-variant');
-                clickedTab.classList.add('active-tab', 'font-bold', 'border-b-2', 'border-primary', 'text-primary');
-
-                currentCategory = clickedTab.dataset.category;
-                renderProducts(); // Re-render from cache or reload
+                tab.classList.remove('text-on-surface-variant');
+                tab.classList.add('active-tab', 'font-bold', 'border-b-2', 'border-primary', 'text-primary');
+                currentCategory = tab.dataset.category;
+                renderProducts();
             });
-        });
+        }
 
         inputCategory.addEventListener('change', () => {
             populateSubcategories(inputCategory.value);
@@ -452,7 +647,8 @@
 
         function populateSubcategories(category, selectedSub = null) {
             inputSubcategory.innerHTML = '';
-            const subs = subcategories[category] || [];
+            const cat = allCategories.find(c => c.name === category);
+            const subs = cat ? cat.subcategories : [];
             subs.forEach(sub => {
                 const option = document.createElement('option');
                 option.value = sub.toLowerCase();
@@ -467,16 +663,23 @@
         // --- DATABASE LOGIC ---
         async function loadProducts() {
             try {
+                console.log('Loading products from Firestore...');
                 productsContainer.innerHTML = '<div class="text-center py-10"><span class="material-symbols-outlined animate-spin text-primary text-4xl">autorenew</span><p class="mt-4">Cargando...</p></div>';
 
-                 const q = query(collection(db, "products"), orderBy("order"));
-                const querySnapshot = await getDocs(q);
+                const q = query(collection(db, "products"));
+                const querySnapshot = await getDocsFromServer(q);
+                console.log('QuerySnapshot empty?', querySnapshot.empty, 'size:', querySnapshot.size);
 
                 allProducts = [];
                 querySnapshot.forEach((doc) => {
-                    allProducts.push({ id: doc.id, ...doc.data() });
+                    const data = doc.data();
+                    console.log('Fetched doc', doc.id, data);
+                    if (data.order === undefined) data.order = 0;
+                    allProducts.push({ id: doc.id, ...data });
                 });
 
+                allProducts.sort((a, b) => (a.order || 0) - (b.order || 0));
+                console.log('Loaded products:', allProducts);
                 renderProducts();
             } catch (error) {
                 console.error("Error loading products:", error);
@@ -485,120 +688,124 @@
         }
 
         function renderProducts() {
-            productsContainer.innerHTML = '';
-            const filteredProducts = allProducts.filter(p => p.category === currentCategory);
+    // Filter products for the selected category
+    const filteredProducts = allProducts.filter(p => {
+        const prodCat = (p.category || '').toString().toLowerCase();
+        const curCat = (currentCategory || '').toString().toLowerCase();
+        return prodCat === curCat;
+    });
+    console.log('Filtered products:', filteredProducts);
 
-            if (filteredProducts.length === 0) {
-                productsContainer.innerHTML = '<p class="text-center py-10 text-on-surface-variant">No hay productos en esta categoría.</p>';
-                return;
-            }
+    const displayProducts = filteredProducts;
 
-            filteredProducts.forEach(product => {
-                     const card = document.createElement('div');
-                     card.className = "product-card bg-white p-3 border border-primary flex gap-4 relative shadow-sm";
-                     card.setAttribute('draggable', 'true');
-                     card.dataset.id = product.id;
-                     card.dataset.order = product.order || 0;
+    // Handle empty state
+    if (displayProducts.length === 0) {
+        productsContainer.innerHTML = '<p class="text-center py-10 text-on-surface-variant">No hay productos disponibles.</p>';
+        return;
+    }
 
-                     // Double border effect
-                     const innerBorder = document.createElement('div');
-                     innerBorder.className = "absolute inset-1 border-[0.5px] border-primary pointer-events-none";
-                     card.appendChild(innerBorder);
+    // Clear container
+    productsContainer.innerHTML = '';
 
-                     card.innerHTML += `
-                        <div class="w-48 h-48 flex-shrink-0 relative z-10">
-            <img src="${product.imageUrl || 'https://via.placeholder.com/150'}" alt="${product.name}" class="w-full h-full object-cover border-[0.5px] border-primary">
-        </div>
-    <div class="flex-grow z-10 py-1 flex flex-col justify-between">
-        <div>
-            <div class="flex justify-between items-start">
-                <h3 class="font-headline-sm text-primary text-lg leading-tight w-3/4">${product.name}</h3>
-                ${product.price != null ? `<span class="font-label-md font-bold text-secondary text-sm">$${parseFloat(product.price).toFixed(2)}</span>` : ''}
+    // Render product cards
+    displayProducts.forEach(product => {
+        const card = document.createElement('div');
+        card.className = "product-card bg-white p-3 border border-primary flex gap-4 relative shadow-sm";
+        card.setAttribute('draggable', 'true');
+        card.dataset.id = product.id;
+        card.dataset.order = product.order || 0;
+
+        // Double border effect
+        const innerBorder = document.createElement('div');
+        innerBorder.className = "absolute inset-1 border-[0.5px] border-primary pointer-events-none";
+        card.appendChild(innerBorder);
+
+        card.innerHTML += `
+            <div class="w-48 h-48 flex-shrink-0 relative z-10">
+                <img src="${product.imageUrl || 'https://via.placeholder.com/150'}" alt="${product.name}" class="w-full h-full object-cover border-[0.5px] border-primary">
             </div>
-            <p class="text-xs text-on-surface-variant italic mt-1 whitespace-pre-line">
-            ${product.description}
-            </p>
-        </div>
-        <div class="flex gap-4 mt-2">
-            <button class="btn-edit flex items-center text-xs text-primary hover:text-secondary font-bold" data-id="${product.id}">
-                <span class="material-symbols-outlined text-[16px] mr-1">edit</span> Editar
-            </button>
-            <button class="btn-delete flex items-center text-xs text-error hover:opacity-80 font-bold" data-id="${product.id}">
-                <span class="material-symbols-outlined text-[16px] mr-1">delete</span> Eliminar
-            </button>
-        </div>
-    </div>
-`;
-                     productsContainer.appendChild(card);
-                 });
+            <div class="flex-grow z-10 py-1 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-headline-sm text-primary text-lg leading-tight w-3/4">${product.name}</h3>
+                        ${product.price != null ? `<span class="font-label-md font-bold text-secondary text-sm">$${parseFloat(product.price).toFixed(2)}</span>` : ''}
+                    </div>
+                    <p class="text-xs text-on-surface-variant italic mt-1 whitespace-pre-line">${product.description}</p>
+                </div>
+                <div class="flex gap-4 mt-2">
+                    <button class="btn-edit flex items-center text-xs text-primary hover:text-secondary font-bold" data-id="${product.id}">
+                        <span class="material-symbols-outlined text-[16px] mr-1">edit</span> Editar
+                    </button>
+                    <button class="btn-delete flex items-center text-xs text-error hover:opacity-80 font-bold" data-id="${product.id}">
+                        <span class="material-symbols-outlined text-[16px] mr-1">delete</span> Eliminar
+                    </button>
+                </div>
+            </div>
+        `;
+        productsContainer.appendChild(card);
+    });
 
-                 // Attach drag-and-drop listeners
-                 document.querySelectorAll('.product-card').forEach(card => {
-                     card.addEventListener('dragstart', (e) => {
-                         e.dataTransfer.setData('text/plain', card.dataset.id);
-                         e.dataTransfer.effectAllowed = 'move';
-                     });
-                     card.addEventListener('dragover', (e) => {
-                         e.preventDefault();
-                         e.dataTransfer.dropEffect = 'move';
-                         card.style.opacity = '0.5';
-                     });
-                     card.addEventListener('dragleave', () => {
-                         card.style.opacity = '';
-                     });
-                     card.addEventListener('drop', async (e) => {
-                         e.preventDefault();
-                         const draggedId = e.dataTransfer.getData('text/plain');
-                         const targetId = card.dataset.id;
-                         if (draggedId === targetId) return;
-                         // Find indices
-                         const draggedIdx = allProducts.findIndex(p => p.id === draggedId);
-                         const targetIdx = allProducts.findIndex(p => p.id === targetId);
-                         // Swap order values
-                         const draggedProduct = allProducts[draggedIdx];
-                         const targetProduct = allProducts[targetIdx];
-                         const tempOrder = draggedProduct.order;
-                         draggedProduct.order = targetProduct.order;
-                         targetProduct.order = tempOrder;
-                         // Persist changes
-                         try {
-                             await Promise.all([
-                                 updateDoc(doc(db, "products", draggedProduct.id), { order: draggedProduct.order }),
-                                 updateDoc(doc(db, "products", targetProduct.id), { order: targetProduct.order })
-                             ]);
-                             // Re-render to reflect new order
-                             await loadProducts();
-                         } catch (err) {
-                             console.error('Error updating order:', err);
-                         }
-                     });
-                 });
-                 
-                 // Attach Edit/Delete listeners
-                 document.querySelectorAll('.btn-edit').forEach(btn => {
-                     btn.addEventListener('click', (e) => {
-                         const id = e.target.closest('.btn-edit').dataset.id;
-                         const product = allProducts.find(p => p.id === id);
-                         openModal(product);
-                     });
-                 });
+    // Attach drag‑and‑drop listeners
+    document.querySelectorAll('.product-card').forEach(card => {
+        card.addEventListener('dragstart', e => {
+            e.dataTransfer.setData('text/plain', card.dataset.id);
+            e.dataTransfer.effectAllowed = 'move';
+        });
+        card.addEventListener('dragover', e => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            card.style.opacity = '0.5';
+        });
+        card.addEventListener('dragleave', () => {
+            card.style.opacity = '';
+        });
+        card.addEventListener('drop', async e => {
+            e.preventDefault();
+            const draggedId = e.dataTransfer.getData('text/plain');
+            const targetId = card.dataset.id;
+            if (draggedId === targetId) return;
+            const draggedIdx = allProducts.findIndex(p => p.id === draggedId);
+            const targetIdx = allProducts.findIndex(p => p.id === targetId);
+            const draggedProduct = allProducts[draggedIdx];
+            const targetProduct = allProducts[targetIdx];
+            const tempOrder = draggedProduct.order;
+            draggedProduct.order = targetProduct.order;
+            targetProduct.order = tempOrder;
+            try {
+                await Promise.all([
+                    updateDoc(doc(db, "products", draggedProduct.id), { order: draggedProduct.order }),
+                    updateDoc(doc(db, "products", targetProduct.id), { order: targetProduct.order })
+                ]);
+                await loadProducts();
+            } catch (err) {
+                console.error('Error updating order:', err);
+            }
+        });
+    });
 
-                 document.querySelectorAll('.btn-delete').forEach(btn => {
-                     btn.addEventListener('click', async (e) => {
-                         if(confirm('¿Estás seguro de eliminar este producto?')) {
-                             const id = e.target.closest('.btn-delete').dataset.id;
-                             try {
-                                 await deleteDoc(doc(db, "products", id));
-                                 await loadProducts();
-                             } catch (err) {
-                                 console.error('Error al eliminar:', err);
-                             }
-                        }
-                });
-            });
-        }
-
-        // --- MODAL LOGIC ---
+    // Attach Edit/Delete listeners
+    document.querySelectorAll('.btn-edit').forEach(btn => {
+        btn.addEventListener('click', e => {
+            const id = e.target.closest('.btn-edit').dataset.id;
+            const product = allProducts.find(p => p.id === id);
+            openModal(product);
+        });
+    });
+    document.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', async e => {
+            if (confirm('¿Estás seguro de eliminar este producto?')) {
+                const id = e.target.closest('.btn-delete').dataset.id;
+                try {
+                    await deleteDoc(doc(db, "products", id));
+                    await loadProducts();
+                } catch (err) {
+                    console.error('Error al eliminar:', err);
+                }
+            }
+        });
+    });
+}
+// --- MODAL LOGIC ---
         function openModal(product = null) {
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -649,7 +856,11 @@
                 reader.onload = (e) => {
                     imagePreview.src = e.target.result;
                     imagePreview.classList.remove('hidden');
-                }
+                };
+                reader.onerror = () => {
+                    console.error('Error reading file for preview');
+                    alert('Error al leer la imagen seleccionada.');
+                };
                 reader.readAsDataURL(file);
             }
         });
@@ -665,8 +876,7 @@
                 const file = inputImage.files[0];
 
                 if (file) {
-                    // Convert and compress image to Base64 to store directly in Firestore (bypassing Storage)
-                    imageUrl = await new Promise((resolve) => {
+                    imageUrl = await new Promise((resolve, reject) => {
                         const img = new Image();
                         img.onload = () => {
                             const canvas = document.createElement('canvas');
@@ -690,9 +900,9 @@
                             canvas.height = height;
                             const ctx = canvas.getContext('2d');
                             ctx.drawImage(img, 0, 0, width, height);
-                            // Convert to JPEG with 60% quality to keep it under 1MB limit for Firestore
                             resolve(canvas.toDataURL('image/jpeg', 0.6));
                         };
+                        img.onerror = () => reject(new Error('Failed to load image for compression'));
                         img.src = imagePreview.src;
                     });
                 }
@@ -728,6 +938,322 @@
                 btnSave.innerHTML = 'Guardar Producto';
             }
         });
+
+        // --- CATEGORIES CRUD ---
+        async function loadCategories() {
+            try {
+                const q = query(collection(db, "categories"));
+                const snapshot = await getDocsFromServer(q);
+                allCategories = [];
+                snapshot.forEach(doc => {
+                    allCategories.push({ id: doc.id, ...doc.data() });
+                });
+                allCategories.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+                if (allCategories.length === 0) {
+                    await seedDefaultCategories();
+                    return;
+                }
+                afterCategoriesLoaded();
+            } catch (error) {
+                console.error("Error loading categories:", error);
+            }
+        }
+
+        async function seedDefaultCategories() {
+            const defaults = [
+                { name: 'cocina', label: 'Cocina', subcategories: ['Comida', 'Postres'], order: 1 },
+                { name: 'cocteles', label: 'Cocteles', subcategories: ['Coctelería', 'Tragos'], order: 2 },
+                { name: 'bebidas', label: 'Bebidas', subcategories: ['Café', 'Bebidas'], order: 3 },
+            ];
+            for (const cat of defaults) {
+                await addDoc(collection(db, "categories"), cat);
+            }
+            await loadCategories();
+        }
+
+        function afterCategoriesLoaded() {
+            populateCategoryTabs();
+            populateCategorySelect();
+            setupCategoryTabs();
+            if (!allCategories.find(c => c.name === currentCategory) && allCategories.length) {
+                currentCategory = allCategories[0].name;
+            }
+        }
+
+        function populateCategoryTabs() {
+            const container = document.getElementById('category-tabs-container');
+            container.innerHTML = '';
+            if (!allCategories.length) {
+                container.innerHTML = '<span class="text-on-surface-variant text-sm py-2">Sin categorías</span>';
+                return;
+            }
+            const firstCat = allCategories.find(c => c.name === currentCategory) ? currentCategory : allCategories[0].name;
+            if (!allCategories.find(c => c.name === currentCategory)) {
+                currentCategory = firstCat;
+            }
+            allCategories.forEach(cat => {
+                const btn = document.createElement('button');
+                const isActive = cat.name === currentCategory;
+                btn.className = `category-tab font-label-md whitespace-nowrap pb-2 transition-colors ${
+                    isActive
+                        ? 'text-primary font-bold border-b-2 border-primary'
+                        : 'text-on-surface-variant hover:text-primary'
+                }`;
+                btn.dataset.category = cat.name;
+                btn.textContent = cat.label || cat.name;
+                container.appendChild(btn);
+            });
+        }
+
+        function populateCategorySelect() {
+            const select = document.getElementById('product-category');
+            const currentVal = select.value;
+            select.innerHTML = '';
+            allCategories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat.name;
+                option.textContent = cat.label || cat.name;
+                select.appendChild(option);
+            });
+            if (currentVal && allCategories.find(c => c.name === currentVal)) {
+                select.value = currentVal;
+            }
+        }
+
+        function openCategoriesModal() {
+            renderCategoriesList();
+            categoriesModal.classList.remove('hidden');
+            categoriesModal.classList.add('flex');
+        }
+
+        function closeCategoriesModal() {
+            categoriesModal.classList.add('hidden');
+            categoriesModal.classList.remove('flex');
+        }
+
+        function renderCategoriesList() {
+            categoriesList.innerHTML = '';
+            if (!allCategories.length) {
+                categoriesList.innerHTML = '<p class="text-center text-on-surface-variant py-8">No hay categorías creadas.</p>';
+                return;
+            }
+            allCategories.forEach(cat => {
+                const div = document.createElement('div');
+                div.className = 'category-item border border-outline-variant rounded-xl p-4';
+                div.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-headline-sm text-primary">${cat.label || cat.name}</h4>
+                            <div class="mt-2">
+                                ${(cat.subcategories || []).map(s => `<span class="subcategory-tag">${s}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="flex gap-1">
+                            <button class="btn-edit-cat text-primary hover:text-secondary p-1 rounded-full" data-id="${cat.id}">
+                                <span class="material-symbols-outlined text-lg">edit</span>
+                            </button>
+                            <button class="btn-delete-cat text-error hover:opacity-80 p-1 rounded-full" data-id="${cat.id}">
+                                <span class="material-symbols-outlined text-lg">delete</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                categoriesList.appendChild(div);
+            });
+
+            document.querySelectorAll('.btn-edit-cat').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.dataset.id;
+                    const cat = allCategories.find(c => c.id === id);
+                    if (cat) openCategoryForm(cat);
+                });
+            });
+            document.querySelectorAll('.btn-delete-cat').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const id = btn.dataset.id;
+                    const cat = allCategories.find(c => c.id === id);
+                    if (cat && confirm(`¿Eliminar la categoría "${cat.label || cat.name}" y todos sus productos?`)) {
+                        try {
+                            const productsToDelete = allProducts.filter(p => p.category === cat.name);
+                            for (const p of productsToDelete) {
+                                await deleteDoc(doc(db, "products", p.id));
+                            }
+                            await deleteDoc(doc(db, "categories", id));
+                            await loadCategories();
+                            await loadProducts();
+                            renderCategoriesList();
+                        } catch (err) {
+                            console.error('Error deleting category:', err);
+                            alert('Error al eliminar la categoría.');
+                        }
+                    }
+                });
+            });
+        }
+
+        function openCategoryForm(cat = null) {
+            editingCategoryId = cat ? cat.id : null;
+            categoryFormTitle.textContent = cat ? 'Editar Categoría' : 'Agregar Categoría';
+            inputCategoryName.value = cat ? (cat.label || cat.name) : '';
+            inputCategorySubs.value = cat ? (cat.subcategories || []).join(', ') : '';
+            categoryFormModal.classList.remove('hidden');
+            categoryFormModal.classList.add('flex');
+        }
+
+        function closeCategoryForm() {
+            categoryFormModal.classList.add('hidden');
+            categoryFormModal.classList.remove('flex');
+        }
+
+        // --- SETTINGS ---
+        async function loadBusinessInfo() {
+            try {
+                const snap = await getDocsFromServer(query(collection(db, "settings")));
+                snap.forEach(d => {
+                    if (d.id === 'business') {
+                        const data = d.data();
+                        inputBizName.value = data.name || '';
+                        inputBizPhone.value = data.phone || '';
+                        inputBizAddress.value = data.address || '';
+                    }
+                });
+            } catch (e) {
+                // collection doesn't exist yet
+            }
+        }
+
+        function openSettingsModal() {
+            loadBusinessInfo();
+            const isDark = document.documentElement.classList.contains('dark');
+            themeToggle.classList.toggle('dark', isDark);
+            themeLabel.textContent = isDark ? 'Oscuro' : 'Claro';
+            settingsModal.classList.remove('hidden');
+            settingsModal.classList.add('flex');
+        }
+
+        function closeSettingsModal() {
+            settingsModal.classList.add('hidden');
+            settingsModal.classList.remove('flex');
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.classList.toggle('dark');
+            themeToggle.classList.toggle('dark', isDark);
+            themeLabel.textContent = isDark ? 'Oscuro' : 'Claro';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        function activateNavView(view) {
+            navBtns.forEach(btn => {
+                const isActive = btn.dataset.view === view;
+                btn.className = `nav-btn flex flex-col items-center transition-colors px-4 py-1 rounded-xl ${
+                    isActive
+                        ? 'text-on-primary bg-primary-container'
+                        : 'text-on-surface-variant hover:text-primary'
+                }`;
+                const span = btn.querySelector('span:last-child');
+                if (span) span.classList.toggle('font-bold', isActive);
+            });
+        }
+
+        function closeAllModals() {
+            closeModal();
+            closeCategoriesModal();
+            closeCategoryForm();
+            closeSettingsModal();
+        }
+
+        // --- EVENT LISTENERS ---
+        [categoriesModal, categoryFormModal, settingsModal].forEach(el => {
+            if (el) el.addEventListener('click', (e) => {
+                if (e.target === el) {
+                    el.classList.add('hidden');
+                    el.classList.remove('flex');
+                }
+            });
+        });
+
+        btnNavCategories.addEventListener('click', () => {
+            closeAllModals();
+            openCategoriesModal();
+            activateNavView('categories');
+        });
+
+        btnNavSettings.addEventListener('click', () => {
+            closeAllModals();
+            openSettingsModal();
+            activateNavView('settings');
+        });
+
+        btnNavOrders.addEventListener('click', () => {
+            closeAllModals();
+            alert('Gestión de pedidos próximamente.');
+        });
+
+        document.getElementById('btn-nav-products').addEventListener('click', () => {
+            closeAllModals();
+            activateNavView('products');
+        });
+
+        btnCloseCategories.addEventListener('click', closeCategoriesModal);
+        btnAddCategory.addEventListener('click', () => openCategoryForm());
+        btnCloseCategoryForm.addEventListener('click', closeCategoryForm);
+        btnCloseSettings.addEventListener('click', closeSettingsModal);
+        themeToggle.addEventListener('click', toggleTheme);
+
+        categoryForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            btnSaveCategory.disabled = true;
+            btnSaveCategory.textContent = 'Guardando...';
+            try {
+                const nameRaw = inputCategoryName.value.trim();
+                const nameKey = nameRaw.toLowerCase().replace(/\s+/g, '-');
+                const subs = inputCategorySubs.value.split(',').map(s => s.trim()).filter(Boolean);
+                const catData = {
+                    name: nameKey,
+                    label: nameRaw,
+                    subcategories: subs,
+                    order: Date.now()
+                };
+                if (editingCategoryId) {
+                    await updateDoc(doc(db, "categories", editingCategoryId), catData);
+                } else {
+                    await addDoc(collection(db, "categories"), catData);
+                }
+                closeCategoryForm();
+                await loadCategories();
+            } catch (err) {
+                console.error('Error saving category:', err);
+                alert('Error al guardar la categoría.');
+            } finally {
+                btnSaveCategory.disabled = false;
+                btnSaveCategory.textContent = 'Guardar Categoría';
+            }
+        });
+
+        businessForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                await setDoc(doc(db, "settings", "business"), {
+                    name: inputBizName.value,
+                    phone: inputBizPhone.value,
+                    address: inputBizAddress.value,
+                    updatedAt: new Date()
+                });
+                alert('Información guardada correctamente.');
+            } catch (err) {
+                console.error('Error saving business info:', err);
+                alert('Error al guardar.');
+            }
+        });
+
+        // Apply saved theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
 
     </script>
 </body>
