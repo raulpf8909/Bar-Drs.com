@@ -17,6 +17,21 @@
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <style>
+        #back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        #back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -460,12 +475,13 @@
                 for (const [subcategory, products] of sortedEntries) {
                     const subTitle = subcategory.charAt(0).toUpperCase() + subcategory.slice(1);
 
+                    const icon = subcategory.toLowerCase() === 'bebidas' ? 'sports_bar' : 'local_cafe';
                     const headerHtml = `
                         <div class="mb-section-gap">
                             <div class="flex items-center justify-center gap-4 mb-8">
-                                <span class="material-symbols-outlined text-primary text-3xl">local_cafe</span>
+                                <span class="material-symbols-outlined text-primary text-3xl">${icon}</span>
                                 <h2 class="font-headline-md text-headline-md text-primary text-center">${subTitle}</h2>
-                                <span class="material-symbols-outlined text-primary text-3xl">local_cafe</span>
+                                <span class="material-symbols-outlined text-primary text-3xl">${icon}</span>
                             </div>
                             <div class="etched-line"></div>
                         </div>
@@ -516,7 +532,21 @@
         }
 
         loadBebidasProducts();
+
+        // Back to top
+        const backToTop = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            backToTop.classList.toggle('show', window.scrollY > 400);
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
     </script>
+
+    <button id="back-to-top"
+        class="w-14 h-14 bg-primary text-on-primary rounded-xl flex items-center justify-center shadow-lg hover:bg-primary-container transition-colors">
+        <span class="material-symbols-outlined text-3xl">arrow_upward</span>
+    </button>
 </body>
 
 </html>
