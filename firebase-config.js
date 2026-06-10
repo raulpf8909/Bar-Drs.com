@@ -20,7 +20,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+try { getAnalytics(app); } catch (e) { /* analytics no disponible */ }
 const db = initializeFirestore(app, { experimentalForceLongPolling: true });
 // Initialize Firebase services
 const auth = getAuth(app);
