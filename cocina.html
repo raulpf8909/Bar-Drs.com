@@ -397,8 +397,15 @@
     </div>
 
     <script type="module">
-        import { db } from './firebase-config.js';
-        import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        async function fetchProducts(category) {
+            const res = await fetch('/api/products', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ category })
+            });
+            if (!res.ok) throw new Error('Error ' + res.status);
+            return await res.json();
+        }
 
         // Modal handling
         const modal = document.getElementById('product-modal');
@@ -415,12 +422,10 @@
 
         async function loadCocinaProducts() {
             try {
-                const q = query(collection(db, "products"), where("category", "==", "cocina"));
-                const querySnapshot = await getDocs(q);
+                const products = await fetchProducts("cocina");
 
                 const productsBySubcategory = {};
-                querySnapshot.forEach((doc) => {
-                    const product = doc.data();
+                products.forEach(product => {
                     if (product.order === undefined) product.order = 0;
                     const sub = product.subcategory || 'Otros';
                     if (!productsBySubcategory[sub]) productsBySubcategory[sub] = [];
