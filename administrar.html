@@ -516,9 +516,12 @@
 
     <!-- Application Logic -->
     <script type="module">
-        import { auth, provider, storage } from './firebase-config.js';
-        import { signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { auth, provider, storage, db } from './firebase-config.js';
+        import { signInWithPopup, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
+        import { getDocs, getDoc, collection, query, where, orderBy, addDoc, updateDoc, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const USE_PROXY = true;
 
         // DOM Elements
         const authOverlay = document.getElementById('auth-overlay');
@@ -610,24 +613,26 @@
         }
         initAuth();
 
-        // Email & Password via proxy
+        // Email & Password (proxy or direct Firebase Auth)
         emailLoginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             btnEmailSubmit.disabled = true;
             btnEmailSubmit.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">autorenew</span> Verificando...';
 
             try {
-                const res = await fetch('/api/auth/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: loginEmail.value, password: loginPassword.value })
-                });
-                if (!res.ok) {
-                    const errText = await res.text();
-                    throw new Error(errText || 'Credenciales incorrectas');
+                if (USE_PROXY) {
+                    const res = await fetch('/api/auth/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: loginEmail.value, password: loginPassword.value })
+                    });
+                    if (!res.ok) throw new Error(await res.text() || 'Credenciales incorrectas');
+                    const data = await res.json();
+                    currentToken = data.token;
+                } else {
+                    const cred = await signInWithEmailAndPassword(auth, loginEmail.value, loginPassword.value);
+                    currentToken = await cred.user.getIdToken(false);
                 }
-                const data = await res.json();
-                currentToken = data.token;
                 authOverlay.classList.add('hidden');
                 emailLoginForm.reset();
                 loadCategories().then(() => loadProducts());
@@ -725,14 +730,19 @@
             try {
                 productsContainer.innerHTML = '<div class="text-center py-10"><span class="material-symbols-outlined animate-spin text-primary text-4xl">autorenew</span><p class="mt-4">Cargando...</p></div>';
 
-                const token = await getAuthToken();
-                const res = await fetch('/api/products/all', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ authToken: token })
-                });
-                if (!res.ok) throw new Error(await res.text());
-                allProducts = await res.json();
+                if (USE_PROXY) {
+                    const token = await getAuthToken();
+                    const res = await fetch('/api/products/all', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ authToken: token })
+                    });
+                    if (!res.ok) throw new Error(await res.text());
+                    allProducts = await res.json();
+                } else {
+                    const snap = await getDocs(collection(db, 'products'));
+                    allProducts = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                }
                 allProducts.forEach(p => { if (p.order === undefined) p.order = 0; });
                 allProducts.sort((a, b) => (a.order || 0) - (b.order || 0));
                 renderProducts();
@@ -890,13 +900,17 @@
             if (confirm('¿Estás seguro de eliminar este producto?')) {
                 const id = e.target.closest('.btn-delete').dataset.id;
                 try {
-                    const token = await getAuthToken();
-                    const res = await fetch('/api/products/delete', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ authToken: token, id })
-                    });
-                    if (!res.ok) throw new Error(await res.text());
+                    if (USE_PROXY) {
+                        const token = await getAuthToken();
+                        const res = await fetch('/api/products/delete', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ authToken: token, id })
+                        });
+                        if (!res.ok) throw new Error(await res.text());
+                    } else {
+                        await deleteDoc(doc(db, 'products', id));
+                    }
                     await loadProducts();
                 } catch (err) {
                     console.error('Error al eliminar:', err);
@@ -1017,19 +1031,25 @@
                         img.onerror = () => { clearTimeout(timeoutId); reject(new Error('Failed to load image for compression')); };
                         img.src = imagePreview.src;
                     });
-                    const b64 = await new Promise((resolve) => {
-                        const reader = new FileReader();
-                        reader.onload = () => resolve(reader.result.split(',')[1]);
-                        reader.readAsDataURL(compressedBlob);
-                    });
-                    const uploadRes = await fetch('/api/upload-image', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ image: b64, filename: `product_${Date.now()}.jpg` })
-                    });
-                    if (!uploadRes.ok) throw new Error(await uploadRes.text());
-                    const uploadData = await uploadRes.json();
-                    imageUrl = uploadData.url;
+                    if (USE_PROXY) {
+                        const b64 = await new Promise((resolve) => {
+                            const reader = new FileReader();
+                            reader.onload = () => resolve(reader.result.split(',')[1]);
+                            reader.readAsDataURL(compressedBlob);
+                        });
+                        const uploadRes = await fetch('/api/upload-image', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ image: b64, filename: `product_${Date.now()}.jpg` })
+                        });
+                        if (!uploadRes.ok) throw new Error(await uploadRes.text());
+                        const uploadData = await uploadRes.json();
+                        imageUrl = uploadData.url;
+                    } else {
+                        const storageRef = ref(storage, `products/${Date.now()}.jpg`);
+                        await uploadBytes(storageRef, compressedBlob);
+                        imageUrl = await getDownloadURL(storageRef);
+                    }
                 }
 
                      const productData = {
@@ -1043,21 +1063,30 @@
                          order: parseInt(inputOrder.value) || 0
                      };
 
-                const token = await getAuthToken();
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 15000);
-                const res = await fetch('/api/products/save', {
-                    method: 'POST',
-                    signal: controller.signal,
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        authToken: token,
-                        id: inputId.value || 'new',
-                        product: productData
-                    })
-                });
-                clearTimeout(timeoutId);
-                if (!res.ok) throw new Error(await res.text());
+                if (USE_PROXY) {
+                    const token = await getAuthToken();
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 15000);
+                    const res = await fetch('/api/products/save', {
+                        method: 'POST',
+                        signal: controller.signal,
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            authToken: token,
+                            id: inputId.value || 'new',
+                            product: productData
+                        })
+                    });
+                    clearTimeout(timeoutId);
+                    if (!res.ok) throw new Error(await res.text());
+                } else {
+                    if (inputId.value && inputId.value !== 'new') {
+                        await updateDoc(doc(db, 'products', inputId.value), productData);
+                    } else {
+                        const docRef = await addDoc(collection(db, 'products'), productData);
+                        inputId.value = docRef.id;
+                    }
+                }
 
                 closeModal();
                 await loadProducts(); // Reload list
@@ -1074,14 +1103,19 @@
         // --- CATEGORIES CRUD ---
         async function loadCategories() {
             try {
-                const token = await getAuthToken();
-                const res = await fetch('/api/categories', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ authToken: token })
-                });
-                if (!res.ok) throw new Error(await res.text());
-                allCategories = await res.json();
+                if (USE_PROXY) {
+                    const token = await getAuthToken();
+                    const res = await fetch('/api/categories', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ authToken: token })
+                    });
+                    if (!res.ok) throw new Error(await res.text());
+                    allCategories = await res.json();
+                } else {
+                    const snap = await getDocs(collection(db, 'categories'));
+                    allCategories = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                }
                 allCategories.sort((a, b) => (a.order || 0) - (b.order || 0));
 
                 if (allCategories.length === 0) {
@@ -1102,13 +1136,19 @@
                 { name: 'cocteles', label: 'Cocteles', subcategories: ['Coctelería', 'Tragos'], order: 2 },
                 { name: 'bebidas', label: 'Bebidas', subcategories: ['Café', 'Bebidas'], order: 3 },
             ];
-            const token = await getAuthToken();
-            for (const cat of defaults) {
-                await fetch('/api/categories/save', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ authToken: token, id: 'new', category: cat })
-                });
+            if (USE_PROXY) {
+                const token = await getAuthToken();
+                for (const cat of defaults) {
+                    await fetch('/api/categories/save', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ authToken: token, id: 'new', category: cat })
+                    });
+                }
+            } else {
+                for (const cat of defaults) {
+                    await addDoc(collection(db, 'categories'), cat);
+                }
             }
             await loadCategories();
         }
@@ -1216,20 +1256,28 @@
                     const cat = allCategories.find(c => c.id === id);
                     if (cat && confirm(`¿Eliminar la categoría "${cat.label || cat.name}" y todos sus productos?`)) {
                         try {
-                            const token = await getAuthToken();
-                            const productsToDelete = allProducts.filter(p => p.category === cat.name);
-                            for (const p of productsToDelete) {
-                                await fetch('/api/products/delete', {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ authToken: token, id: p.id })
-                                });
+                            if (USE_PROXY) {
+                                const token = await getAuthToken();
+                                const productsToDelete = allProducts.filter(p => p.category === cat.name);
+                                for (const p of productsToDelete) {
+                                    await fetch('/api/products/delete', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ authToken: token, id: p.id })
+                                    });
+                                }
+                                await fetch('/api/categories/delete', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ authToken: token, id })
+                                    });
+                            } else {
+                                const productsToDelete = allProducts.filter(p => p.category === cat.name);
+                                for (const p of productsToDelete) {
+                                    await deleteDoc(doc(db, 'products', p.id));
+                                }
+                                await deleteDoc(doc(db, 'categories', id));
                             }
-                            await fetch('/api/categories/delete', {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ authToken: token, id })
-                                });
                             await loadCategories();
                             await loadProducts();
                             renderCategoriesList();
@@ -1259,14 +1307,20 @@
         // --- SETTINGS ---
         async function loadBusinessInfo() {
             try {
-                const token = await getAuthToken();
-                const res = await fetch('/api/settings', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ authToken: token, docId: 'business' })
-                });
-                if (!res.ok) throw new Error(await res.text());
-                const data = await res.json();
+                let data = {};
+                if (USE_PROXY) {
+                    const token = await getAuthToken();
+                    const res = await fetch('/api/settings', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ authToken: token, docId: 'business' })
+                    });
+                    if (!res.ok) throw new Error(await res.text());
+                    data = await res.json();
+                } else {
+                    const snap = await getDoc(doc(db, 'settings', 'business'));
+                    if (snap.exists()) data = { id: snap.id, ...snap.data() };
+                }
                 if (data && data.name !== undefined) {
                     inputBizName.value = data.name || '';
                     inputBizPhone.value = data.phone || '';
@@ -1371,17 +1425,25 @@
                     subcategories: subs,
                     order: Date.now()
                 };
-                const token = await getAuthToken();
-                const res = await fetch('/api/categories/save', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        authToken: token,
-                        id: editingCategoryId || 'new',
-                        category: catData
-                    })
-                });
-                if (!res.ok) throw new Error(await res.text());
+                if (USE_PROXY) {
+                    const token = await getAuthToken();
+                    const res = await fetch('/api/categories/save', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            authToken: token,
+                            id: editingCategoryId || 'new',
+                            category: catData
+                        })
+                    });
+                    if (!res.ok) throw new Error(await res.text());
+                } else {
+                    if (editingCategoryId) {
+                        await updateDoc(doc(db, 'categories', editingCategoryId), catData);
+                    } else {
+                        await addDoc(collection(db, 'categories'), catData);
+                    }
+                }
                 closeCategoryForm();
                 await loadCategories();
             } catch (err) {
@@ -1396,22 +1458,23 @@
         businessForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
-                const token = await getAuthToken();
-                const res = await fetch('/api/settings/save', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        authToken: token,
-                        docId: 'business',
-                        data: {
-                            name: inputBizName.value,
-                            phone: inputBizPhone.value,
-                            address: inputBizAddress.value,
-                            updatedAt: new Date().toISOString()
-                        }
-                    })
-                });
-                if (!res.ok) throw new Error(await res.text());
+                const bizData = {
+                    name: inputBizName.value,
+                    phone: inputBizPhone.value,
+                    address: inputBizAddress.value,
+                    updatedAt: new Date().toISOString()
+                };
+                if (USE_PROXY) {
+                    const token = await getAuthToken();
+                    const res = await fetch('/api/settings/save', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ authToken: token, docId: 'business', data: bizData })
+                    });
+                    if (!res.ok) throw new Error(await res.text());
+                } else {
+                    await setDoc(doc(db, 'settings', 'business'), bizData);
+                }
                 alert('Información guardada correctamente.');
             } catch (err) {
                 console.error('Error saving business info:', err);

@@ -400,14 +400,24 @@
         </div>
     </div>
     <script type="module">
+        import { db } from './firebase-config.js';
+        import { getDocs, collection, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const USE_PROXY = true;
+
         async function fetchProducts(category) {
-            const res = await fetch('/api/products', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ category })
-            });
-            if (!res.ok) throw new Error('Error ' + res.status);
-            return await res.json();
+            if (USE_PROXY) {
+                const res = await fetch('/api/products', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ category })
+                });
+                if (!res.ok) throw new Error('Error ' + res.status);
+                return await res.json();
+            }
+            const q = query(collection(db, 'products'), where('category', '==', category), orderBy('order'));
+            const snap = await getDocs(q);
+            return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         }
 
         // Modal handling
