@@ -17,7 +17,7 @@
         rel="stylesheet">
 
     <!-- Tailwind CSS CDN -->
-<link rel="stylesheet" href="./dist/output.css">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -213,7 +213,7 @@
 <body class="bg-background text-primary font-body-md min-h-screen flex flex-col relative pb-20">
 
     <!-- Auth Overlay -->
-    <div id="auth-overlay" class="fixed inset-0 bg-background z-[100] flex flex-col items-center justify-center hidden">
+    <div id="auth-overlay" class="fixed inset-0 z-[100] flex-col items-center justify-center hidden" style="background-color: var(--bg);">
         <div class="text-center p-8 max-w-sm w-full">
             <h1 class="font-headline-lg text-primary mb-2">Administración</h1>
             <p class="font-body-md text-on-surface-variant mb-6 text-sm">Por favor, inicia sesión para acceder al panel
@@ -630,7 +630,13 @@
 
         // Logout Logic
         btnLogout.addEventListener('click', async () => {
-            await signOut(auth);
+            try {
+                await signOut(auth);
+            } catch (error) {
+                console.error("Error signing out:", error);
+                authOverlay.classList.remove('hidden');
+                authOverlay.classList.add('flex');
+            }
         });
 
         // --- UI LOGIC ---
