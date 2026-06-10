@@ -672,23 +672,19 @@
         // --- DATABASE LOGIC ---
         async function loadProducts() {
             try {
-                console.log('Loading products from Firestore...');
                 productsContainer.innerHTML = '<div class="text-center py-10"><span class="material-symbols-outlined animate-spin text-primary text-4xl">autorenew</span><p class="mt-4">Cargando...</p></div>';
 
                 const q = query(collection(db, "products"));
                 const querySnapshot = await getDocsFromServer(q);
-                console.log('QuerySnapshot empty?', querySnapshot.empty, 'size:', querySnapshot.size);
 
                 allProducts = [];
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    console.log('Fetched doc', doc.id, data);
                     if (data.order === undefined) data.order = 0;
                     allProducts.push({ id: doc.id, ...data });
                 });
 
                 allProducts.sort((a, b) => (a.order || 0) - (b.order || 0));
-                console.log('Loaded products:', allProducts);
                 renderProducts();
             } catch (error) {
                 console.error("Error loading products:", error);
@@ -1163,7 +1159,7 @@
                     }
                 });
             } catch (e) {
-                // collection doesn't exist yet
+                console.warn("No se pudo cargar la configuracion del negocio:", e);
             }
         }
 

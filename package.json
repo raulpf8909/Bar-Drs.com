@@ -1,5 +1,12 @@
 {
-  "dependencies": {
-    "firebase": "^12.14.0"
-  }
+  "name": "bardrs-appweb",
+  "version": "1.0.0",
+  "main": "firebase-config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

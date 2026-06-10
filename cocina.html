@@ -395,16 +395,6 @@
             });
         });
 
-        // Kitchen menu item hover highlighting micro-interaction
-        document.querySelectorAll('main section > div').forEach(item => {
-            item.addEventListener('mouseenter', () => {
-                item.style.transform = 'translateY(-2px)';
-                item.style.transition = 'transform 0.3s ease';
-            });
-            item.addEventListener('mouseleave', () => {
-                item.style.transform = 'translateY(0)';
-            });
-        });
     </script>
 
     <!-- Product Details Modal -->
@@ -518,6 +508,7 @@
                         modalPrice.textContent = card.dataset.price;
                         modalDesc.textContent = card.dataset.desc;
                         modal.classList.remove('hidden');
+                        modal.classList.add('flex');
                     });
 
                     // Micro-interactions
