@@ -3,3 +3,6 @@ __pycache__
 *.pyc
 images/
 tmp/
+.eslintrc.cjs
+.vscode/
+.DS_Store
