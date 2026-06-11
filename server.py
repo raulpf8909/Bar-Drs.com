@@ -1,5 +1,5 @@
 import http.server
-import urllib.request
+import urllib.request, urllib.parse
 import json
 import ssl
 import socket
@@ -103,11 +103,22 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
                 body = self.read_body()
                 image_data = body.get('image', '')
                 filename = body.get('filename', f'product_{int(__import__("time").time())}.jpg')
+                token = body.get('authToken', '')
                 os.makedirs('images', exist_ok=True)
                 filepath = os.path.join('images', filename)
+                raw = base64.b64decode(image_data)
                 with open(filepath, 'wb') as f:
-                    f.write(base64.b64decode(image_data))
-                self.send_json({"url": "/images/" + filename})
+                    f.write(raw)
+                storage_url = f"https://firebasestorage.googleapis.com/v0/b/bardrs-64b37.firebasestorage.app/o?name={urllib.parse.quote(filename)}"
+                storage_req = urllib.request.Request(storage_url, data=raw,
+                    headers={'Content-Type': 'image/jpeg', 'Authorization': 'Bearer ' + token}, method='POST')
+                try:
+                    with urllib.request.urlopen(storage_req, timeout=15, context=ssl_ctx) as resp:
+                        result = json.loads(resp.read())
+                    download_url = f"https://firebasestorage.googleapis.com/v0/b/bardrs-64b37.firebasestorage.app/o/{urllib.parse.quote(filename)}?alt=media"
+                    self.send_json({"url": download_url})
+                except Exception as e:
+                    self.send_json({"url": "/images/" + filename})
             except Exception as e:
                 self.send_error_msg("Upload error: " + str(e))
 
