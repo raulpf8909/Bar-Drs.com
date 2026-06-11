@@ -1,31 +1,19 @@
-const API_KEY = 'AIzaSyCPkfsrWoSkF7oYE_QAKkjJ5oYLzsXynao';
+import { IDENTITYKIT, jsonResponse, errorResponse } from '../lib/firebase.js';
 
 export async function onRequestPost({ request }) {
   try {
-    const body = await request.json();
-    const { email, password } = body;
-
-    const url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + API_KEY;
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const { email, password } = await request.json();
+    const res = await fetch(IDENTITYKIT, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password, returnSecureToken: true })
     });
-
     if (!res.ok) {
       const err = await res.json();
-      return new Response(err.error?.message || 'Credenciales incorrectas', { status: 401 });
+      return errorResponse(err.error?.message || 'Credenciales incorrectas', 401);
     }
-
     const data = await res.json();
-    return new Response(JSON.stringify({
-      token: data.idToken,
-      email: data.email || '',
-      localId: data.localId || ''
-    }), {
-      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
-    });
+    return jsonResponse({ token: data.idToken, email: data.email || '', localId: data.localId || '' });
   } catch (err) {
-    return new Response('Auth error: ' + err.message, { status: 500 });
+    return errorResponse('Auth error: ' + err.message);
   }
 }

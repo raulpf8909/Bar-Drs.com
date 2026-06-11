@@ -1,5 +1,4 @@
-const API_KEY = 'AIzaSyCPkfsrWoSkF7oYE_QAKkjJ5oYLzsXynao';
-const FIRESTORE_URL = 'https://firestore.googleapis.com/v1/projects/bardrs-64b37/databases/(default)/documents';
+import { FIRESTORE_QUERY, convertFields, jsonResponse, errorResponse } from '../lib/firebase.js';
 
 export async function onRequestPost({ request }) {
   try {
@@ -10,42 +9,23 @@ export async function onRequestPost({ request }) {
       structuredQuery: {
         from: [{ collectionId: 'products' }],
         where: category ? {
-          fieldFilter: {
-            field: { fieldPath: 'category' },
-            op: 'EQUAL',
-            value: { stringValue: category }
-          }
+          fieldFilter: { field: { fieldPath: 'category' }, op: 'EQUAL', value: { stringValue: category } }
         } : undefined
       }
     };
 
-    const res = await fetch(FIRESTORE_URL + ':runQuery?key=' + API_KEY, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(query)
+    const res = await fetch(FIRESTORE_QUERY, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(query)
     });
-
-    if (!res.ok) {
-      return new Response('Firestore error: ' + res.status, { status: 502 });
-    }
+    if (!res.ok) return errorResponse('Firestore error: ' + res.status, 502);
 
     const data = await res.json();
-    const products = (data || [])
-      .filter(r => r.document)
-      .map(r => {
-        const fields = r.document.fields || {};
-        const obj = { id: r.document.name.split('/').pop() };
-        for (const [k, v] of Object.entries(fields)) {
-          obj[k] = v.stringValue ?? v.integerValue ?? v.doubleValue ?? null;
-          if ((k === 'price' || k === 'order') && obj[k] != null) obj[k] = parseFloat(obj[k]);
-        }
-        return obj;
-      });
+    const products = (data || []).filter(r => r.document).map(r => ({
+      id: r.document.name.split('/').pop(), ...convertFields(r.document.fields)
+    }));
 
-    return new Response(JSON.stringify(products), {
-      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
-    });
+    return jsonResponse(products);
   } catch (err) {
-    return new Response('Proxy error: ' + err.message, { status: 500 });
+    return errorResponse('Proxy error: ' + err.message);
   }
 }

@@ -516,12 +516,22 @@
 
     <!-- Application Logic -->
     <script type="module">
-        import { auth, provider, storage, db } from './firebase-config.js';
-        import { signInWithPopup, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
-        import { getDocs, getDoc, collection, query, where, orderBy, addDoc, updateDoc, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-        const USE_PROXY = false;
+        const firebaseConfig = {
+            apiKey: "AIzaSyCPkfsrWoSkF7oYE_QAKkjJ5oYLzsXynao",
+            authDomain: "bardrs-64b37.firebaseapp.com",
+            projectId: "bardrs-64b37",
+            storageBucket: "bardrs-64b37.firebasestorage.app",
+            messagingSenderId: "437026154305",
+            appId: "1:437026154305:web:7ef5635e69acfa95a623c0"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        const USE_PROXY = true;
 
         // DOM Elements
         const authOverlay = document.getElementById('auth-overlay');
@@ -1039,6 +1049,7 @@
                         img.src = imagePreview.src;
                     });
                     if (USE_PROXY) {
+                        const token = await getAuthToken();
                         const b64 = await new Promise((resolve) => {
                             const reader = new FileReader();
                             reader.onload = () => resolve(reader.result.split(',')[1]);
@@ -1047,8 +1058,8 @@
                         const uploadRes = await withTimeout(fetch('/api/upload-image', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ image: b64, filename: `product_${Date.now()}.jpg` })
-                        }), 15000);
+                            body: JSON.stringify({ authToken: token, image: b64, filename: `product_${Date.now()}.jpg` })
+                        }), 30000);
                         if (!uploadRes.ok) throw new Error(await uploadRes.text());
                         const uploadData = await uploadRes.json();
                         imageUrl = uploadData.url;
