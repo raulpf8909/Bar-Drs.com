@@ -521,7 +521,7 @@
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
         import { getDocs, getDoc, collection, query, where, orderBy, addDoc, updateDoc, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        const USE_PROXY = true;
+        const USE_PROXY = false;
 
         // DOM Elements
         const authOverlay = document.getElementById('auth-overlay');
@@ -638,7 +638,7 @@
                 loadCategories().then(() => loadProducts());
             } catch (error) {
                 console.error("Error with email sign in:", error);
-                alert("Credenciales incorrectas o usuario no registrado.");
+                alert("Credenciales incorrectas o usuario no registrado.\n\n" + error.message);
             } finally {
                 btnEmailSubmit.disabled = false;
                 btnEmailSubmit.innerHTML = 'Ingresar con Usuario';
