@@ -477,10 +477,10 @@
                                 data-title="${product.name}" 
                                 data-price="${product.price != null && !isNaN(product.price) ? '$' + parseFloat(product.price).toFixed(2) : ''}" 
                                 data-desc="${product.description}" 
-                                data-img="${product.imageUrl || 'https://via.placeholder.com/300'}">
+                                data-img="${product.imageUrl}">
                                 <div class="tarjeta-producto-tacos mx-auto mb-6">
                                     <img class="w-full h-full object-cover filter sepia-[0.2] transition-transform duration-500 group-hover:scale-110"
-                                        alt="${product.name}" src="${product.imageUrl || 'https://via.placeholder.com/300'}">
+                                        alt="${product.name}" src="${product.imageUrl || 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='}">
                                 </div>
                                 <div class="flex justify-between items-baseline mb-1">
                                     <h4 class="font-headline-sm text-headline-sm text-primary">${product.name}</h4>
