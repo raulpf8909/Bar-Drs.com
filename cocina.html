@@ -413,25 +413,37 @@
     </div>
 
     <script type="module">
-        import { db } from './firebase-config.js';
-        import { getDocs, collection, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-
-        // Set to false when deploying to a hosting with direct Firebase access
-        const USE_PROXY = false;
+        const API_KEY = 'AIzaSyCPkfsrWoSkF7oYE_QAKkjJ5oYLzsXynao';
+        const FIRESTORE_URL = 'https://firestore.googleapis.com/v1/projects/bardrs-64b37/databases/(default)/documents';
 
         async function fetchProducts(category) {
-            if (USE_PROXY) {
-                const res = await fetch('/api/products', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ category })
-                });
-                if (!res.ok) throw new Error('Error ' + res.status);
-                return await res.json();
-            }
-            const q = query(collection(db, 'products'), where('category', '==', category));
-            const snap = await getDocs(q);
-            return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            const res = await fetch(FIRESTORE_URL + ':runQuery?key=' + API_KEY, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    structuredQuery: {
+                        from: [{ collectionId: 'products' }],
+                        where: {
+                            fieldFilter: {
+                                field: { fieldPath: 'category' },
+                                op: 'EQUAL',
+                                value: { stringValue: category }
+                            }
+                        }
+                    }
+                })
+            });
+            if (!res.ok) throw new Error('Error ' + res.status);
+            const data = await res.json();
+            return data.filter(r => r.document).map(r => {
+                const fields = r.document.fields || {};
+                const obj = { id: r.document.name.split('/').pop() };
+                for (const [k, v] of Object.entries(fields)) {
+                    obj[k] = v.stringValue ?? v.integerValue ?? v.doubleValue ?? null;
+                    if ((k === 'price' || k === 'order') && obj[k] != null) obj[k] = parseFloat(obj[k]);
+                }
+                return obj;
+            });
         }
 
         // Modal handling
