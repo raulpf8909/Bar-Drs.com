@@ -417,7 +417,7 @@
         import { getDocs, collection, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         // Set to false when deploying to a hosting with direct Firebase access
-        const USE_PROXY = true;
+        const USE_PROXY = false;
 
         async function fetchProducts(category) {
             if (USE_PROXY) {
