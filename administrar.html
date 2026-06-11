@@ -985,6 +985,13 @@
         });
 
         // Save Product
+        function withTimeout(promise, ms) {
+            return Promise.race([
+                promise,
+                new Promise((_, reject) => setTimeout(() => reject(new Error('La operación tardó demasiado. Revisa tu conexión.')), ms))
+            ]);
+        }
+
         productForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             btnSave.disabled = true;
@@ -1037,18 +1044,18 @@
                             reader.onload = () => resolve(reader.result.split(',')[1]);
                             reader.readAsDataURL(compressedBlob);
                         });
-                        const uploadRes = await fetch('/api/upload-image', {
+                        const uploadRes = await withTimeout(fetch('/api/upload-image', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ image: b64, filename: `product_${Date.now()}.jpg` })
-                        });
+                        }), 15000);
                         if (!uploadRes.ok) throw new Error(await uploadRes.text());
                         const uploadData = await uploadRes.json();
                         imageUrl = uploadData.url;
                     } else {
                         const storageRef = ref(storage, `products/${Date.now()}.jpg`);
-                        await uploadBytes(storageRef, compressedBlob);
-                        imageUrl = await getDownloadURL(storageRef);
+                        await withTimeout(uploadBytes(storageRef, compressedBlob), 20000);
+                        imageUrl = await withTimeout(getDownloadURL(storageRef), 10000);
                     }
                 }
 
@@ -1065,25 +1072,21 @@
 
                 if (USE_PROXY) {
                     const token = await getAuthToken();
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 15000);
-                    const res = await fetch('/api/products/save', {
+                    const res = await withTimeout(fetch('/api/products/save', {
                         method: 'POST',
-                        signal: controller.signal,
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             authToken: token,
                             id: inputId.value || 'new',
                             product: productData
                         })
-                    });
-                    clearTimeout(timeoutId);
+                    }), 20000);
                     if (!res.ok) throw new Error(await res.text());
                 } else {
                     if (inputId.value && inputId.value !== 'new') {
-                        await updateDoc(doc(db, 'products', inputId.value), productData);
+                        await withTimeout(updateDoc(doc(db, 'products', inputId.value), productData), 20000);
                     } else {
-                        const docRef = await addDoc(collection(db, 'products'), productData);
+                        const docRef = await withTimeout(addDoc(collection(db, 'products'), productData), 20000);
                         inputId.value = docRef.id;
                     }
                 }
