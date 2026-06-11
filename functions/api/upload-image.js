@@ -1,6 +1,6 @@
 import { jsonResponse, errorResponse } from './lib/firebase.js';
 
-const CLOUD_NAME = 'dijkktqvx'; // cloud name
+const CLOUD_NAME = 'dijkktqvx';
 const API_KEY = '561341328954241';
 const API_SECRET = 'U2cO3wGPzgygTCD_DF6td96Hm5k';
 
@@ -17,17 +17,16 @@ export async function onRequestPost({ request }) {
     const filename = body.filename || `product_${Date.now()}.jpg`;
 
     const timestamp = Math.floor(Date.now() / 1000);
-    const folder = 'products';
-    const params = { folder, timestamp: String(timestamp) };
-    const sortedKeys = Object.keys(params).sort();
-    const sigStr = sortedKeys.map(k => k + '=' + params[k]).join('&') + API_SECRET;
+    const publicId = filename.replace(/\.[^.]+$/, '');
+    const params = { public_id: publicId, timestamp: String(timestamp) };
+    const sigStr = Object.keys(params).sort().map(k => k + '=' + params[k]).join('&') + API_SECRET;
     const signature = await sha1(sigStr);
 
     const formBody = new URLSearchParams();
     formBody.append('file', `data:image/jpeg;base64,${imageData}`);
     formBody.append('api_key', API_KEY);
     formBody.append('timestamp', String(timestamp));
-    formBody.append('folder', folder);
+    formBody.append('public_id', publicId);
     formBody.append('signature', signature);
 
     const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {

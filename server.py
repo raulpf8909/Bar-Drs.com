@@ -111,14 +111,14 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
                 # Upload to Cloudinary
                 import hashlib, time
                 timestamp = int(time.time())
-                folder = 'products'
-                sig_str = f'folder={folder}&timestamp={timestamp}' + 'U2cO3wGPzgygTCD_DF6td96Hm5k'
+                public_id = filename.rsplit('.', 1)[0]
+                sig_str = f'public_id={public_id}&timestamp={timestamp}' + 'U2cO3wGPzgygTCD_DF6td96Hm5k'
                 signature = hashlib.sha1(sig_str.encode()).hexdigest()
                 cld_data = urllib.parse.urlencode({
                     'file': 'data:image/jpeg;base64,' + image_data,
                     'api_key': '561341328954241',
                     'timestamp': timestamp,
-                    'folder': folder,
+                    'public_id': public_id,
                     'signature': signature
                 }).encode()
                 cld_req = urllib.request.Request(
