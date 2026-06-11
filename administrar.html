@@ -539,8 +539,15 @@
         function fwFields(fields) {
             const obj = {};
             for (const [k, v] of Object.entries(fields || {})) {
-                obj[k] = v.stringValue ?? v.integerValue ?? v.doubleValue ?? null;
-                if ((k === 'price' || k === 'order') && obj[k] != null) obj[k] = parseFloat(obj[k]);
+                if (v.arrayValue) {
+                    obj[k] = (v.arrayValue.values || []).map(x => x.stringValue ?? null);
+                } else {
+                    obj[k] = v.stringValue ?? v.integerValue ?? v.doubleValue ?? null;
+                    if ((k === 'price' || k === 'order') && obj[k] != null) obj[k] = parseFloat(obj[k]);
+                    if (typeof obj[k] === 'string' && obj[k].startsWith('[') && obj[k].endsWith(']')) {
+                        try { obj[k] = JSON.parse(obj[k]); } catch(e) {}
+                    }
+                }
             }
             return obj;
         }
@@ -552,6 +559,7 @@
                 else if (typeof v === 'boolean') fields[k] = { booleanValue: v };
                 else if (typeof v === 'number') fields[k] = Number.isInteger(v) ? { integerValue: String(v) } : { doubleValue: v };
                 else if (v instanceof Date) fields[k] = { timestampValue: v.toISOString() };
+                else if (Array.isArray(v)) fields[k] = { arrayValue: { values: v.map(x => ({ stringValue: String(x) })) } };
                 else fields[k] = { stringValue: String(v) };
             }
             return fields;
@@ -1142,11 +1150,10 @@
             ];
             const token = await getAuthToken();
             for (const cat of defaults) {
-                const catData = { ...cat, subcategories: JSON.stringify(cat.subcategories) };
                 await fetch(FW_BASE + '/categories?key=' + FW_API, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-                    body: JSON.stringify({ fields: fwEncode(catData) })
+                    body: JSON.stringify({ fields: fwEncode(cat) })
                 });
             }
             await loadCategories();
@@ -1411,7 +1418,7 @@
                     order: Date.now()
                 };
                 const token = await getAuthToken();
-                const catFields = fwEncode({ ...catData, subcategories: JSON.stringify(catData.subcategories) });
+                const catFields = fwEncode(catData);
                 if (editingCategoryId) {
                     await fetch(FW_BASE + '/categories/' + editingCategoryId + '?updateMask.fieldPaths=name&updateMask.fieldPaths=label&updateMask.fieldPaths=subcategories&updateMask.fieldPaths=order&key=' + FW_API, {
                         method: 'PATCH',
