@@ -531,7 +531,33 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
-        const USE_PROXY = true;
+        const FW_API = 'AIzaSyCPkfsrWoSkF7oYE_QAKkjJ5oYLzsXynao';
+        const FW_BASE = 'https://firestore.googleapis.com/v1/projects/bardrs-64b37/databases/(default)/documents';
+        const FW_QUERY = FW_BASE + ':runQuery?key=' + FW_API;
+        const ST_BASE = 'https://firebasestorage.googleapis.com/v0/b/bardrs-64b37.firebasestorage.app/o';
+
+        function fwFields(fields) {
+            const obj = {};
+            for (const [k, v] of Object.entries(fields || {})) {
+                obj[k] = v.stringValue ?? v.integerValue ?? v.doubleValue ?? null;
+                if ((k === 'price' || k === 'order') && obj[k] != null) obj[k] = parseFloat(obj[k]);
+            }
+            return obj;
+        }
+
+        function fwEncode(data) {
+            const fields = {};
+            for (const [k, v] of Object.entries(data || {})) {
+                if (v === null || v === undefined) fields[k] = { nullValue: null };
+                else if (typeof v === 'boolean') fields[k] = { booleanValue: v };
+                else if (typeof v === 'number') fields[k] = Number.isInteger(v) ? { integerValue: String(v) } : { doubleValue: v };
+                else if (v instanceof Date) fields[k] = { timestampValue: v.toISOString() };
+                else fields[k] = { stringValue: String(v) };
+            }
+            return fields;
+        }
+
+        const USE_PROXY = false;
 
         // DOM Elements
         const authOverlay = document.getElementById('auth-overlay');
@@ -630,19 +656,14 @@
             btnEmailSubmit.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">autorenew</span> Verificando...';
 
             try {
-                if (USE_PROXY) {
-                    const res = await fetch('/api/auth/login', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email: loginEmail.value, password: loginPassword.value })
-                    });
-                    if (!res.ok) throw new Error(await res.text() || 'Credenciales incorrectas');
-                    const data = await res.json();
-                    currentToken = data.token;
-                } else {
-                    const cred = await signInWithEmailAndPassword(auth, loginEmail.value, loginPassword.value);
-                    currentToken = await cred.user.getIdToken(false);
-                }
+                const res = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + FW_API, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: loginEmail.value, password: loginPassword.value, returnSecureToken: true })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error?.message || 'Credenciales incorrectas');
+                currentToken = data.idToken;
                 authOverlay.classList.add('hidden');
                 emailLoginForm.reset();
                 loadCategories().then(() => loadProducts());
@@ -740,19 +761,15 @@
             try {
                 productsContainer.innerHTML = '<div class="text-center py-10"><span class="material-symbols-outlined animate-spin text-primary text-4xl">autorenew</span><p class="mt-4">Cargando...</p></div>';
 
-                if (USE_PROXY) {
-                    const token = await getAuthToken();
-                    const res = await fetch('/api/products/all', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ authToken: token })
-                    });
-                    if (!res.ok) throw new Error(await res.text());
-                    allProducts = await res.json();
-                } else {
-                    const snap = await getDocs(collection(db, 'products'));
-                    allProducts = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                }
+                const token = await getAuthToken();
+                const res = await fetch(FW_QUERY, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                    body: JSON.stringify({ structuredQuery: { from: [{ collectionId: 'products' }] } })
+                });
+                if (!res.ok) throw new Error(await res.text());
+                const docs = await res.json();
+                allProducts = (docs || []).filter(d => d.document).map(d => ({ id: d.document.name.split('/').pop(), ...fwFields(d.document.fields) }));
                 allProducts.forEach(p => { if (p.order === undefined) p.order = 0; });
                 allProducts.sort((a, b) => (a.order || 0) - (b.order || 0));
                 renderProducts();
@@ -910,17 +927,12 @@
             if (confirm('¿Estás seguro de eliminar este producto?')) {
                 const id = e.target.closest('.btn-delete').dataset.id;
                 try {
-                    if (USE_PROXY) {
-                        const token = await getAuthToken();
-                        const res = await fetch('/api/products/delete', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ authToken: token, id })
-                        });
-                        if (!res.ok) throw new Error(await res.text());
-                    } else {
-                        await deleteDoc(doc(db, 'products', id));
-                    }
+                    const token = await getAuthToken();
+                    const res = await fetch(FW_BASE + '/products/' + id + '?key=' + FW_API, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': 'Bearer ' + token }
+                    });
+                    if (!res.ok) throw new Error(await res.text());
                     await loadProducts();
                 } catch (err) {
                     console.error('Error al eliminar:', err);
@@ -1041,26 +1053,16 @@
                         img.onerror = () => { clearTimeout(timeoutId); reject(new Error('Failed to load image for compression')); };
                         img.src = imagePreview.src;
                     });
-                    if (USE_PROXY) {
-                        const token = await getAuthToken();
-                        const b64 = await new Promise((resolve) => {
-                            const reader = new FileReader();
-                            reader.onload = () => resolve(reader.result.split(',')[1]);
-                            reader.readAsDataURL(compressedBlob);
-                        });
-                        const uploadRes = await withTimeout(fetch('/api/upload-image', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ authToken: token, image: b64, filename: `product_${Date.now()}.jpg` })
-                        }), 30000);
-                        if (!uploadRes.ok) throw new Error(await uploadRes.text());
-                        const uploadData = await uploadRes.json();
-                        imageUrl = uploadData.url;
-                    } else {
-                        const storageRef = ref(storage, `products/${Date.now()}.jpg`);
-                        await withTimeout(uploadBytes(storageRef, compressedBlob), 20000);
-                        imageUrl = await withTimeout(getDownloadURL(storageRef), 10000);
-                    }
+                    const token = await getAuthToken();
+                    const filename = `products/${Date.now()}.jpg`;
+                    const uploadRes = await withTimeout(fetch(ST_BASE + '?uploadType=media&name=' + filename + '&key=' + FW_API, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'image/jpeg' },
+                        body: compressedBlob
+                    }), 30000);
+                    if (!uploadRes.ok) throw new Error(await uploadRes.text());
+                    const uploadData = await uploadRes.json();
+                    imageUrl = 'https://firebasestorage.googleapis.com/v0/b/bardrs-64b37.firebasestorage.app/o/' + encodeURIComponent(uploadData.name) + '?alt=media';
                 }
 
                      const productData = {
@@ -1074,25 +1076,24 @@
                          order: parseInt(inputOrder.value) || 0
                      };
 
-                if (USE_PROXY) {
-                    const token = await getAuthToken();
-                    const res = await withTimeout(fetch('/api/products/save', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            authToken: token,
-                            id: inputId.value || 'new',
-                            product: productData
-                        })
+                const token = await getAuthToken();
+                const fields = fwEncode(productData);
+                if (inputId.value && inputId.value !== 'new') {
+                    const res = await withTimeout(fetch(FW_BASE + '/products/' + inputId.value + '?updateMask.fieldPaths=name&updateMask.fieldPaths=price&updateMask.fieldPaths=category&updateMask.fieldPaths=subcategory&updateMask.fieldPaths=description&updateMask.fieldPaths=imageUrl&updateMask.fieldPaths=updatedAt&updateMask.fieldPaths=order&key=' + FW_API, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                        body: JSON.stringify({ fields })
                     }), 20000);
                     if (!res.ok) throw new Error(await res.text());
                 } else {
-                    if (inputId.value && inputId.value !== 'new') {
-                        await withTimeout(updateDoc(doc(db, 'products', inputId.value), productData), 20000);
-                    } else {
-                        const docRef = await withTimeout(addDoc(collection(db, 'products'), productData), 20000);
-                        inputId.value = docRef.id;
-                    }
+                    const res = await withTimeout(fetch(FW_BASE + '/products?key=' + FW_API, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                        body: JSON.stringify({ fields })
+                    }), 20000);
+                    if (!res.ok) throw new Error(await res.text());
+                    const data = await res.json();
+                    inputId.value = data.name.split('/').pop();
                 }
 
                 closeModal();
@@ -1110,19 +1111,15 @@
         // --- CATEGORIES CRUD ---
         async function loadCategories() {
             try {
-                if (USE_PROXY) {
-                    const token = await getAuthToken();
-                    const res = await fetch('/api/categories', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ authToken: token })
-                    });
-                    if (!res.ok) throw new Error(await res.text());
-                    allCategories = await res.json();
-                } else {
-                    const snap = await getDocs(collection(db, 'categories'));
-                    allCategories = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                }
+                const token = await getAuthToken();
+                const res = await fetch(FW_QUERY, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                    body: JSON.stringify({ structuredQuery: { from: [{ collectionId: 'categories' }] } })
+                });
+                if (!res.ok) throw new Error(await res.text());
+                const docs = await res.json();
+                allCategories = (docs || []).filter(d => d.document).map(d => ({ id: d.document.name.split('/').pop(), ...fwFields(d.document.fields) }));
                 allCategories.sort((a, b) => (a.order || 0) - (b.order || 0));
 
                 if (allCategories.length === 0) {
@@ -1143,19 +1140,14 @@
                 { name: 'cocteles', label: 'Cocteles', subcategories: ['Coctelería', 'Tragos'], order: 2 },
                 { name: 'bebidas', label: 'Bebidas', subcategories: ['Café', 'Bebidas'], order: 3 },
             ];
-            if (USE_PROXY) {
-                const token = await getAuthToken();
-                for (const cat of defaults) {
-                    await fetch('/api/categories/save', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ authToken: token, id: 'new', category: cat })
-                    });
-                }
-            } else {
-                for (const cat of defaults) {
-                    await addDoc(collection(db, 'categories'), cat);
-                }
+            const token = await getAuthToken();
+            for (const cat of defaults) {
+                const catData = { ...cat, subcategories: JSON.stringify(cat.subcategories) };
+                await fetch(FW_BASE + '/categories?key=' + FW_API, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                    body: JSON.stringify({ fields: fwEncode(catData) })
+                });
             }
             await loadCategories();
         }
@@ -1263,28 +1255,18 @@
                     const cat = allCategories.find(c => c.id === id);
                     if (cat && confirm(`¿Eliminar la categoría "${cat.label || cat.name}" y todos sus productos?`)) {
                         try {
-                            if (USE_PROXY) {
                                 const token = await getAuthToken();
                                 const productsToDelete = allProducts.filter(p => p.category === cat.name);
                                 for (const p of productsToDelete) {
-                                    await fetch('/api/products/delete', {
-                                        method: 'POST',
-                                        headers: { 'Content-Type': 'application/json' },
-                                        body: JSON.stringify({ authToken: token, id: p.id })
+                                    await fetch(FW_BASE + '/products/' + p.id + '?key=' + FW_API, {
+                                        method: 'DELETE',
+                                        headers: { 'Authorization': 'Bearer ' + token }
                                     });
                                 }
-                                await fetch('/api/categories/delete', {
-                                        method: 'POST',
-                                        headers: { 'Content-Type': 'application/json' },
-                                        body: JSON.stringify({ authToken: token, id })
-                                    });
-                            } else {
-                                const productsToDelete = allProducts.filter(p => p.category === cat.name);
-                                for (const p of productsToDelete) {
-                                    await deleteDoc(doc(db, 'products', p.id));
-                                }
-                                await deleteDoc(doc(db, 'categories', id));
-                            }
+                                await fetch(FW_BASE + '/categories/' + id + '?key=' + FW_API, {
+                                    method: 'DELETE',
+                                    headers: { 'Authorization': 'Bearer ' + token }
+                                });
                             await loadCategories();
                             await loadProducts();
                             renderCategoriesList();
@@ -1315,18 +1297,14 @@
         async function loadBusinessInfo() {
             try {
                 let data = {};
-                if (USE_PROXY) {
-                    const token = await getAuthToken();
-                    const res = await fetch('/api/settings', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ authToken: token, docId: 'business' })
-                    });
-                    if (!res.ok) throw new Error(await res.text());
-                    data = await res.json();
-                } else {
-                    const snap = await getDoc(doc(db, 'settings', 'business'));
-                    if (snap.exists()) data = { id: snap.id, ...snap.data() };
+                const token = await getAuthToken();
+                const res = await fetch(FW_BASE + '/settings/business' + '?key=' + FW_API, {
+                    method: 'GET',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                if (res.ok) {
+                    const docData = await res.json();
+                    data = { id: docData.name.split('/').pop(), ...fwFields(docData.fields) };
                 }
                 if (data && data.name !== undefined) {
                     inputBizName.value = data.name || '';
@@ -1432,24 +1410,20 @@
                     subcategories: subs,
                     order: Date.now()
                 };
-                if (USE_PROXY) {
-                    const token = await getAuthToken();
-                    const res = await fetch('/api/categories/save', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            authToken: token,
-                            id: editingCategoryId || 'new',
-                            category: catData
-                        })
+                const token = await getAuthToken();
+                const catFields = fwEncode({ ...catData, subcategories: JSON.stringify(catData.subcategories) });
+                if (editingCategoryId) {
+                    await fetch(FW_BASE + '/categories/' + editingCategoryId + '?updateMask.fieldPaths=name&updateMask.fieldPaths=label&updateMask.fieldPaths=subcategories&updateMask.fieldPaths=order&key=' + FW_API, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                        body: JSON.stringify({ fields: catFields })
                     });
-                    if (!res.ok) throw new Error(await res.text());
                 } else {
-                    if (editingCategoryId) {
-                        await updateDoc(doc(db, 'categories', editingCategoryId), catData);
-                    } else {
-                        await addDoc(collection(db, 'categories'), catData);
-                    }
+                    await fetch(FW_BASE + '/categories?key=' + FW_API, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                        body: JSON.stringify({ fields: catFields })
+                    });
                 }
                 closeCategoryForm();
                 await loadCategories();
@@ -1471,17 +1445,12 @@
                     address: inputBizAddress.value,
                     updatedAt: new Date().toISOString()
                 };
-                if (USE_PROXY) {
-                    const token = await getAuthToken();
-                    const res = await fetch('/api/settings/save', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ authToken: token, docId: 'business', data: bizData })
-                    });
-                    if (!res.ok) throw new Error(await res.text());
-                } else {
-                    await setDoc(doc(db, 'settings', 'business'), bizData);
-                }
+                const token = await getAuthToken();
+                await fetch(FW_BASE + '/settings/business' + '?key=' + FW_API, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                    body: JSON.stringify({ fields: fwEncode(bizData) })
+                });
                 alert('Información guardada correctamente.');
             } catch (err) {
                 console.error('Error saving business info:', err);
