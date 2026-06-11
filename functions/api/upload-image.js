@@ -22,27 +22,26 @@ export async function onRequestPost({ request }) {
       body: '{}'
     });
 
+    const initText = await initRes.text().catch(() => '');
     if (!initRes.ok) {
-      const text = await initRes.text().catch(() => '');
-      return errorResponse(`Init failed: ${initRes.status} ${text}`, 502);
+      return errorResponse(`Init ${initRes.status}: ${initText}`, 502);
     }
 
-    // Step 2: Get the upload URL from response
-    const uploadUrl = initRes.headers.get('x-goog-upload-url') || initiateUrl;
+    let uploadUrl = initRes.headers.get('x-goog-upload-url');
+    if (!uploadUrl && initText) {
+      try { uploadUrl = JSON.parse(initText).uploadUrl; } catch(e) {}
+    }
+    if (!uploadUrl) uploadUrl = initiateUrl;
 
-    // Step 3: Upload the actual file content
     const uploadRes = await fetch(uploadUrl, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'image/jpeg',
-        'Content-Length': String(raw.length)
-      },
+      headers: { 'Content-Type': 'image/jpeg' },
       body: raw
     });
 
+    const uploadText = await uploadRes.text().catch(() => '');
     if (!uploadRes.ok) {
-      const text = await uploadRes.text().catch(() => '');
-      return errorResponse(`Upload failed: ${uploadRes.status} ${text}`, 502);
+      return errorResponse(`Upload ${uploadRes.status}: ${uploadText}`, 502);
     }
 
     const downloadUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(filename)}?alt=media`;
