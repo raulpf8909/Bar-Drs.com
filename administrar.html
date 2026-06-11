@@ -710,7 +710,7 @@
         function populateSubcategories(category, selectedSub = null) {
             inputSubcategory.innerHTML = '';
             const cat = allCategories.find(c => c.name === category);
-            const subs = cat ? cat.subcategories : [];
+            const subs = cat ? (cat.subcategories || []) : [];
             subs.forEach(sub => {
                 const option = document.createElement('option');
                 option.value = sub.toLowerCase();

@@ -25,11 +25,14 @@ export function serializeField(v) {
 export function convertFields(fields) {
   const obj = {};
   for (const [k, v] of Object.entries(fields || {})) {
-    if (v.stringValue !== undefined) obj[k] = v.stringValue;
+    if (v.arrayValue) {
+      obj[k] = (v.arrayValue.values || []).map(x => x.stringValue ?? null);
+    } else if (v.stringValue !== undefined) obj[k] = v.stringValue;
     else if (v.integerValue !== undefined) obj[k] = parseFloat(v.integerValue);
     else if (v.doubleValue !== undefined) obj[k] = v.doubleValue;
     else if (v.timestampValue !== undefined) obj[k] = v.timestampValue;
     else obj[k] = null;
+    if ((k === 'price' || k === 'order') && obj[k] != null) obj[k] = parseFloat(obj[k]);
   }
   return obj;
 }
