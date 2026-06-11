@@ -1,90 +1,47 @@
 import { jsonResponse, errorResponse } from './lib/firebase.js';
 
-const API_KEY = 'AIzaSyCPkfsrWoSkF7oYE_QAKkjJ5oYLzsXynao';
-const FW_BASE = 'https://firestore.googleapis.com/v1/projects/bardrs-64b37/databases/(default)/documents';
+const CLOUD_NAME = 'Root';
+const API_KEY = '561341328954241';
+const API_SECRET = 'U2cO3wGPzgygTCD_DF6td96Hm5k';
 
-async function getAccessToken(refreshToken) {
-  if (!refreshToken) return null;
-  // Try exchanging as Firebase refresh token first
-  const res = await fetch('https://securetoken.googleapis.com/v1/token?key=' + API_KEY, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: 'grant_type=refresh_token&refresh_token=' + encodeURIComponent(refreshToken)
-  });
-  if (res.ok) {
-    const data = await res.json();
-    return data.access_token || null;
-  }
-  // If exchange fails, might already be a Google OAuth2 token, use directly
-  return refreshToken;
+async function sha1(str) {
+  const buf = new TextEncoder().encode(str);
+  const hash = await crypto.subtle.digest('SHA-1', buf);
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
 export async function onRequestPost({ request }) {
   try {
     const body = await request.json();
-    const refreshToken = body.refreshToken || '';
     const imageData = body.image || '';
     const filename = body.filename || `product_${Date.now()}.jpg`;
-    const raw = Uint8Array.from(atob(imageData), c => c.charCodeAt(0));
-    const path = encodeURIComponent(filename);
-    const bucket = 'bardrs-64b37.firebasestorage.app';
 
-    // Get Google OAuth2 access token from refresh token
-    const accessToken = await getAccessToken(refreshToken);
+    const timestamp = Math.floor(Date.now() / 1000);
+    const folder = 'products';
+    const params = { folder, timestamp: String(timestamp) };
+    const sortedKeys = Object.keys(params).sort();
+    const sigStr = sortedKeys.map(k => k + '=' + params[k]).join('&') + API_SECRET;
+    const signature = await sha1(sigStr);
 
-    if (accessToken) {
-      // Try Firebase Storage resumable upload with OAuth2 token
-      const initUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${path}?uploadType=resumable&name=${path}&key=${API_KEY}`;
-      const initRes = await fetch(initUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer ' + accessToken,
-          'X-Firebase-Storage-Version': 'Standalone'
-        },
-        body: '{}'
-      });
+    const formBody = new URLSearchParams();
+    formBody.append('file', `data:image/jpeg;base64,${imageData}`);
+    formBody.append('api_key', API_KEY);
+    formBody.append('timestamp', String(timestamp));
+    formBody.append('folder', folder);
+    formBody.append('signature', signature);
 
-      if (initRes.ok) {
-        let uploadUrl = initRes.headers.get('x-goog-upload-url') || initRes.headers.get('Location') || '';
-        if (!uploadUrl) {
-          const text = await initRes.text().catch(() => '{}');
-          try { const j = JSON.parse(text); uploadUrl = j.uploadUrl || j.location || j.url || ''; } catch(e) {}
-        }
-        if (uploadUrl) {
-          const putRes = await fetch(uploadUrl, {
-            method: 'PUT', headers: { 'Content-Type': 'image/jpeg' }, body: raw
-          });
-          if (putRes.ok) {
-            const downloadUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${path}?alt=media`;
-            return jsonResponse({ url: downloadUrl, name: filename });
-          }
-        }
-      }
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+      method: 'POST',
+      body: formBody
+    });
 
-      // Fallback: use access token for Firestore
-      const doc = {
-        fields: {
-          data: { stringValue: imageData },
-          filename: { stringValue: filename },
-          contentType: { stringValue: 'image/jpeg' },
-          createdAt: { timestampValue: new Date().toISOString() }
-        }
-      };
-      const fsRes = await fetch(FW_BASE + '/uploads', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + accessToken },
-        body: JSON.stringify(doc)
-      });
-      if (fsRes.ok) {
-        const result = await fsRes.json();
-        const docId = result.name.split('/').pop();
-        return jsonResponse({ url: '/api/image/' + docId, name: filename });
-      }
-      return errorResponse('Both failed. Storage init: ' + initRes.status + ' Firestore: ' + fsRes.status, 502);
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      return errorResponse('Cloudinary error: ' + res.status + ' ' + text, 502);
     }
 
-    return errorResponse('No access token available', 502);
+    const result = await res.json();
+    return jsonResponse({ url: result.secure_url || result.url, name: result.public_id });
   } catch (err) {
     return errorResponse('Upload error: ' + err.message);
   }

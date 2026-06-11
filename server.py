@@ -103,24 +103,33 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
                 body = self.read_body()
                 image_data = body.get('image', '')
                 filename = body.get('filename', f'product_{int(__import__("time").time())}.jpg')
-                token = body.get('authToken', '')
                 os.makedirs('images', exist_ok=True)
                 filepath = os.path.join('images', filename)
                 raw = base64.b64decode(image_data)
                 with open(filepath, 'wb') as f:
                     f.write(raw)
-                storage_url = f"https://firebasestorage.googleapis.com/v0/b/bardrs-64b37.firebasestorage.app/o?name={urllib.parse.quote(filename)}"
-                storage_req = urllib.request.Request(storage_url, data=raw,
-                    headers={'Content-Type': 'image/jpeg', 'Authorization': 'Bearer ' + token}, method='POST')
-                try:
-                    with urllib.request.urlopen(storage_req, timeout=15, context=ssl_ctx) as resp:
-                        result = json.loads(resp.read())
-                    download_url = f"https://firebasestorage.googleapis.com/v0/b/bardrs-64b37.firebasestorage.app/o/{urllib.parse.quote(filename)}?alt=media"
-                    self.send_json({"url": download_url})
-                except Exception as e:
-                    self.send_json({"url": "/images/" + filename})
+                # Upload to Cloudinary
+                import hashlib, time
+                timestamp = int(time.time())
+                folder = 'products'
+                sig_str = f'folder={folder}&timestamp={timestamp}' + 'U2cO3wGPzgygTCD_DF6td96Hm5k'
+                signature = hashlib.sha1(sig_str.encode()).hexdigest()
+                cld_data = urllib.parse.urlencode({
+                    'file': 'data:image/jpeg;base64,' + image_data,
+                    'api_key': '561341328954241',
+                    'timestamp': timestamp,
+                    'folder': folder,
+                    'signature': signature
+                }).encode()
+                cld_req = urllib.request.Request(
+                    'https://api.cloudinary.com/v1_1/Root/image/upload',
+                    data=cld_data
+                )
+                with urllib.request.urlopen(cld_req, timeout=15, context=ssl_ctx) as resp:
+                    result = json.loads(resp.read())
+                self.send_json({"url": result.get('secure_url') or result.get('url')})
             except Exception as e:
-                self.send_error_msg("Upload error: " + str(e))
+                self.send_json({"url": "/images/" + filename})
 
         elif self.path == '/api/products':
             # Query products by category (public, no auth needed)
