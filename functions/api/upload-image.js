@@ -1,6 +1,6 @@
 import { jsonResponse, errorResponse } from './lib/firebase.js';
 
-const CLOUD_NAME = 'root';
+const CLOUD_NAME = 'dijkktqvx';
 const API_KEY = '561341328954241';
 const API_SECRET = 'U2cO3wGPzgygTCD_DF6td96Hm5k';
 
