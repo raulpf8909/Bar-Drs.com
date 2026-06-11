@@ -1,4 +1,4 @@
-import { STORAGE_BASE, jsonResponse, errorResponse } from '../lib/firebase.js';
+import { STORAGE_BASE, jsonResponse, errorResponse } from './lib/firebase.js';
 
 export async function onRequestPost({ request }) {
   try {
