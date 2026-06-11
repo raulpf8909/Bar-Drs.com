@@ -536,6 +536,28 @@
         const FW_QUERY = FW_BASE + ':runQuery?key=' + FW_API;
         const ST_BASE = 'https://firebasestorage.googleapis.com/v0/b/bardrs-64b37.firebasestorage.app/o';
 
+        async function proxy(method, path, body, params) {
+          const token = await getAuthToken();
+          const res = await fetch('/api/firestore', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ authToken: token, method, path, body, params })
+          });
+          if (!res.ok) throw new Error(await res.text());
+          return res.json();
+        }
+
+        async function proxyUpload(filename, base64data, contentType) {
+          const token = await getAuthToken();
+          const res = await fetch('/api/firestore', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ authToken: token, _upload: true, filename, _data: base64data, contentType: contentType || 'image/jpeg' })
+          });
+          if (!res.ok) throw new Error(await res.text());
+          return res.json();
+        }
+
         function fwFields(fields) {
             const obj = {};
             for (const [k, v] of Object.entries(fields || {})) {
@@ -770,13 +792,9 @@
                 productsContainer.innerHTML = '<div class="text-center py-10"><span class="material-symbols-outlined animate-spin text-primary text-4xl">autorenew</span><p class="mt-4">Cargando...</p></div>';
 
                 const token = await getAuthToken();
-                const res = await fetch(FW_QUERY, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-                    body: JSON.stringify({ structuredQuery: { from: [{ collectionId: 'products' }] } })
+                const docs = await proxy('POST', ':runQuery', {
+                  structuredQuery: { from: [{ collectionId: 'products' }] }
                 });
-                if (!res.ok) throw new Error(await res.text());
-                const docs = await res.json();
                 allProducts = (docs || []).filter(d => d.document).map(d => ({ id: d.document.name.split('/').pop(), ...fwFields(d.document.fields) }));
                 allProducts.forEach(p => { if (p.order === undefined) p.order = 0; });
                 allProducts.sort((a, b) => (a.order || 0) - (b.order || 0));
@@ -935,12 +953,7 @@
             if (confirm('¿Estás seguro de eliminar este producto?')) {
                 const id = e.target.closest('.btn-delete').dataset.id;
                 try {
-                    const token = await getAuthToken();
-                    const res = await fetch(FW_BASE + '/products/' + id + '?key=' + FW_API, {
-                        method: 'DELETE',
-                        headers: { 'Authorization': 'Bearer ' + token }
-                    });
-                    if (!res.ok) throw new Error(await res.text());
+                    const data = await proxy('DELETE', '/products/' + id);
                     await loadProducts();
                 } catch (err) {
                     console.error('Error al eliminar:', err);
@@ -1061,16 +1074,13 @@
                         img.onerror = () => { clearTimeout(timeoutId); reject(new Error('Failed to load image for compression')); };
                         img.src = imagePreview.src;
                     });
-                    const token = await getAuthToken();
-                    const filename = `products/${Date.now()}.jpg`;
-                    const uploadRes = await withTimeout(fetch(ST_BASE + '?uploadType=media&name=' + filename + '&key=' + FW_API, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'image/jpeg', 'Authorization': 'Bearer ' + token },
-                        body: compressedBlob
-                    }), 30000);
-                    if (!uploadRes.ok) throw new Error(await uploadRes.text());
-                    const uploadData = await uploadRes.json();
-                    imageUrl = 'https://firebasestorage.googleapis.com/v0/b/bardrs-64b37.firebasestorage.app/o/' + encodeURIComponent(uploadData.name) + '?alt=media';
+                    const b64 = await new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve(reader.result.split(',')[1]);
+                        reader.readAsDataURL(compressedBlob);
+                    });
+                    const uploadData = await proxyUpload(`products/${Date.now()}.jpg`, b64, 'image/jpeg');
+                    imageUrl = uploadData.url;
                 }
 
                      const productData = {
@@ -1084,23 +1094,13 @@
                          order: parseInt(inputOrder.value) || 0
                      };
 
-                const token = await getAuthToken();
                 const fields = fwEncode(productData);
                 if (inputId.value && inputId.value !== 'new') {
-                    const res = await withTimeout(fetch(FW_BASE + '/products/' + inputId.value + '?updateMask.fieldPaths=name&updateMask.fieldPaths=price&updateMask.fieldPaths=category&updateMask.fieldPaths=subcategory&updateMask.fieldPaths=description&updateMask.fieldPaths=imageUrl&updateMask.fieldPaths=updatedAt&updateMask.fieldPaths=order&key=' + FW_API, {
-                        method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-                        body: JSON.stringify({ fields })
-                    }), 20000);
-                    if (!res.ok) throw new Error(await res.text());
+                    const data = await proxy('PATCH', '/products/' + inputId.value, { fields }, {
+                        'updateMask.fieldPaths': ['name','price','category','subcategory','description','imageUrl','updatedAt','order']
+                    });
                 } else {
-                    const res = await withTimeout(fetch(FW_BASE + '/products?key=' + FW_API, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-                        body: JSON.stringify({ fields })
-                    }), 20000);
-                    if (!res.ok) throw new Error(await res.text());
-                    const data = await res.json();
+                    const data = await proxy('POST', '/products', { fields });
                     inputId.value = data.name.split('/').pop();
                 }
 
@@ -1119,14 +1119,9 @@
         // --- CATEGORIES CRUD ---
         async function loadCategories() {
             try {
-                const token = await getAuthToken();
-                const res = await fetch(FW_QUERY, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-                    body: JSON.stringify({ structuredQuery: { from: [{ collectionId: 'categories' }] } })
+                const docs = await proxy('POST', ':runQuery', {
+                  structuredQuery: { from: [{ collectionId: 'categories' }] }
                 });
-                if (!res.ok) throw new Error(await res.text());
-                const docs = await res.json();
                 allCategories = (docs || []).filter(d => d.document).map(d => ({ id: d.document.name.split('/').pop(), ...fwFields(d.document.fields) }));
                 allCategories.sort((a, b) => (a.order || 0) - (b.order || 0));
 
@@ -1148,13 +1143,8 @@
                 { name: 'cocteles', label: 'Cocteles', subcategories: ['Coctelería', 'Tragos'], order: 2 },
                 { name: 'bebidas', label: 'Bebidas', subcategories: ['Café', 'Bebidas'], order: 3 },
             ];
-            const token = await getAuthToken();
             for (const cat of defaults) {
-                await fetch(FW_BASE + '/categories?key=' + FW_API, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-                    body: JSON.stringify({ fields: fwEncode(cat) })
-                });
+                await proxy('POST', '/categories', { fields: fwEncode(cat) });
             }
             await loadCategories();
         }
@@ -1262,18 +1252,11 @@
                     const cat = allCategories.find(c => c.id === id);
                     if (cat && confirm(`¿Eliminar la categoría "${cat.label || cat.name}" y todos sus productos?`)) {
                         try {
-                                const token = await getAuthToken();
                                 const productsToDelete = allProducts.filter(p => p.category === cat.name);
                                 for (const p of productsToDelete) {
-                                    await fetch(FW_BASE + '/products/' + p.id + '?key=' + FW_API, {
-                                        method: 'DELETE',
-                                        headers: { 'Authorization': 'Bearer ' + token }
-                                    });
+                                    await proxy('DELETE', '/products/' + p.id);
                                 }
-                                await fetch(FW_BASE + '/categories/' + id + '?key=' + FW_API, {
-                                    method: 'DELETE',
-                                    headers: { 'Authorization': 'Bearer ' + token }
-                                });
+                                await proxy('DELETE', '/categories/' + id);
                             await loadCategories();
                             await loadProducts();
                             renderCategoriesList();
@@ -1304,15 +1287,10 @@
         async function loadBusinessInfo() {
             try {
                 let data = {};
-                const token = await getAuthToken();
-                const res = await fetch(FW_BASE + '/settings/business' + '?key=' + FW_API, {
-                    method: 'GET',
-                    headers: { 'Authorization': 'Bearer ' + token }
-                });
-                if (res.ok) {
-                    const docData = await res.json();
+                try {
+                    const docData = await proxy('GET', '/settings/business');
                     data = { id: docData.name.split('/').pop(), ...fwFields(docData.fields) };
-                }
+                } catch(e) { /* doc may not exist */ }
                 if (data && data.name !== undefined) {
                     inputBizName.value = data.name || '';
                     inputBizPhone.value = data.phone || '';
@@ -1417,20 +1395,13 @@
                     subcategories: subs,
                     order: Date.now()
                 };
-                const token = await getAuthToken();
                 const catFields = fwEncode(catData);
                 if (editingCategoryId) {
-                    await fetch(FW_BASE + '/categories/' + editingCategoryId + '?updateMask.fieldPaths=name&updateMask.fieldPaths=label&updateMask.fieldPaths=subcategories&updateMask.fieldPaths=order&key=' + FW_API, {
-                        method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-                        body: JSON.stringify({ fields: catFields })
+                    await proxy('PATCH', '/categories/' + editingCategoryId, { fields: catFields }, {
+                        'updateMask.fieldPaths': ['name','label','subcategories','order']
                     });
                 } else {
-                    await fetch(FW_BASE + '/categories?key=' + FW_API, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-                        body: JSON.stringify({ fields: catFields })
-                    });
+                    await proxy('POST', '/categories', { fields: catFields });
                 }
                 closeCategoryForm();
                 await loadCategories();
@@ -1452,11 +1423,8 @@
                     address: inputBizAddress.value,
                     updatedAt: new Date().toISOString()
                 };
-                const token = await getAuthToken();
-                await fetch(FW_BASE + '/settings/business' + '?key=' + FW_API, {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-                    body: JSON.stringify({ fields: fwEncode(bizData) })
+                await proxy('PATCH', '/settings/business', { fields: fwEncode(bizData) }, {
+                    'updateMask.fieldPaths': ['name','phone','address','updatedAt']
                 });
                 alert('Información guardada correctamente.');
             } catch (err) {
