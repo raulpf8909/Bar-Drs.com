@@ -536,7 +536,7 @@
           const res = await fetch('/api' + path, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ...data, authToken: token })
+            body: JSON.stringify({ ...data, authToken: token, refreshToken: currentRefreshToken })
           });
           if (!res.ok) throw new Error(await res.text());
           return res.json();
@@ -610,6 +610,7 @@
         let allCategories = [];
         let editingCategoryId = null;
         let currentToken = null;
+        let currentRefreshToken = '';
 
 
         // --- AUTHENTICATION ---
@@ -647,6 +648,7 @@
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || data.message || 'Credenciales incorrectas');
                 currentToken = data.token;
+                currentRefreshToken = data.refreshToken || '';
                 authOverlay.classList.add('hidden');
                 emailLoginForm.reset();
                 loadCategories().then(() => loadProducts());
@@ -664,6 +666,8 @@
             try {
                 const result = await signInWithPopup(auth, provider);
                 currentToken = await result.user.getIdToken(false);
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                currentRefreshToken = credential?.accessToken || '';
                 authOverlay.classList.add('hidden');
                 loadCategories().then(() => loadProducts());
             } catch (error) {

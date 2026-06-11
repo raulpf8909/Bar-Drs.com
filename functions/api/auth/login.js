@@ -10,7 +10,7 @@ export async function onRequestPost({ request }) {
     });
     const data = await res.json();
     if (!res.ok) return errorResponse(data.error?.message || 'Login failed', 401);
-    return jsonResponse({ token: data.idToken });
+    return jsonResponse({ token: data.idToken, refreshToken: data.refreshToken || '' });
   } catch (err) {
     return errorResponse('Proxy error: ' + err.message);
   }

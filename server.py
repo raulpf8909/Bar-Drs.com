@@ -92,7 +92,7 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
                 req = urllib.request.Request(url, data=payload, headers={'Content-Type': 'application/json'})
                 with urllib.request.urlopen(req, timeout=15, context=ssl_ctx) as resp:
                     result = json.loads(resp.read())
-                self.send_json({"token": result["idToken"], "email": result.get("email", ""), "localId": result.get("localId", "")})
+                self.send_json({"token": result["idToken"], "refreshToken": result.get("refreshToken", ""), "email": result.get("email", ""), "localId": result.get("localId", "")})
             except urllib.error.HTTPError as e:
                 self.send_error_msg("Credenciales incorrectas", 401)
             except Exception as e:
