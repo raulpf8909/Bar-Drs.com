@@ -122,7 +122,7 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
                     'signature': signature
                 }).encode()
                 cld_req = urllib.request.Request(
-                    'https://api.cloudinary.com/v1_1/Root/image/upload',
+                    'https://api.cloudinary.com/v1_1/root/image/upload',
                     data=cld_data
                 )
                 with urllib.request.urlopen(cld_req, timeout=15, context=ssl_ctx) as resp:
