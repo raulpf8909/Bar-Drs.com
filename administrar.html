@@ -729,10 +729,10 @@
             throw new Error('No autenticado');
         }
 
-        function withTimeout(promise, ms, msg) {
+        function withTimeout(promise, ms) {
             return Promise.race([
                 promise,
-                new Promise((_, reject) => setTimeout(() => reject(new Error(msg)), ms))
+                new Promise((_, reject) => setTimeout(() => reject(new Error('La operación tardó demasiado. Revisa tu conexión.')), ms))
             ]);
         }
 
@@ -995,13 +995,6 @@
         });
 
         // Save Product
-        function withTimeout(promise, ms) {
-            return Promise.race([
-                promise,
-                new Promise((_, reject) => setTimeout(() => reject(new Error('La operación tardó demasiado. Revisa tu conexión.')), ms))
-            ]);
-        }
-
         productForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             btnSave.disabled = true;
