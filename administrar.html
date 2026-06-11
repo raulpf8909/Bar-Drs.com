@@ -1065,7 +1065,7 @@
                     const filename = `products/${Date.now()}.jpg`;
                     const uploadRes = await withTimeout(fetch(ST_BASE + '?uploadType=media&name=' + filename + '&key=' + FW_API, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'image/jpeg' },
+                        headers: { 'Content-Type': 'image/jpeg', 'Authorization': 'Bearer ' + token },
                         body: compressedBlob
                     }), 30000);
                     if (!uploadRes.ok) throw new Error(await uploadRes.text());
