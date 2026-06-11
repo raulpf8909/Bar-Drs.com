@@ -531,63 +531,16 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
-        const FW_API = 'AIzaSyCPkfsrWoSkF7oYE_QAKkjJ5oYLzsXynao';
-        const FW_BASE = 'https://firestore.googleapis.com/v1/projects/bardrs-64b37/databases/(default)/documents';
-        const FW_QUERY = FW_BASE + ':runQuery?key=' + FW_API;
-        const ST_BASE = 'https://firebasestorage.googleapis.com/v0/b/bardrs-64b37.firebasestorage.app/o';
-
-        async function proxy(method, path, body, params) {
+        async function api(path, data = {}) {
           const token = await getAuthToken();
-          const res = await fetch('/api/firestore', {
+          const res = await fetch('/api' + path, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ authToken: token, method, path, body, params })
+            body: JSON.stringify({ ...data, authToken: token })
           });
           if (!res.ok) throw new Error(await res.text());
           return res.json();
         }
-
-        async function proxyUpload(filename, base64data, contentType) {
-          const token = await getAuthToken();
-          const res = await fetch('/api/firestore', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ authToken: token, _upload: true, filename, _data: base64data, contentType: contentType || 'image/jpeg' })
-          });
-          if (!res.ok) throw new Error(await res.text());
-          return res.json();
-        }
-
-        function fwFields(fields) {
-            const obj = {};
-            for (const [k, v] of Object.entries(fields || {})) {
-                if (v.arrayValue) {
-                    obj[k] = (v.arrayValue.values || []).map(x => x.stringValue ?? null);
-                } else {
-                    obj[k] = v.stringValue ?? v.integerValue ?? v.doubleValue ?? null;
-                    if ((k === 'price' || k === 'order') && obj[k] != null) obj[k] = parseFloat(obj[k]);
-                    if (typeof obj[k] === 'string' && obj[k].startsWith('[') && obj[k].endsWith(']')) {
-                        try { obj[k] = JSON.parse(obj[k]); } catch(e) {}
-                    }
-                }
-            }
-            return obj;
-        }
-
-        function fwEncode(data) {
-            const fields = {};
-            for (const [k, v] of Object.entries(data || {})) {
-                if (v === null || v === undefined) fields[k] = { nullValue: null };
-                else if (typeof v === 'boolean') fields[k] = { booleanValue: v };
-                else if (typeof v === 'number') fields[k] = Number.isInteger(v) ? { integerValue: String(v) } : { doubleValue: v };
-                else if (v instanceof Date) fields[k] = { timestampValue: v.toISOString() };
-                else if (Array.isArray(v)) fields[k] = { arrayValue: { values: v.map(x => ({ stringValue: String(x) })) } };
-                else fields[k] = { stringValue: String(v) };
-            }
-            return fields;
-        }
-
-        const USE_PROXY = false;
 
         // DOM Elements
         const authOverlay = document.getElementById('auth-overlay');
@@ -791,11 +744,7 @@
             try {
                 productsContainer.innerHTML = '<div class="text-center py-10"><span class="material-symbols-outlined animate-spin text-primary text-4xl">autorenew</span><p class="mt-4">Cargando...</p></div>';
 
-                const token = await getAuthToken();
-                const docs = await proxy('POST', ':runQuery', {
-                  structuredQuery: { from: [{ collectionId: 'products' }] }
-                });
-                allProducts = (docs || []).filter(d => d.document).map(d => ({ id: d.document.name.split('/').pop(), ...fwFields(d.document.fields) }));
+                allProducts = await api('/products/all', {});
                 allProducts.forEach(p => { if (p.order === undefined) p.order = 0; });
                 allProducts.sort((a, b) => (a.order || 0) - (b.order || 0));
                 renderProducts();
@@ -953,7 +902,7 @@
             if (confirm('¿Estás seguro de eliminar este producto?')) {
                 const id = e.target.closest('.btn-delete').dataset.id;
                 try {
-                    const data = await proxy('DELETE', '/products/' + id);
+                    await api('/products/delete', { id });
                     await loadProducts();
                 } catch (err) {
                     console.error('Error al eliminar:', err);
@@ -1079,7 +1028,7 @@
                         reader.onload = () => resolve(reader.result.split(',')[1]);
                         reader.readAsDataURL(compressedBlob);
                     });
-                    const uploadData = await proxyUpload(`products/${Date.now()}.jpg`, b64, 'image/jpeg');
+                    const uploadData = await api('/upload-image', { image: b64, filename: `products/${Date.now()}.jpg` });
                     imageUrl = uploadData.url;
                 }
 
@@ -1094,14 +1043,11 @@
                          order: parseInt(inputOrder.value) || 0
                      };
 
-                const fields = fwEncode(productData);
                 if (inputId.value && inputId.value !== 'new') {
-                    const data = await proxy('PATCH', '/products/' + inputId.value, { fields }, {
-                        'updateMask.fieldPaths': ['name','price','category','subcategory','description','imageUrl','updatedAt','order']
-                    });
+                    await api('/products/save', { product: productData, id: inputId.value, collection: 'products' });
                 } else {
-                    const data = await proxy('POST', '/products', { fields });
-                    inputId.value = data.name.split('/').pop();
+                    const data = await api('/products/save', { product: productData, id: 'new', collection: 'products' });
+                    inputId.value = data.id;
                 }
 
                 closeModal();
@@ -1119,10 +1065,7 @@
         // --- CATEGORIES CRUD ---
         async function loadCategories() {
             try {
-                const docs = await proxy('POST', ':runQuery', {
-                  structuredQuery: { from: [{ collectionId: 'categories' }] }
-                });
-                allCategories = (docs || []).filter(d => d.document).map(d => ({ id: d.document.name.split('/').pop(), ...fwFields(d.document.fields) }));
+                allCategories = await api('/categories', {});
                 allCategories.sort((a, b) => (a.order || 0) - (b.order || 0));
 
                 if (allCategories.length === 0) {
@@ -1144,7 +1087,7 @@
                 { name: 'bebidas', label: 'Bebidas', subcategories: ['Café', 'Bebidas'], order: 3 },
             ];
             for (const cat of defaults) {
-                await proxy('POST', '/categories', { fields: fwEncode(cat) });
+                await api('/categories/save', { category: cat, id: 'new' });
             }
             await loadCategories();
         }
@@ -1254,9 +1197,9 @@
                         try {
                                 const productsToDelete = allProducts.filter(p => p.category === cat.name);
                                 for (const p of productsToDelete) {
-                                    await proxy('DELETE', '/products/' + p.id);
+                                    await api('/products/delete', { id: p.id });
                                 }
-                                await proxy('DELETE', '/categories/' + id);
+                                await api('/categories/delete', { id });
                             await loadCategories();
                             await loadProducts();
                             renderCategoriesList();
@@ -1288,10 +1231,9 @@
             try {
                 let data = {};
                 try {
-                    const docData = await proxy('GET', '/settings/business');
-                    data = { id: docData.name.split('/').pop(), ...fwFields(docData.fields) };
+                    data = await api('/settings', { docId: 'business' });
                 } catch(e) { /* doc may not exist */ }
-                if (data && data.name !== undefined) {
+                if (data && data.name) {
                     inputBizName.value = data.name || '';
                     inputBizPhone.value = data.phone || '';
                     inputBizAddress.value = data.address || '';
@@ -1395,13 +1337,10 @@
                     subcategories: subs,
                     order: Date.now()
                 };
-                const catFields = fwEncode(catData);
                 if (editingCategoryId) {
-                    await proxy('PATCH', '/categories/' + editingCategoryId, { fields: catFields }, {
-                        'updateMask.fieldPaths': ['name','label','subcategories','order']
-                    });
+                    await api('/categories/save', { category: catData, id: editingCategoryId });
                 } else {
-                    await proxy('POST', '/categories', { fields: catFields });
+                    await api('/categories/save', { category: catData, id: 'new' });
                 }
                 closeCategoryForm();
                 await loadCategories();
@@ -1423,9 +1362,7 @@
                     address: inputBizAddress.value,
                     updatedAt: new Date().toISOString()
                 };
-                await proxy('PATCH', '/settings/business', { fields: fwEncode(bizData) }, {
-                    'updateMask.fieldPaths': ['name','phone','address','updatedAt']
-                });
+                await api('/settings/save', { docId: 'business', data: bizData });
                 alert('Información guardada correctamente.');
             } catch (err) {
                 console.error('Error saving business info:', err);
