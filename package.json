@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "firebase-config.js",
   "scripts": {
-    "build": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --minify",
+    "build": "echo 'build skipped, using committed dist/'",
     "watch": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
     "lint": "eslint . --ext .js,.html",
     "format": "prettier --write .",
