@@ -9,7 +9,7 @@ export async function onRequestPost({ request }) {
     const imageData = body.image || '';
     const filename = body.filename || `product_${Date.now()}.jpg`;
 
-    const uploadUrl = `https://firebasestorage.googleapis.com/upload/storage/v1/b/${PROJECT_ID}.firebasestorage.app/o?uploadType=media&name=${encodeURIComponent(filename)}`;
+    const uploadUrl = `https://firebasestorage.googleapis.com/v0/b/${PROJECT_ID}.firebasestorage.app/o?name=${encodeURIComponent(filename)}`;
     const res = await fetch(uploadUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'image/jpeg', 'Authorization': 'Bearer ' + token },
