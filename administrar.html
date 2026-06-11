@@ -517,7 +517,7 @@
     <!-- Application Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCPkfsrWoSkF7oYE_QAKkjJ5oYLzsXynao",
@@ -664,14 +664,8 @@
             btnEmailSubmit.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">autorenew</span> Verificando...';
 
             try {
-                const res = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + FW_API, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: loginEmail.value, password: loginPassword.value, returnSecureToken: true })
-                });
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error?.message || 'Credenciales incorrectas');
-                currentToken = data.idToken;
+                const cred = await signInWithEmailAndPassword(auth, loginEmail.value, loginPassword.value);
+                currentToken = await cred.user.getIdToken(false);
                 authOverlay.classList.add('hidden');
                 emailLoginForm.reset();
                 loadCategories().then(() => loadProducts());
