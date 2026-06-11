@@ -1,6 +1,7 @@
-import { FIRESTORE_BASE, STORAGE_BASE, API_KEY, authHeaders, jsonResponse, errorResponse } from '../lib/firebase.js';
+import { FIRESTORE_BASE, STORAGE_BASE, authHeaders, jsonResponse, errorResponse } from '../lib/firebase.js';
 
 const PROJECT_ID = 'bardrs-64b37';
+const API_KEY = 'AIzaSyCPkfsrWoSkF7oYE_QAKkjJ5oYLzsXynao';
 
 export async function onRequestPost({ request }) {
   try {
