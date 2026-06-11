@@ -1,27 +1,7 @@
 {
   "name": "bardrs-appweb",
   "version": "1.0.0",
-  "main": "firebase-config.js",
   "scripts": {
-    "build": "echo 'build skipped, using committed dist/'",
-    "watch": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
-    "lint": "eslint . --ext .js,.html",
-    "format": "prettier --write .",
-    "test": "jest",
-    "cypress": "cypress open"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "@testing-library/dom": "^10.4.1",
-    "autoprefixer": "^10.5.0",
-    "cypress": "^15.17.0",
-    "eslint": "^10.4.1",
-    "jest": "^30.4.2",
-    "postcss": "^8.5.15",
-    "prettier": "^3.8.4",
-    "tailwindcss": "^3.4.1"
+    "build": "echo 'build skipped, using committed dist/'"
   }
 }
