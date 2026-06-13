@@ -651,11 +651,15 @@
             btnEmailSubmit.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">autorenew</span> Verificando...';
 
             try {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 15000);
                 const res = await fetch(API_BASE + '/api/auth/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: loginEmail.value, password: loginPassword.value })
+                    body: JSON.stringify({ email: loginEmail.value, password: loginPassword.value }),
+                    signal: controller.signal
                 });
+                clearTimeout(timeout);
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || data.message || 'Credenciales incorrectas');
                 currentToken = data.token;
@@ -665,7 +669,13 @@
                 loadCategories().then(() => loadProducts());
             } catch (error) {
                 console.error("Error with email sign in:", error);
-                alert("Credenciales incorrectas o usuario no registrado.\n\n" + error.message);
+                if (error.name === 'AbortError') {
+                    alert("La conexión está tardando demasiado. Revisa tu conexión a internet e intenta de nuevo.");
+                } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                    alert("No se pudo conectar con el servidor. Revisa tu conexión a internet.");
+                } else {
+                    alert("Credenciales incorrectas o usuario no registrado.\n\n" + error.message);
+                }
             } finally {
                 btnEmailSubmit.disabled = false;
                 btnEmailSubmit.innerHTML = 'Ingresar con Usuario';
