@@ -410,8 +410,10 @@
     </div>
 
     <script type="module">
+        const API_BASE = ''; // '' = relative, or 'https://api-worker.workers.dev'
+
         async function fetchProducts(category) {
-            const res = await fetch('/api/products', {
+            const res = await fetch(API_BASE + '/api/products', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ category })

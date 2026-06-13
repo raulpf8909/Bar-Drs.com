@@ -531,9 +531,11 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
+        const API_BASE = ''; // '' = relative (/api/...), or 'https://api-worker.workers.dev'
+
         async function api(path, data = {}) {
           const token = await getAuthToken();
-          const res = await fetch('/api' + path, {
+          const res = await fetch(API_BASE + '/api' + path, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ...data, authToken: token, refreshToken: currentRefreshToken })
