@@ -1,18 +1,18 @@
 import { jsonResponse, errorResponse } from './lib/firebase.js';
 
-const CLOUD_NAME = 'dijkktqvx';
-const API_KEY = '561341328954241';
-const API_SECRET = 'U2cO3wGPzgygTCD_DF6td96Hm5k';
-
 async function sha1(str) {
   const buf = new TextEncoder().encode(str);
   const hash = await crypto.subtle.digest('SHA-1', buf);
   return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-export async function onRequestPost({ request }) {
+export async function onRequestPost({ request, env }) {
   try {
     const body = await request.json();
+    const CLOUD_NAME = env.CLOUDINARY_CLOUD_NAME || 'dijkktqvx';
+    const API_KEY = env.CLOUDINARY_API_KEY || '561341328954241';
+    const API_SECRET = env.CLOUDINARY_API_SECRET || 'U2cO3wGPzgygTCD_DF6td96Hm5k';
+
     const imageData = body.image || '';
     const filename = body.filename || `product_${Date.now()}.jpg`;
 

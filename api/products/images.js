@@ -1,12 +1,12 @@
 import crypto from 'crypto';
 
-const CLOUD_NAME = 'dijkktqvx';
-const API_KEY = '561341328954241';
-const API_SECRET = 'U2cO3wGPzgygTCD_DF6td96Hm5k';
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end('Method not allowed');
   try {
+    const CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME || 'dijkktqvx';
+    const API_KEY = process.env.CLOUDINARY_API_KEY || '561341328954241';
+    const API_SECRET = process.env.CLOUDINARY_API_SECRET || 'U2cO3wGPzgygTCD_DF6td96Hm5k';
+
     const body = req.body;
     const imageData = body.image || '';
     const filename = body.filename || `product_${Date.now()}.jpg`;

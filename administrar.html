@@ -531,7 +531,7 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
-        const API_BASE = ''; // '' = relative (/api/...), or 'https://api-worker.workers.dev'
+        const API_BASE = 'https://bar-drs-com.pages.dev';
 
         async function api(path, data = {}) {
           const token = await getAuthToken();

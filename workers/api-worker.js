@@ -1,11 +1,8 @@
-const API_KEY = 'AIzaSyCPkfsrWoSkF7oYE_QAKkjJ5oYLzsXynao';
 const PROJECT_ID = 'bardrs-64b37';
+const FB_API_KEY = 'AIzaSyCPkfsrWoSkF7oYE_QAKkjJ5oYLzsXynao';
 const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
-const FIRESTORE_QUERY = FIRESTORE_BASE + ':runQuery?key=' + API_KEY;
-const IDENTITYKIT = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + API_KEY;
-const CLOUD_NAME = 'dijkktqvx';
-const CLOUD_API_KEY = '561341328954241';
-const CLOUD_API_SECRET = 'U2cO3wGPzgygTCD_DF6td96Hm5k';
+const FIRESTORE_QUERY = FIRESTORE_BASE + ':runQuery?key=' + FB_API_KEY;
+const IDENTITYKIT = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + FB_API_KEY;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -213,7 +210,11 @@ async function handleSettingsSave(body) {
 }
 
 // ── IMAGE UPLOAD ──
-async function handleImageUpload(body) {
+async function handleImageUpload(body, env) {
+  const CLOUD_NAME = env.CLOUDINARY_CLOUD_NAME || 'dijkktqvx';
+  const CLOUD_API_KEY = env.CLOUDINARY_API_KEY || '561341328954241';
+  const CLOUD_API_SECRET = env.CLOUDINARY_API_SECRET || 'U2cO3wGPzgygTCD_DF6td96Hm5k';
+
   const imageData = body.image || '';
   const filename = body.filename || `product_${Date.now()}.jpg`;
   const timestamp = Math.floor(Date.now() / 1000);
@@ -278,7 +279,7 @@ export default {
           return await handleProductsDelete(body);
 
         case '/api/products/images':
-          return await handleImageUpload(body);
+          return await handleImageUpload(body, env);
 
         case '/api/categories':
           return await handleCategoriesList(body);

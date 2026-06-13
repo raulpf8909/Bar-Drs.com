@@ -7,8 +7,9 @@ import sys
 import os
 import base64
 
+FIREBASE_API_KEY = "AIzaSyCPkfsrWoSkF7oYE_QAKkjJ5oYLzsXynao"
 FIRESTORE_BASE = "https://firestore.googleapis.com/v1/projects/bardrs-64b37/databases/(default)/documents"
-FIRESTORE_QUERY = FIRESTORE_BASE + ":runQuery?key=AIzaSyCPkfsrWoSkF7oYE_QAKkjJ5oYLzsXynao"
+FIRESTORE_QUERY = FIRESTORE_BASE + ":runQuery?key=" + FIREBASE_API_KEY
 ssl_ctx = ssl._create_unverified_context()
 
 def convert_field(v):
@@ -87,7 +88,7 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
                 body = self.read_body()
                 email = body.get('email', '')
                 password = body.get('password', '')
-                url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCPkfsrWoSkF7oYE_QAKkjJ5oYLzsXynao"
+                url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + FIREBASE_API_KEY
                 payload = json.dumps({"email": email, "password": password, "returnSecureToken": True}).encode()
                 req = urllib.request.Request(url, data=payload, headers={'Content-Type': 'application/json'})
                 with urllib.request.urlopen(req, timeout=15, context=ssl_ctx) as resp:
@@ -112,17 +113,20 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
                 import hashlib, time
                 timestamp = int(time.time())
                 public_id = filename.rsplit('.', 1)[0]
-                sig_str = f'public_id={public_id}&timestamp={timestamp}' + 'U2cO3wGPzgygTCD_DF6td96Hm5k'
+                cld_secret = os.environ.get('CLOUDINARY_API_SECRET', 'U2cO3wGPzgygTCD_DF6td96Hm5k')
+                cld_key = os.environ.get('CLOUDINARY_API_KEY', '561341328954241')
+                cld_name = os.environ.get('CLOUDINARY_CLOUD_NAME', 'dijkktqvx')
+                sig_str = f'public_id={public_id}&timestamp={timestamp}' + cld_secret
                 signature = hashlib.sha1(sig_str.encode()).hexdigest()
                 cld_data = urllib.parse.urlencode({
                     'file': 'data:image/jpeg;base64,' + image_data,
-                    'api_key': '561341328954241',
+                    'api_key': cld_key,
                     'timestamp': timestamp,
                     'public_id': public_id,
                     'signature': signature
                 }).encode()
                 cld_req = urllib.request.Request(
-                    'https://api.cloudinary.com/v1_1/dijkktqvx/image/upload',
+                    'https://api.cloudinary.com/v1_1/' + cld_name + '/image/upload',
                     data=cld_data
                 )
                 with urllib.request.urlopen(cld_req, timeout=15, context=ssl_ctx) as resp:
