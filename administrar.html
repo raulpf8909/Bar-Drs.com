@@ -265,11 +265,19 @@
             <div class="flex justify-between items-center px-margin-md mb-4">
                 <img src="logo-brown.png" alt="Drs.Com" class="h-10 w-auto">
                 <h1 class="font-headline-md text-primary font-bold">Administración</h1>
-                <button id="btn-logout"
-                    class="text-primary text-xs flex flex-col items-center hover:bg-surface-variant p-2 rounded-lg transition-colors">
-                    <span class="font-label-md">Cerrar</span>
-                    <span class="font-label-md">Sesión</span>
-                </button>
+                <div class="flex items-center gap-2">
+                    <button id="btn-regenerate"
+                        class="text-primary text-xs flex flex-col items-center hover:bg-surface-variant p-2 rounded-lg transition-colors"
+                        title="Actualizar menú estático">
+                        <span class="material-symbols-outlined text-lg">refresh</span>
+                        <span class="font-label-md">Actualizar</span>
+                    </button>
+                    <button id="btn-logout"
+                        class="text-primary text-xs flex flex-col items-center hover:bg-surface-variant p-2 rounded-lg transition-colors">
+                        <span class="font-label-md">Cerrar</span>
+                        <span class="font-label-md">Sesión</span>
+                    </button>
+                </div>
             </div>
 
             <!-- Scrollable Tabs -->
@@ -548,6 +556,7 @@
         const authOverlay = document.getElementById('auth-overlay');
         const btnLogin = document.getElementById('btn-login');
         const btnLogout = document.getElementById('btn-logout');
+        const btnRegenerate = document.getElementById('btn-regenerate');
         const productsContainer = document.getElementById('products-container');
 
         // Email Auth Elements
@@ -642,7 +651,7 @@
             btnEmailSubmit.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">autorenew</span> Verificando...';
 
             try {
-                const res = await fetch('/api/auth/login', {
+                const res = await fetch(API_BASE + '/api/auth/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: loginEmail.value, password: loginPassword.value })
@@ -688,6 +697,19 @@
             authOverlay.classList.add('flex');
             allProducts = [];
             allCategories = [];
+        });
+
+        btnRegenerate.addEventListener('click', async () => {
+            btnRegenerate.disabled = true;
+            btnRegenerate.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">autorenew</span><span class="font-label-md">...</span>';
+            try {
+                const res = await api('/regenerate', {});
+                alert(res.message || 'Actualización iniciada. Espera unos minutos.');
+            } catch (err) {
+                alert('Error al actualizar: ' + err.message);
+            }
+            btnRegenerate.disabled = false;
+            btnRegenerate.innerHTML = '<span class="material-symbols-outlined text-lg">refresh</span><span class="font-label-md">Actualizar</span>';
         });
 
         // --- UI LOGIC ---
