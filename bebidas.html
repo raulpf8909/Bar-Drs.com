@@ -416,16 +416,30 @@
         </div>
     </div>
     <script type="module">
-        const API_BASE = 'https://bar-drs-com.pages.dev';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCPkfsrWoSkF7oYE_QAKkjJ5oYLzsXynao",
+            authDomain: "bardrs-64b37.firebaseapp.com",
+            projectId: "bardrs-64b37",
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
         async function fetchProducts(category) {
-            const res = await fetch(API_BASE + '/api/products', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ category })
+            const q = query(
+                collection(db, "products"),
+                where("category", "==", category),
+                orderBy("order")
+            );
+            const snap = await getDocs(q);
+            return snap.docs.map(doc => {
+                const data = doc.data();
+                if (data.price != null) data.price = parseFloat(data.price);
+                if (data.order != null) data.order = parseFloat(data.order);
+                return { id: doc.id, ...data };
             });
-            if (!res.ok) throw new Error('Error ' + res.status);
-            return await res.json();
         }
 
         // Modal handling
