@@ -525,7 +525,7 @@
     <!-- Application Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCPkfsrWoSkF7oYE_QAKkjJ5oYLzsXynao",
@@ -644,37 +644,30 @@
         }
         initAuth();
 
-        // Email & Password (proxy or direct Firebase Auth)
+        // Email & Password (direct Firebase Auth SDK - bypasses Cloudflare)
         emailLoginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             btnEmailSubmit.disabled = true;
             btnEmailSubmit.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">autorenew</span> Verificando...';
 
             try {
-                const controller = new AbortController();
-                const timeout = setTimeout(() => controller.abort(), 15000);
-                const res = await fetch(API_BASE + '/api/auth/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: loginEmail.value, password: loginPassword.value }),
-                    signal: controller.signal
-                });
-                clearTimeout(timeout);
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error || data.message || 'Credenciales incorrectas');
-                currentToken = data.token;
-                currentRefreshToken = data.refreshToken || '';
+                const cred = await signInWithEmailAndPassword(auth, loginEmail.value, loginPassword.value);
+                currentToken = await cred.user.getIdToken();
+                currentRefreshToken = cred.user.refreshToken || '';
                 authOverlay.classList.add('hidden');
                 emailLoginForm.reset();
                 loadCategories().then(() => loadProducts());
             } catch (error) {
                 console.error("Error with email sign in:", error);
-                if (error.name === 'AbortError') {
-                    alert("La conexión está tardando demasiado. Revisa tu conexión a internet e intenta de nuevo.");
-                } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-                    alert("No se pudo conectar con el servidor. Revisa tu conexión a internet.");
+                const code = error.code || '';
+                if (code === 'auth/user-not-found' || code === 'auth/wrong-password' || code === 'auth/invalid-credential') {
+                    alert("Credenciales incorrectas o usuario no registrado.");
+                } else if (code === 'auth/too-many-requests') {
+                    alert("Demasiados intentos. Espera un momento e intenta de nuevo.");
+                } else if (code === 'auth/network-request-failed') {
+                    alert("No se pudo conectar. Revisa tu conexión a internet.");
                 } else {
-                    alert("Credenciales incorrectas o usuario no registrado.\n\n" + error.message);
+                    alert("Error de autenticación: " + (error.message || 'Desconocido'));
                 }
             } finally {
                 btnEmailSubmit.disabled = false;
