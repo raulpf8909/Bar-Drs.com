@@ -45,5 +45,8 @@ export function jsonResponse(data, status = 200) {
 }
 
 export function errorResponse(msg, status = 500) {
-  return new Response(String(msg), { status, headers: { 'Access-Control-Allow-Origin': '*' } });
+  return new Response(JSON.stringify({ error: String(msg) }), {
+    status,
+    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+  });
 }
